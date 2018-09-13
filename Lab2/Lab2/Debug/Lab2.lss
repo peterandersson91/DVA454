@@ -1,0 +1,756 @@
+
+Lab2.elf:     file format elf32-avr32
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .reset        00002008  80000000  80000000  00000400  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .text         000001ac  80002008  80002008  00002408  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  2 .exception    00000200  80002200  80002200  00002600  2**9
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  3 .rodata       000000a0  80002400  80002400  00002800  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+  4 .dalign       00000004  00000004  00000004  00000000  2**0
+                  ALLOC
+  5 .bss          000000f0  00000008  00000008  00000000  2**2
+                  ALLOC
+  6 .heap         0000ef08  000000f8  000000f8  00000000  2**0
+                  ALLOC
+  7 .comment      00000030  00000000  00000000  000028a0  2**0
+                  CONTENTS, READONLY
+  8 .debug_aranges 00000100  00000000  00000000  000028d0  2**3
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_pubnames 000000e6  00000000  00000000  000029d0  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_info   00001e11  00000000  00000000  00002ab6  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_abbrev 000003b2  00000000  00000000  000048c7  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 12 .debug_line   00001068  00000000  00000000  00004c79  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 13 .debug_frame  0000018c  00000000  00000000  00005ce4  2**2
+                  CONTENTS, READONLY, DEBUGGING
+ 14 .debug_str    0000098a  00000000  00000000  00005e70  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 15 .debug_loc    0000022f  00000000  00000000  000067fa  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 16 .debug_macinfo 001dc457  00000000  00000000  00006a29  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 17 .stack        00001000  0000f000  0000f000  00000000  2**0
+                  ALLOC
+ 18 .debug_ranges 000000a8  00000000  00000000  001e2e80  2**3
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .reset:
+
+80000000 <_start>:
+
+  .global _start
+  .type _start, @function
+_start:
+  // Jump to the C runtime startup routine.
+  lda.w   pc, _stext
+80000000:	fe cf df 88 	sub	pc,pc,-8312
+
+80000004 <_trampoline>:
+80000004:	e0 8f 10 00 	bral	80002004 <program_start>
+	...
+
+80002004 <program_start>:
+  rjmp    program_start
+
+  .org  PROGRAM_START_OFFSET
+program_start:
+  // Jump to the C runtime startup routine.
+  lda.w   pc, _stext
+80002004:	fe cf ff 8c 	sub	pc,pc,-116
+
+Disassembly of section .text:
+
+80002008 <_get_interrupt_handler>:
+80002008:	eb cd 40 80 	pushm	r7,lr
+ *
+ * \return Interrupt handler to execute.
+ */
+__int_handler _get_interrupt_handler(uint32_t int_level);
+__int_handler _get_interrupt_handler(uint32_t int_level)
+{
+8000200c:	1a 97       	mov	r7,sp
+8000200e:	20 3d       	sub	sp,12
+80002010:	ef 4c ff f4 	st.w	r7[-12],r12
+	/* ICR3 is mapped first, ICR0 last.
+	Code in exception.S puts int_level in R12 which is used by the compiler
+	to pass a single argument to a function. */
+	uint32_t int_grp = AVR32_INTC.icr[AVR32_INTC_INT3 - int_level];
+80002014:	fe 78 08 00 	mov	r8,-63488
+80002018:	ee f9 ff f4 	ld.w	r9,r7[-12]
+8000201c:	f2 09 11 03 	rsub	r9,r9,3
+80002020:	28 09       	sub	r9,-128
+80002022:	f0 09 03 28 	ld.w	r8,r8[r9<<0x2]
+80002026:	ef 48 ff f8 	st.w	r7[-8],r8
+	uint32_t int_req = AVR32_INTC.irr[int_grp];
+8000202a:	fe 78 08 00 	mov	r8,-63488
+8000202e:	ee f9 ff f8 	ld.w	r9,r7[-8]
+80002032:	2c 09       	sub	r9,-64
+80002034:	f0 09 03 28 	ld.w	r8,r8[r9<<0x2]
+80002038:	ef 48 ff fc 	st.w	r7[-4],r8
+	exception.S will provide the interrupt handler with a clean interrupt
+	stack frame, with nothing more pushed onto the stack. The interrupt
+	handler must manage the `rete' instruction, which can be done using
+	pure assembly, inline assembly or the `__attribute__((__interrupt__))'
+	C function attribute.*/
+	return (int_req)
+8000203c:	ee f8 ff fc 	ld.w	r8,r7[-4]
+80002040:	58 08       	cp.w	r8,0
+80002042:	c1 30       	breq	80002068 <_get_interrupt_handler+0x60>
+		? _int_handler_table[int_grp]._int_line_handler_table[32
+80002044:	ee f9 ff f8 	ld.w	r9,r7[-8]
+80002048:	48 b8       	lddpc	r8,80002074 <_get_interrupt_handler+0x6c>
+8000204a:	a1 79       	lsl	r9,0x1
+8000204c:	2f f9       	sub	r9,-1
+8000204e:	f0 09 03 29 	ld.w	r9,r8[r9<<0x2]
+80002052:	ee f8 ff fc 	ld.w	r8,r7[-4]
+80002056:	f0 08 12 00 	clz	r8,r8
+8000205a:	f0 08 11 1f 	rsub	r8,r8,31
+			- clz(int_req) - 1]
+8000205e:	a3 68       	lsl	r8,0x2
+	stack frame, with nothing more pushed onto the stack. The interrupt
+	handler must manage the `rete' instruction, which can be done using
+	pure assembly, inline assembly or the `__attribute__((__interrupt__))'
+	C function attribute.*/
+	return (int_req)
+		? _int_handler_table[int_grp]._int_line_handler_table[32
+80002060:	f2 08 00 08 	add	r8,r9,r8
+	exception.S will provide the interrupt handler with a clean interrupt
+	stack frame, with nothing more pushed onto the stack. The interrupt
+	handler must manage the `rete' instruction, which can be done using
+	pure assembly, inline assembly or the `__attribute__((__interrupt__))'
+	C function attribute.*/
+	return (int_req)
+80002064:	70 08       	ld.w	r8,r8[0x0]
+80002066:	c0 28       	rjmp	8000206a <_get_interrupt_handler+0x62>
+80002068:	30 08       	mov	r8,0
+		? _int_handler_table[int_grp]._int_line_handler_table[32
+			- clz(int_req) - 1]
+		: NULL;
+}
+8000206a:	10 9c       	mov	r12,r8
+8000206c:	2f dd       	sub	sp,-12
+8000206e:	e3 cd 80 80 	ldm	sp++,r7,pc
+80002072:	00 00       	add	r0,r0
+80002074:	80 00       	ld.sh	r0,r0[0x0]
+80002076:	24 00       	sub	r0,64
+
+80002078 <_stext>:
+
+  .global _stext
+  .type _stext, @function
+_stext:
+  // Set initial stack pointer.
+  lda.w   sp, _estack
+80002078:	e0 7d 00 00 	mov	sp,65536
+
+  // Set up EVBA so interrupts can be enabled.
+  lda.w   r0, _evba
+  mtsr    AVR32_EVBA, r0
+8000207c:	fe c0 fe 7c 	sub	r0,pc,-388
+
+  // Enable the exception processing.
+  csrf    AVR32_SR_EM_OFFSET
+80002080:	e3 b0 00 01 	mtsr	0x4,r0
+
+  // Load initialized data having a global lifetime from the data LMA.
+  lda.w   r0, _data
+  lda.w   r1, _edata
+80002084:	d5 53       	csrf	0x15
+  cp      r0, r1
+80002086:	30 80       	mov	r0,8
+  brhs    idata_load_loop_end
+80002088:	30 81       	mov	r1,8
+  lda.w   r2, _data_lma
+8000208a:	02 30       	cp.w	r0,r1
+idata_load_loop:
+  ld.d    r4, r2++
+8000208c:	c0 72       	brcc	8000209a <idata_load_loop_end>
+  st.d    r0++, r4
+8000208e:	fe c2 fb ee 	sub	r2,pc,-1042
+
+80002092 <idata_load_loop>:
+  cp      r0, r1
+  brlo    idata_load_loop
+80002092:	a5 05       	ld.d	r4,r2++
+idata_load_loop_end:
+
+  // Clear uninitialized data having a global lifetime in the blank static storage section.
+  lda.w   r0, __bss_start
+80002094:	a1 24       	st.d	r0++,r4
+  lda.w   r1, _end
+80002096:	02 30       	cp.w	r0,r1
+  cp      r0, r1
+80002098:	cf d3       	brcs	80002092 <idata_load_loop>
+
+8000209a <idata_load_loop_end>:
+  brhs    udata_clear_loop_end
+8000209a:	30 80       	mov	r0,8
+  mov     r2, 0
+8000209c:	e0 61 00 f8 	mov	r1,248
+  mov     r3, 0
+udata_clear_loop:
+  st.d    r0++, r2
+800020a0:	02 30       	cp.w	r0,r1
+  cp      r0, r1
+800020a2:	c0 62       	brcc	800020ae <udata_clear_loop_end>
+  brlo    udata_clear_loop
+800020a4:	30 02       	mov	r2,0
+  // Safety: Set the default "return" @ to the exit routine address.
+  lda.w   lr, exit
+#endif
+
+  // Start the show.
+  lda.w   pc, main
+800020a6:	30 03       	mov	r3,0
+
+800020a8 <udata_clear_loop>:
+800020a8:	a1 22       	st.d	r0++,r2
+800020aa:	02 30       	cp.w	r0,r1
+800020ac:	cf e3       	brcs	800020a8 <udata_clear_loop>
+
+800020ae <udata_clear_loop_end>:
+800020ae:	fe cf ff 62 	sub	pc,pc,-158
+800020b2:	d7 03       	nop
+
+800020b4 <initLED>:
+800020b4:	eb cd 40 80 	pushm	r7,lr
+800020b8:	1a 97       	mov	r7,sp
+800020ba:	20 1d       	sub	sp,4
+800020bc:	fe 78 11 00 	mov	r8,-61184
+800020c0:	ef 48 ff fc 	st.w	r7[-4],r8
+800020c4:	ee f8 ff fc 	ld.w	r8,r7[-4]
+	volatile avr32_gpio_port_t * led_port;
+	// pointing to the correct port
+	led_port = &AVR32_GPIO.port[LED_PORT];
+	
+	// Enables the registers for the LEDs
+	led_port->gpers = LED0_BIT_VALUE;
+800020c8:	fc 19 08 00 	movh	r9,0x800
+800020cc:	91 19       	st.w	r8[0x4],r9
+
+	// Turning all LEDs off
+	led_port->ovrs = LED0_BIT_VALUE;
+800020ce:	ee f8 ff fc 	ld.w	r8,r7[-4]
+800020d2:	fc 19 08 00 	movh	r9,0x800
+800020d6:	f1 49 00 54 	st.w	r8[84],r9
+	
+	// setting the led pins to outputs
+	led_port->oders = LED0_BIT_VALUE;
+800020da:	ee f8 ff fc 	ld.w	r8,r7[-4]
+800020de:	fc 19 08 00 	movh	r9,0x800
+800020e2:	f1 49 00 44 	st.w	r8[68],r9
+}
+800020e6:	2f fd       	sub	sp,-4
+800020e8:	e3 cd 80 80 	ldm	sp++,r7,pc
+
+800020ec <initButton>:
+// Initializes the button
+void initButton (void)
+{
+800020ec:	eb cd 40 80 	pushm	r7,lr
+800020f0:	1a 97       	mov	r7,sp
+800020f2:	20 1d       	sub	sp,4
+	// Button port pointer
+	volatile avr32_gpio_port_t * button_port;
+	button_port = &AVR32_GPIO.port[BUTTON_PORT];
+800020f4:	fe 78 12 00 	mov	r8,-60928
+800020f8:	ef 48 ff fc 	st.w	r7[-4],r8
+	
+	// Enables the register
+	button_port->gpers = BUTTON2_PIN;
+800020fc:	ee f8 ff fc 	ld.w	r8,r7[-4]
+80002100:	e4 69 00 00 	mov	r9,262144
+80002104:	91 19       	st.w	r8[0x4],r9
+	// Sets the pin to an input
+	button_port->oderc = BUTTON2_PIN;
+80002106:	ee f8 ff fc 	ld.w	r8,r7[-4]
+8000210a:	e4 69 00 00 	mov	r9,262144
+8000210e:	f1 49 00 48 	st.w	r8[72],r9
+	
+}
+80002112:	2f fd       	sub	sp,-4
+80002114:	e3 cd 80 80 	ldm	sp++,r7,pc
+
+80002118 <USART_init>:
+
+void USART_init(volatile avr32_usart_t * usart)
+{
+80002118:	eb cd 40 80 	pushm	r7,lr
+8000211c:	1a 97       	mov	r7,sp
+8000211e:	20 1d       	sub	sp,4
+80002120:	ef 4c ff fc 	st.w	r7[-4],r12
+	//usart->mr = MODE_SETTINGS;
+	
+	usart->MR.onebit = 0;
+80002124:	ee f9 ff fc 	ld.w	r9,r7[-4]
+80002128:	72 18       	ld.w	r8,r9[0x4]
+8000212a:	30 0a       	mov	r10,0
+8000212c:	f1 da d3 e1 	bfins	r8,r10,0x1f,0x1
+80002130:	93 18       	st.w	r9[0x4],r8
+    unsigned int sync            : 1;
+    unsigned int chrl            : 2;
+    unsigned int usclks          : 2;
+    unsigned int mode            : 4;
+	*/
+	usart->cr = CONTROL_SETTINGS;
+80002132:	ee f8 ff fc 	ld.w	r8,r7[-4]
+80002136:	e0 69 00 80 	mov	r9,128
+8000213a:	91 09       	st.w	r8[0x0],r9
+	
+	usart->brgr = BAUD_SETTINGS;
+8000213c:	ee f8 ff fc 	ld.w	r8,r7[-4]
+80002140:	e0 69 01 ae 	mov	r9,430
+80002144:	91 89       	st.w	r8[0x20],r9
+	
+}
+80002146:	2f fd       	sub	sp,-4
+80002148:	e3 cd 80 80 	ldm	sp++,r7,pc
+
+8000214c <main>:
+	{
+		milliseconds--;
+	}
+}
+int main (void)
+{
+8000214c:	eb cd 40 80 	pushm	r7,lr
+80002150:	1a 97       	mov	r7,sp
+80002152:	20 5d       	sub	sp,20
+	// Initialization
+	initLED();
+80002154:	f0 1f 00 15 	mcall	800021a8 <main+0x5c>
+	initButton();
+80002158:	f0 1f 00 15 	mcall	800021ac <main+0x60>
+	volatile avr32_usart_t * usart;
+	usart = USART0;
+8000215c:	fe 78 14 00 	mov	r8,-60416
+80002160:	ef 48 ff ec 	st.w	r7[-20],r8
+	
+	USART_init(usart);
+80002164:	ee fc ff ec 	ld.w	r12,r7[-20]
+80002168:	f0 1f 00 12 	mcall	800021b0 <main+0x64>
+	
+	usart->thr  = 0x00;
+8000216c:	ee f8 ff ec 	ld.w	r8,r7[-20]
+80002170:	30 09       	mov	r9,0
+80002172:	91 79       	st.w	r8[0x1c],r9
+	
+	int csr = usart->csr;
+80002174:	ee f8 ff ec 	ld.w	r8,r7[-20]
+80002178:	70 58       	ld.w	r8,r8[0x14]
+8000217a:	ef 48 ff f0 	st.w	r7[-16],r8
+	int cr = usart->cr;
+8000217e:	ee f8 ff ec 	ld.w	r8,r7[-20]
+80002182:	70 08       	ld.w	r8,r8[0x0]
+80002184:	ef 48 ff f4 	st.w	r7[-12],r8
+	int mr = usart->mr;
+80002188:	ee f8 ff ec 	ld.w	r8,r7[-20]
+8000218c:	70 18       	ld.w	r8,r8[0x4]
+8000218e:	ef 48 ff f8 	st.w	r7[-8],r8
+	int brgr = usart->brgr;
+80002192:	ee f8 ff ec 	ld.w	r8,r7[-20]
+80002196:	70 88       	ld.w	r8,r8[0x20]
+80002198:	ef 48 ff fc 	st.w	r7[-4],r8
+	
+	while(1)
+	{
+		csr = usart->csr;
+8000219c:	ee f8 ff ec 	ld.w	r8,r7[-20]
+800021a0:	70 58       	ld.w	r8,r8[0x14]
+800021a2:	ef 48 ff f0 	st.w	r7[-16],r8
+		
+	}
+800021a6:	cf bb       	rjmp	8000219c <main+0x50>
+800021a8:	80 00       	ld.sh	r0,r0[0x0]
+800021aa:	20 b4       	sub	r4,11
+800021ac:	80 00       	ld.sh	r0,r0[0x0]
+800021ae:	20 ec       	sub	r12,14
+800021b0:	80 00       	ld.sh	r0,r0[0x0]
+800021b2:	21 18       	sub	r8,17
+
+Disassembly of section .exception:
+
+80002200 <_evba>:
+_evba:
+
+	.org  0x000
+	// Unrecoverable Exception.
+_handle_Unrecoverable_Exception:
+	rjmp $
+80002200:	c0 08       	rjmp	80002200 <_evba>
+	...
+
+80002204 <_handle_TLB_Multiple_Hit>:
+
+	.org  0x004
+	// TLB Multiple Hit.
+_handle_TLB_Multiple_Hit:
+	rjmp $
+80002204:	c0 08       	rjmp	80002204 <_handle_TLB_Multiple_Hit>
+	...
+
+80002208 <_handle_Bus_Error_Data_Fetch>:
+
+	.org  0x008
+	// Bus Error Data Fetch.
+_handle_Bus_Error_Data_Fetch:
+	rjmp $
+80002208:	c0 08       	rjmp	80002208 <_handle_Bus_Error_Data_Fetch>
+	...
+
+8000220c <_handle_Bus_Error_Instruction_Fetch>:
+
+	.org  0x00C
+	// Bus Error Instruction Fetch.
+_handle_Bus_Error_Instruction_Fetch:
+	rjmp $
+8000220c:	c0 08       	rjmp	8000220c <_handle_Bus_Error_Instruction_Fetch>
+	...
+
+80002210 <_handle_NMI>:
+
+	.org  0x010
+	// NMI.
+_handle_NMI:
+	rjmp $
+80002210:	c0 08       	rjmp	80002210 <_handle_NMI>
+	...
+
+80002214 <_handle_Instruction_Address>:
+
+	.org  0x014
+	// Instruction Address.
+_handle_Instruction_Address:
+	rjmp $
+80002214:	c0 08       	rjmp	80002214 <_handle_Instruction_Address>
+	...
+
+80002218 <_handle_ITLB_Protection>:
+
+	.org  0x018
+	// ITLB Protection.
+_handle_ITLB_Protection:
+	rjmp $
+80002218:	c0 08       	rjmp	80002218 <_handle_ITLB_Protection>
+	...
+
+8000221c <_handle_Breakpoint>:
+
+	.org  0x01C
+	// Breakpoint.
+_handle_Breakpoint:
+	rjmp $
+8000221c:	c0 08       	rjmp	8000221c <_handle_Breakpoint>
+	...
+
+80002220 <_handle_Illegal_Opcode>:
+
+	.org  0x020
+	// Illegal Opcode.
+_handle_Illegal_Opcode:
+	rjmp $
+80002220:	c0 08       	rjmp	80002220 <_handle_Illegal_Opcode>
+	...
+
+80002224 <_handle_Unimplemented_Instruction>:
+
+	.org  0x024
+	// Unimplemented Instruction.
+_handle_Unimplemented_Instruction:
+	rjmp $
+80002224:	c0 08       	rjmp	80002224 <_handle_Unimplemented_Instruction>
+	...
+
+80002228 <_handle_Privilege_Violation>:
+
+	.org  0x028
+	// Privilege Violation.
+_handle_Privilege_Violation:
+	rjmp $
+80002228:	c0 08       	rjmp	80002228 <_handle_Privilege_Violation>
+	...
+
+8000222c <_handle_Floating_Point>:
+
+	.org  0x02C
+	// Floating-Point: UNUSED IN AVR32UC and AVR32AP.
+_handle_Floating_Point:
+	rjmp $
+8000222c:	c0 08       	rjmp	8000222c <_handle_Floating_Point>
+	...
+
+80002230 <_handle_Coprocessor_Absent>:
+
+	.org  0x030
+	// Coprocessor Absent: UNUSED IN AVR32UC.
+_handle_Coprocessor_Absent:
+	rjmp $
+80002230:	c0 08       	rjmp	80002230 <_handle_Coprocessor_Absent>
+	...
+
+80002234 <_handle_Data_Address_Read>:
+
+	.org  0x034
+	// Data Address (Read).
+_handle_Data_Address_Read:
+	rjmp $
+80002234:	c0 08       	rjmp	80002234 <_handle_Data_Address_Read>
+	...
+
+80002238 <_handle_Data_Address_Write>:
+
+	.org  0x038
+	// Data Address (Write).
+_handle_Data_Address_Write:
+	rjmp $
+80002238:	c0 08       	rjmp	80002238 <_handle_Data_Address_Write>
+	...
+
+8000223c <_handle_DTLB_Protection_Read>:
+
+	.org  0x03C
+	// DTLB Protection (Read).
+_handle_DTLB_Protection_Read:
+	rjmp $
+8000223c:	c0 08       	rjmp	8000223c <_handle_DTLB_Protection_Read>
+	...
+
+80002240 <_handle_DTLB_Protection_Write>:
+
+	.org  0x040
+	// DTLB Protection (Write).
+_handle_DTLB_Protection_Write:
+	rjmp $
+80002240:	c0 08       	rjmp	80002240 <_handle_DTLB_Protection_Write>
+	...
+
+80002244 <_handle_DTLB_Modified>:
+
+	.org  0x044
+	// DTLB Modified: UNUSED IN AVR32UC.
+_handle_DTLB_Modified:
+	rjmp $
+80002244:	c0 08       	rjmp	80002244 <_handle_DTLB_Modified>
+	...
+
+80002250 <_handle_ITLB_Miss>:
+
+	.org  0x050
+	// ITLB Miss.
+_handle_ITLB_Miss:
+	rjmp $
+80002250:	c0 08       	rjmp	80002250 <_handle_ITLB_Miss>
+	...
+
+80002260 <_handle_DTLB_Miss_Read>:
+
+	.org  0x060
+	// DTLB Miss (Read).
+_handle_DTLB_Miss_Read:
+	rjmp $
+80002260:	c0 08       	rjmp	80002260 <_handle_DTLB_Miss_Read>
+	...
+
+80002270 <_handle_DTLB_Miss_Write>:
+
+	.org  0x070
+	// DTLB Miss (Write).
+_handle_DTLB_Miss_Write:
+	rjmp $
+80002270:	c0 08       	rjmp	80002270 <_handle_DTLB_Miss_Write>
+	...
+
+80002300 <_handle_Supervisor_Call>:
+
+	.org  0x100
+	// Supervisor Call.
+_handle_Supervisor_Call:
+	rjmp $
+80002300:	c0 08       	rjmp	80002300 <_handle_Supervisor_Call>
+80002302:	d7 03       	nop
+
+80002304 <_int0>:
+	 * RSR_INTx by the CPU upon interrupt entry. No other register is saved
+	 * by hardware.
+	 */
+	pushm   r8-r12, lr
+#endif
+	// Pass the int_level parameter to the _get_interrupt_handler function.
+80002304:	30 0c       	mov	r12,0
+80002306:	c8 1e       	rcall	80002008 <_get_interrupt_handler>
+80002308:	58 0c       	cp.w	r12,0
+8000230a:	f8 0f 17 10 	movne	pc,r12
+8000230e:	d6 03       	rete
+
+80002310 <_int1>:
+	popm    r8-r12, lr
+#endif
+	/*
+	 * If this was a spurious interrupt (R12 == NULL), return from event
+	 * handler.
+	 */
+80002310:	30 1c       	mov	r12,1
+	 * RSR_INTx by the CPU upon interrupt entry. No other register is saved
+	 * by hardware.
+	 */
+	pushm   r8-r12, lr
+#endif
+	// Pass the int_level parameter to the _get_interrupt_handler function.
+80002312:	c7 be       	rcall	80002008 <_get_interrupt_handler>
+80002314:	58 0c       	cp.w	r12,0
+80002316:	f8 0f 17 10 	movne	pc,r12
+8000231a:	d6 03       	rete
+
+8000231c <_int2>:
+8000231c:	30 2c       	mov	r12,2
+	popm    r8-r12, lr
+#endif
+	/*
+	 * If this was a spurious interrupt (R12 == NULL), return from event
+	 * handler.
+	 */
+8000231e:	c7 5e       	rcall	80002008 <_get_interrupt_handler>
+	 * RSR_INTx by the CPU upon interrupt entry. No other register is saved
+	 * by hardware.
+	 */
+	pushm   r8-r12, lr
+#endif
+	// Pass the int_level parameter to the _get_interrupt_handler function.
+80002320:	58 0c       	cp.w	r12,0
+80002322:	f8 0f 17 10 	movne	pc,r12
+80002326:	d6 03       	rete
+
+80002328 <_int3>:
+80002328:	30 3c       	mov	r12,3
+8000232a:	c6 fe       	rcall	80002008 <_get_interrupt_handler>
+	popm    r8-r12, lr
+#endif
+	/*
+	 * If this was a spurious interrupt (R12 == NULL), return from event
+	 * handler.
+	 */
+8000232c:	58 0c       	cp.w	r12,0
+	 * RSR_INTx by the CPU upon interrupt entry. No other register is saved
+	 * by hardware.
+	 */
+	pushm   r8-r12, lr
+#endif
+	// Pass the int_level parameter to the _get_interrupt_handler function.
+8000232e:	f8 0f 17 10 	movne	pc,r12
+80002332:	d6 03       	rete
+80002334:	d7 03       	nop
+80002336:	d7 03       	nop
+80002338:	d7 03       	nop
+	popm    r8-r12, lr
+#endif
+	/*
+	 * If this was a spurious interrupt (R12 == NULL), return from event
+	 * handler.
+	 */
+8000233a:	d7 03       	nop
+8000233c:	d7 03       	nop
+8000233e:	d7 03       	nop
+80002340:	d7 03       	nop
+80002342:	d7 03       	nop
+80002344:	d7 03       	nop
+80002346:	d7 03       	nop
+80002348:	d7 03       	nop
+8000234a:	d7 03       	nop
+8000234c:	d7 03       	nop
+8000234e:	d7 03       	nop
+80002350:	d7 03       	nop
+80002352:	d7 03       	nop
+80002354:	d7 03       	nop
+80002356:	d7 03       	nop
+80002358:	d7 03       	nop
+8000235a:	d7 03       	nop
+8000235c:	d7 03       	nop
+8000235e:	d7 03       	nop
+80002360:	d7 03       	nop
+80002362:	d7 03       	nop
+80002364:	d7 03       	nop
+80002366:	d7 03       	nop
+80002368:	d7 03       	nop
+8000236a:	d7 03       	nop
+8000236c:	d7 03       	nop
+8000236e:	d7 03       	nop
+80002370:	d7 03       	nop
+80002372:	d7 03       	nop
+80002374:	d7 03       	nop
+80002376:	d7 03       	nop
+80002378:	d7 03       	nop
+8000237a:	d7 03       	nop
+8000237c:	d7 03       	nop
+8000237e:	d7 03       	nop
+80002380:	d7 03       	nop
+80002382:	d7 03       	nop
+80002384:	d7 03       	nop
+80002386:	d7 03       	nop
+80002388:	d7 03       	nop
+8000238a:	d7 03       	nop
+8000238c:	d7 03       	nop
+8000238e:	d7 03       	nop
+80002390:	d7 03       	nop
+80002392:	d7 03       	nop
+80002394:	d7 03       	nop
+80002396:	d7 03       	nop
+80002398:	d7 03       	nop
+8000239a:	d7 03       	nop
+8000239c:	d7 03       	nop
+8000239e:	d7 03       	nop
+800023a0:	d7 03       	nop
+800023a2:	d7 03       	nop
+800023a4:	d7 03       	nop
+800023a6:	d7 03       	nop
+800023a8:	d7 03       	nop
+800023aa:	d7 03       	nop
+800023ac:	d7 03       	nop
+800023ae:	d7 03       	nop
+800023b0:	d7 03       	nop
+800023b2:	d7 03       	nop
+800023b4:	d7 03       	nop
+800023b6:	d7 03       	nop
+800023b8:	d7 03       	nop
+800023ba:	d7 03       	nop
+800023bc:	d7 03       	nop
+800023be:	d7 03       	nop
+800023c0:	d7 03       	nop
+800023c2:	d7 03       	nop
+800023c4:	d7 03       	nop
+800023c6:	d7 03       	nop
+800023c8:	d7 03       	nop
+800023ca:	d7 03       	nop
+800023cc:	d7 03       	nop
+800023ce:	d7 03       	nop
+800023d0:	d7 03       	nop
+800023d2:	d7 03       	nop
+800023d4:	d7 03       	nop
+800023d6:	d7 03       	nop
+800023d8:	d7 03       	nop
+800023da:	d7 03       	nop
+800023dc:	d7 03       	nop
+800023de:	d7 03       	nop
+800023e0:	d7 03       	nop
+800023e2:	d7 03       	nop
+800023e4:	d7 03       	nop
+800023e6:	d7 03       	nop
+800023e8:	d7 03       	nop
+800023ea:	d7 03       	nop
+800023ec:	d7 03       	nop
+800023ee:	d7 03       	nop
+800023f0:	d7 03       	nop
+800023f2:	d7 03       	nop
+800023f4:	d7 03       	nop
+800023f6:	d7 03       	nop
+800023f8:	d7 03       	nop
+800023fa:	d7 03       	nop
+800023fc:	d7 03       	nop
+800023fe:	d7 03       	nop
