@@ -5,11 +5,11 @@ Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
   0 .reset        00002008  80000000  80000000  00000400  2**2
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  1 .text         000005c0  80002008  80002008  00002408  2**2
+  1 .text         00000488  80002008  80002008  00002408  2**2
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
   2 .exception    00000200  80002600  80002600  00002a00  2**9
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  3 .rodata       000000b0  80002800  80002800  00002c00  2**2
+  3 .rodata       000000a0  80002800  80002800  00002c00  2**2
                   CONTENTS, ALLOC, LOAD, READONLY, DATA
   4 .dalign       00000004  00000004  00000004  00000000  2**0
                   ALLOC
@@ -17,860 +17,1002 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   ALLOC
   6 .heap         0000ef08  000000f8  000000f8  00000000  2**0
                   ALLOC
-  7 .comment      00000030  00000000  00000000  00002cb0  2**0
+  7 .comment      00000030  00000000  00000000  00002ca0  2**0
                   CONTENTS, READONLY
-  8 .debug_aranges 00000208  00000000  00000000  00002ce0  2**3
+  8 .debug_aranges 00000118  00000000  00000000  00002cd0  2**3
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_pubnames 00000416  00000000  00000000  00002ee8  2**0
+  9 .debug_pubnames 000000f8  00000000  00000000  00002de8  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_info   000029bd  00000000  00000000  000032fe  2**0
+ 10 .debug_info   0000338b  00000000  00000000  00002ee0  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_abbrev 0000057c  00000000  00000000  00005cbb  2**0
+ 11 .debug_abbrev 0000051b  00000000  00000000  0000626b  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_line   000019b6  00000000  00000000  00006237  2**0
+ 12 .debug_line   0000170a  00000000  00000000  00006786  2**0
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_frame  000004e4  00000000  00000000  00007bf0  2**2
+ 13 .debug_frame  0000019c  00000000  00000000  00007e90  2**2
                   CONTENTS, READONLY, DEBUGGING
- 14 .debug_str    00000cfc  00000000  00000000  000080d4  2**0
+ 14 .debug_str    000009b3  00000000  00000000  0000802c  2**0
                   CONTENTS, READONLY, DEBUGGING
- 15 .debug_loc    00000739  00000000  00000000  00008dd0  2**0
+ 15 .debug_loc    0000022f  00000000  00000000  000089df  2**0
                   CONTENTS, READONLY, DEBUGGING
- 16 .debug_macinfo 002c7de4  00000000  00000000  00009509  2**0
+ 16 .debug_macinfo 002c95b3  00000000  00000000  00008c0e  2**0
                   CONTENTS, READONLY, DEBUGGING
  17 .stack        00001000  0000f000  0000f000  00000000  2**0
                   ALLOC
- 18 .debug_ranges 000001a8  00000000  00000000  002d12f0  2**3
+ 18 .debug_ranges 000000b8  00000000  00000000  002d21c8  2**3
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .reset:
 
 80000000 <_start>:
-80000000:	fe cf de 08 	sub	pc,pc,-8696
+
+  .global _start
+  .type _start, @function
+_start:
+  // Jump to the C runtime startup routine.
+  lda.w   pc, _stext
+80000000:	fe cf dc a0 	sub	pc,pc,-9056
 
 80000004 <_trampoline>:
 80000004:	e0 8f 10 00 	bral	80002004 <program_start>
 	...
 
 80002004 <program_start>:
-80002004:	fe cf fe 0c 	sub	pc,pc,-500
+  rjmp    program_start
+
+  .org  PROGRAM_START_OFFSET
+program_start:
+  // Jump to the C runtime startup routine.
+  lda.w   pc, _stext
+80002004:	fe cf fc a4 	sub	pc,pc,-860
 
 Disassembly of section .text:
 
-80002008 <gpio_enable_module>:
+80002008 <USART_init>:
 80002008:	eb cd 40 80 	pushm	r7,lr
-8000200c:	1a 97       	mov	r7,sp
-8000200e:	20 4d       	sub	sp,16
-80002010:	ef 4c ff f4 	st.w	r7[-12],r12
-80002014:	ef 4b ff f0 	st.w	r7[-16],r11
-80002018:	30 08       	mov	r8,0
-8000201a:	ef 48 ff f8 	st.w	r7[-8],r8
-8000201e:	30 08       	mov	r8,0
-80002020:	ef 48 ff fc 	st.w	r7[-4],r8
-80002024:	c1 c8       	rjmp	8000205c <gpio_enable_module+0x54>
-80002026:	ee f8 ff f4 	ld.w	r8,r7[-12]
-8000202a:	70 19       	ld.w	r9,r8[0x4]
-8000202c:	ee f8 ff f4 	ld.w	r8,r7[-12]
-80002030:	70 08       	ld.w	r8,r8[0x0]
-80002032:	12 9b       	mov	r11,r9
-80002034:	10 9c       	mov	r12,r8
-80002036:	f0 1f 00 10 	mcall	80002074 <gpio_enable_module+0x6c>
-8000203a:	18 98       	mov	r8,r12
-8000203c:	ee f9 ff f8 	ld.w	r9,r7[-8]
-80002040:	f3 e8 10 08 	or	r8,r9,r8
-80002044:	ef 48 ff f8 	st.w	r7[-8],r8
-80002048:	ee f8 ff f4 	ld.w	r8,r7[-12]
-8000204c:	2f 88       	sub	r8,-8
-8000204e:	ef 48 ff f4 	st.w	r7[-12],r8
-80002052:	ee f8 ff fc 	ld.w	r8,r7[-4]
-80002056:	2f f8       	sub	r8,-1
-80002058:	ef 48 ff fc 	st.w	r7[-4],r8
-8000205c:	ee f9 ff fc 	ld.w	r9,r7[-4]
-80002060:	ee f8 ff f0 	ld.w	r8,r7[-16]
-80002064:	10 39       	cp.w	r9,r8
-80002066:	ce 03       	brcs	80002026 <gpio_enable_module+0x1e>
-80002068:	ee f8 ff f8 	ld.w	r8,r7[-8]
-8000206c:	10 9c       	mov	r12,r8
-8000206e:	2f cd       	sub	sp,-16
-80002070:	e3 cd 80 80 	ldm	sp++,r7,pc
-80002074:	80 00       	ld.sh	r0,r0[0x0]
-80002076:	20 78       	sub	r8,7
-
-80002078 <gpio_enable_module_pin>:
-80002078:	eb cd 40 80 	pushm	r7,lr
-8000207c:	1a 97       	mov	r7,sp
-8000207e:	20 3d       	sub	sp,12
-80002080:	ef 4c ff f8 	st.w	r7[-8],r12
-80002084:	ef 4b ff f4 	st.w	r7[-12],r11
-80002088:	ee f8 ff f8 	ld.w	r8,r7[-8]
-8000208c:	a5 98       	lsr	r8,0x5
-8000208e:	a9 68       	lsl	r8,0x8
-80002090:	e0 28 f0 00 	sub	r8,61440
-80002094:	ef 48 ff fc 	st.w	r7[-4],r8
-80002098:	ee f8 ff f4 	ld.w	r8,r7[-12]
-8000209c:	58 18       	cp.w	r8,1
-8000209e:	c1 e0       	breq	800020da <gpio_enable_module_pin+0x62>
-800020a0:	c0 63       	brcs	800020ac <gpio_enable_module_pin+0x34>
-800020a2:	58 28       	cp.w	r8,2
-800020a4:	c3 20       	breq	80002108 <gpio_enable_module_pin+0x90>
-800020a6:	58 38       	cp.w	r8,3
-800020a8:	c4 70       	breq	80002136 <gpio_enable_module_pin+0xbe>
-800020aa:	c5 d8       	rjmp	80002164 <gpio_enable_module_pin+0xec>
-800020ac:	ee f8 ff f8 	ld.w	r8,r7[-8]
-800020b0:	f1 d8 c0 05 	bfextu	r8,r8,0x0,0x5
-800020b4:	30 19       	mov	r9,1
-800020b6:	f2 08 09 48 	lsl	r8,r9,r8
-800020ba:	10 99       	mov	r9,r8
-800020bc:	ee f8 ff fc 	ld.w	r8,r7[-4]
-800020c0:	91 69       	st.w	r8[0x18],r9
-800020c2:	ee f8 ff f8 	ld.w	r8,r7[-8]
-800020c6:	f1 d8 c0 05 	bfextu	r8,r8,0x0,0x5
-800020ca:	30 19       	mov	r9,1
-800020cc:	f2 08 09 48 	lsl	r8,r9,r8
-800020d0:	10 99       	mov	r9,r8
-800020d2:	ee f8 ff fc 	ld.w	r8,r7[-4]
-800020d6:	91 a9       	st.w	r8[0x28],r9
-800020d8:	c4 88       	rjmp	80002168 <gpio_enable_module_pin+0xf0>
-800020da:	ee f8 ff f8 	ld.w	r8,r7[-8]
-800020de:	f1 d8 c0 05 	bfextu	r8,r8,0x0,0x5
-800020e2:	30 19       	mov	r9,1
-800020e4:	f2 08 09 48 	lsl	r8,r9,r8
-800020e8:	10 99       	mov	r9,r8
-800020ea:	ee f8 ff fc 	ld.w	r8,r7[-4]
-800020ee:	91 59       	st.w	r8[0x14],r9
-800020f0:	ee f8 ff f8 	ld.w	r8,r7[-8]
-800020f4:	f1 d8 c0 05 	bfextu	r8,r8,0x0,0x5
-800020f8:	30 19       	mov	r9,1
-800020fa:	f2 08 09 48 	lsl	r8,r9,r8
-800020fe:	10 99       	mov	r9,r8
-80002100:	ee f8 ff fc 	ld.w	r8,r7[-4]
-80002104:	91 a9       	st.w	r8[0x28],r9
-80002106:	c3 18       	rjmp	80002168 <gpio_enable_module_pin+0xf0>
-80002108:	ee f8 ff f8 	ld.w	r8,r7[-8]
-8000210c:	f1 d8 c0 05 	bfextu	r8,r8,0x0,0x5
-80002110:	30 19       	mov	r9,1
-80002112:	f2 08 09 48 	lsl	r8,r9,r8
-80002116:	10 99       	mov	r9,r8
-80002118:	ee f8 ff fc 	ld.w	r8,r7[-4]
-8000211c:	91 69       	st.w	r8[0x18],r9
-8000211e:	ee f8 ff f8 	ld.w	r8,r7[-8]
-80002122:	f1 d8 c0 05 	bfextu	r8,r8,0x0,0x5
-80002126:	30 19       	mov	r9,1
-80002128:	f2 08 09 48 	lsl	r8,r9,r8
-8000212c:	10 99       	mov	r9,r8
-8000212e:	ee f8 ff fc 	ld.w	r8,r7[-4]
-80002132:	91 99       	st.w	r8[0x24],r9
-80002134:	c1 a8       	rjmp	80002168 <gpio_enable_module_pin+0xf0>
-80002136:	ee f8 ff f8 	ld.w	r8,r7[-8]
-8000213a:	f1 d8 c0 05 	bfextu	r8,r8,0x0,0x5
-8000213e:	30 19       	mov	r9,1
-80002140:	f2 08 09 48 	lsl	r8,r9,r8
-80002144:	10 99       	mov	r9,r8
-80002146:	ee f8 ff fc 	ld.w	r8,r7[-4]
-8000214a:	91 59       	st.w	r8[0x14],r9
-8000214c:	ee f8 ff f8 	ld.w	r8,r7[-8]
-80002150:	f1 d8 c0 05 	bfextu	r8,r8,0x0,0x5
-80002154:	30 19       	mov	r9,1
-80002156:	f2 08 09 48 	lsl	r8,r9,r8
-8000215a:	10 99       	mov	r9,r8
-8000215c:	ee f8 ff fc 	ld.w	r8,r7[-4]
-80002160:	91 99       	st.w	r8[0x24],r9
-80002162:	c0 38       	rjmp	80002168 <gpio_enable_module_pin+0xf0>
-80002164:	30 18       	mov	r8,1
-80002166:	c0 d8       	rjmp	80002180 <gpio_enable_module_pin+0x108>
-80002168:	ee f8 ff f8 	ld.w	r8,r7[-8]
-8000216c:	f1 d8 c0 05 	bfextu	r8,r8,0x0,0x5
-80002170:	30 19       	mov	r9,1
-80002172:	f2 08 09 48 	lsl	r8,r9,r8
-80002176:	10 99       	mov	r9,r8
-80002178:	ee f8 ff fc 	ld.w	r8,r7[-4]
-8000217c:	91 29       	st.w	r8[0x8],r9
-8000217e:	30 08       	mov	r8,0
-80002180:	10 9c       	mov	r12,r8
-80002182:	2f dd       	sub	sp,-12
-80002184:	e3 cd 80 80 	ldm	sp++,r7,pc
-
-80002188 <_get_interrupt_handler>:
-80002188:	eb cd 40 80 	pushm	r7,lr
-8000218c:	1a 97       	mov	r7,sp
-8000218e:	20 3d       	sub	sp,12
-80002190:	ef 4c ff f4 	st.w	r7[-12],r12
-80002194:	fe 78 08 00 	mov	r8,-63488
-80002198:	ee f9 ff f4 	ld.w	r9,r7[-12]
-8000219c:	f2 09 11 03 	rsub	r9,r9,3
-800021a0:	28 09       	sub	r9,-128
-800021a2:	f0 09 03 28 	ld.w	r8,r8[r9<<0x2]
-800021a6:	ef 48 ff f8 	st.w	r7[-8],r8
-800021aa:	fe 78 08 00 	mov	r8,-63488
-800021ae:	ee f9 ff f8 	ld.w	r9,r7[-8]
-800021b2:	2c 09       	sub	r9,-64
-800021b4:	f0 09 03 28 	ld.w	r8,r8[r9<<0x2]
-800021b8:	ef 48 ff fc 	st.w	r7[-4],r8
-800021bc:	ee f8 ff fc 	ld.w	r8,r7[-4]
-800021c0:	58 08       	cp.w	r8,0
-800021c2:	c1 30       	breq	800021e8 <_get_interrupt_handler+0x60>
-800021c4:	ee f9 ff f8 	ld.w	r9,r7[-8]
-800021c8:	48 b8       	lddpc	r8,800021f4 <_get_interrupt_handler+0x6c>
-800021ca:	a1 79       	lsl	r9,0x1
-800021cc:	2f f9       	sub	r9,-1
-800021ce:	f0 09 03 29 	ld.w	r9,r8[r9<<0x2]
-800021d2:	ee f8 ff fc 	ld.w	r8,r7[-4]
-800021d6:	f0 08 12 00 	clz	r8,r8
-800021da:	f0 08 11 1f 	rsub	r8,r8,31
-800021de:	a3 68       	lsl	r8,0x2
-800021e0:	f2 08 00 08 	add	r8,r9,r8
-800021e4:	70 08       	ld.w	r8,r8[0x0]
-800021e6:	c0 28       	rjmp	800021ea <_get_interrupt_handler+0x62>
-800021e8:	30 08       	mov	r8,0
-800021ea:	10 9c       	mov	r12,r8
-800021ec:	2f dd       	sub	sp,-12
-800021ee:	e3 cd 80 80 	ldm	sp++,r7,pc
-800021f2:	00 00       	add	r0,r0
-800021f4:	80 00       	ld.sh	r0,r0[0x0]
-800021f6:	28 00       	sub	r0,-128
-
-800021f8 <_stext>:
-800021f8:	e0 7d 00 00 	mov	sp,65536
-800021fc:	fe c0 fb fc 	sub	r0,pc,-1028
-80002200:	e3 b0 00 01 	mtsr	0x4,r0
-80002204:	d5 53       	csrf	0x15
-80002206:	30 80       	mov	r0,8
-80002208:	30 81       	mov	r1,8
-8000220a:	02 30       	cp.w	r0,r1
-8000220c:	c0 72       	brcc	8000221a <idata_load_loop_end>
-8000220e:	fe c2 f9 5e 	sub	r2,pc,-1698
-
-80002212 <idata_load_loop>:
-80002212:	a5 05       	ld.d	r4,r2++
-80002214:	a1 24       	st.d	r0++,r4
-80002216:	02 30       	cp.w	r0,r1
-80002218:	cf d3       	brcs	80002212 <idata_load_loop>
-
-8000221a <idata_load_loop_end>:
-8000221a:	30 80       	mov	r0,8
-8000221c:	e0 61 00 f8 	mov	r1,248
-80002220:	02 30       	cp.w	r0,r1
-80002222:	c0 62       	brcc	8000222e <udata_clear_loop_end>
-80002224:	30 02       	mov	r2,0
-80002226:	30 03       	mov	r3,0
-
-80002228 <udata_clear_loop>:
-80002228:	a1 22       	st.d	r0++,r2
-8000222a:	02 30       	cp.w	r0,r1
-8000222c:	cf e3       	brcs	80002228 <udata_clear_loop>
-
-8000222e <udata_clear_loop_end>:
-8000222e:	fe cf fc e6 	sub	pc,pc,-794
-80002232:	d7 03       	nop
-80002234:	62 72       	ld.w	r2,r1[0x1c]
-80002236:	61 00       	ld.w	r0,r0[0x40]
-
-80002238 <initLED>:
-80002238:	eb cd 40 80 	pushm	r7,lr
-8000223c:	1a 97       	mov	r7,sp
-8000223e:	20 1d       	sub	sp,4
-80002240:	fe 78 11 00 	mov	r8,-61184
-80002244:	ef 48 ff fc 	st.w	r7[-4],r8
-	volatile avr32_gpio_port_t * led_port;
-	// pointing to the correct port
-	led_port = &AVR32_GPIO.port[LED_PORT];
-	
-	// Enables the registers for the LEDs
-	led_port->gpers = LED0_BIT_VALUE;
-80002248:	ee f8 ff fc 	ld.w	r8,r7[-4]
-8000224c:	fc 19 08 00 	movh	r9,0x800
-80002250:	91 19       	st.w	r8[0x4],r9
-
-	// Turning all LEDs off
-	led_port->ovrs = LED0_BIT_VALUE;
-80002252:	ee f8 ff fc 	ld.w	r8,r7[-4]
-80002256:	fc 19 08 00 	movh	r9,0x800
-8000225a:	f1 49 00 54 	st.w	r8[84],r9
-	
-	// setting the led pins to outputs
-	led_port->oders = LED0_BIT_VALUE;
-8000225e:	ee f8 ff fc 	ld.w	r8,r7[-4]
-80002262:	fc 19 08 00 	movh	r9,0x800
-80002266:	f1 49 00 44 	st.w	r8[68],r9
-}
-8000226a:	2f fd       	sub	sp,-4
-8000226c:	e3 cd 80 80 	ldm	sp++,r7,pc
-
-80002270 <initButton>:
-// Initializes the button
-void initButton (void)
-{
-80002270:	eb cd 40 80 	pushm	r7,lr
-80002274:	1a 97       	mov	r7,sp
-80002276:	20 1d       	sub	sp,4
-	// Button port pointer
-	volatile avr32_gpio_port_t * button_port;
-	button_port = &AVR32_GPIO.port[BUTTON_PORT];
-80002278:	fe 78 12 00 	mov	r8,-60928
-8000227c:	ef 48 ff fc 	st.w	r7[-4],r8
-	
-	// Enables the register
-	button_port->gpers = BUTTON2_PIN;
-80002280:	ee f8 ff fc 	ld.w	r8,r7[-4]
-80002284:	e4 69 00 00 	mov	r9,262144
-80002288:	91 19       	st.w	r8[0x4],r9
-	// Sets the pin to an input
-	button_port->oderc = BUTTON2_PIN;
-8000228a:	ee f8 ff fc 	ld.w	r8,r7[-4]
-8000228e:	e4 69 00 00 	mov	r9,262144
-80002292:	f1 49 00 48 	st.w	r8[72],r9
-	
-}
-80002296:	2f fd       	sub	sp,-4
-80002298:	e3 cd 80 80 	ldm	sp++,r7,pc
-
-8000229c <USART_reset>:
-	usart->THR.txsynh = 0;
-	usart->thr = c;
-}
-
-void USART_reset(volatile avr32_usart_t * usart)
-{
-8000229c:	eb cd 40 80 	pushm	r7,lr
-800022a0:	1a 97       	mov	r7,sp
-800022a2:	20 1d       	sub	sp,4
-800022a4:	ef 4c ff fc 	st.w	r7[-4],r12
-		usart->mr = 0;
-800022a8:	ee f8 ff fc 	ld.w	r8,r7[-4]
-800022ac:	30 09       	mov	r9,0
-800022ae:	91 19       	st.w	r8[0x4],r9
-		usart->rtor = 0;
-800022b0:	ee f8 ff fc 	ld.w	r8,r7[-4]
-800022b4:	30 09       	mov	r9,0
-800022b6:	91 99       	st.w	r8[0x24],r9
-		usart->ttgr = 0;
-800022b8:	ee f8 ff fc 	ld.w	r8,r7[-4]
-800022bc:	30 09       	mov	r9,0
-800022be:	91 a9       	st.w	r8[0x28],r9
-		
-		usart->cr = AVR32_USART_CR_RSTRX_MASK   |
-800022c0:	ee f8 ff fc 	ld.w	r8,r7[-4]
-800022c4:	e8 69 61 0c 	mov	r9,549132
-800022c8:	91 09       	st.w	r8[0x0],r9
-		AVR32_USART_CR_RSTTX_MASK   |
-		AVR32_USART_CR_RSTSTA_MASK  |
-		AVR32_USART_CR_RSTIT_MASK   |
-		AVR32_USART_CR_RSTNACK_MASK |
-		AVR32_USART_CR_RTSDIS_MASK;
-}
-800022ca:	2f fd       	sub	sp,-4
-800022cc:	e3 cd 80 80 	ldm	sp++,r7,pc
-
-800022d0 <mdelay>:
-
-// Function to create a delay (not in milliseconds)
-void mdelay(int milliseconds)
-{
-800022d0:	eb cd 40 80 	pushm	r7,lr
-800022d4:	1a 97       	mov	r7,sp
-800022d6:	20 1d       	sub	sp,4
-800022d8:	ef 4c ff fc 	st.w	r7[-4],r12
-	while (milliseconds != 0)
-800022dc:	c0 68       	rjmp	800022e8 <mdelay+0x18>
-	{
-		milliseconds--;
-800022de:	ee f8 ff fc 	ld.w	r8,r7[-4]
-800022e2:	20 18       	sub	r8,1
-800022e4:	ef 48 ff fc 	st.w	r7[-4],r8
-}
-
-// Function to create a delay (not in milliseconds)
-void mdelay(int milliseconds)
-{
-	while (milliseconds != 0)
-800022e8:	ee f8 ff fc 	ld.w	r8,r7[-4]
-800022ec:	58 08       	cp.w	r8,0
-800022ee:	cf 81       	brne	800022de <mdelay+0xe>
-	{
-		milliseconds--;
-	}
-}
-800022f0:	2f fd       	sub	sp,-4
-800022f2:	e3 cd 80 80 	ldm	sp++,r7,pc
-
-800022f6 <USART_init>:
-/*! \brief This is an example demonstrating the USART RS232 TX and RX
- *         functionalities using the USART driver.
- */
+#include "USART_driver.h"
 
 void USART_init(volatile avr32_usart_t * usart)
 {
-800022f6:	eb cd 40 80 	pushm	r7,lr
-800022fa:	1a 97       	mov	r7,sp
-800022fc:	20 2d       	sub	sp,8
-800022fe:	ef 4c ff f8 	st.w	r7[-8],r12
-	//usart->mr = MODE_SETTINGS;
+8000200c:	1a 97       	mov	r7,sp
+8000200e:	20 2d       	sub	sp,8
+80002010:	ef 4c ff f8 	st.w	r7[-8],r12
+	USART_reset(); //Resets the mode register and the Control register.
+80002014:	f0 1f 00 92 	mcall	8000225c <USART_init+0x254>
 	// Mode register init
 	usart->MR.onebit		= 0;
-80002302:	ee f9 ff f8 	ld.w	r9,r7[-8]
-80002306:	72 18       	ld.w	r8,r9[0x4]
-80002308:	30 0a       	mov	r10,0
-8000230a:	f1 da d3 e1 	bfins	r8,r10,0x1f,0x1
-8000230e:	93 18       	st.w	r9[0x4],r8
+80002018:	ee f9 ff f8 	ld.w	r9,r7[-8]
+8000201c:	72 18       	ld.w	r8,r9[0x4]
+8000201e:	30 0a       	mov	r10,0
+80002020:	f1 da d3 e1 	bfins	r8,r10,0x1f,0x1
+80002024:	93 18       	st.w	r9[0x4],r8
 	usart->MR.modsync		= 0;
-80002310:	ee f9 ff f8 	ld.w	r9,r7[-8]
-80002314:	72 18       	ld.w	r8,r9[0x4]
-80002316:	30 0a       	mov	r10,0
-80002318:	f1 da d3 c1 	bfins	r8,r10,0x1e,0x1
-8000231c:	93 18       	st.w	r9[0x4],r8
+80002026:	ee f9 ff f8 	ld.w	r9,r7[-8]
+8000202a:	72 18       	ld.w	r8,r9[0x4]
+8000202c:	30 0a       	mov	r10,0
+8000202e:	f1 da d3 c1 	bfins	r8,r10,0x1e,0x1
+80002032:	93 18       	st.w	r9[0x4],r8
 	usart->MR.man			= 0;
-8000231e:	ee f9 ff f8 	ld.w	r9,r7[-8]
-80002322:	72 18       	ld.w	r8,r9[0x4]
-80002324:	30 0a       	mov	r10,0
-80002326:	f1 da d3 a1 	bfins	r8,r10,0x1d,0x1
-8000232a:	93 18       	st.w	r9[0x4],r8
+80002034:	ee f9 ff f8 	ld.w	r9,r7[-8]
+80002038:	72 18       	ld.w	r8,r9[0x4]
+8000203a:	30 0a       	mov	r10,0
+8000203c:	f1 da d3 a1 	bfins	r8,r10,0x1d,0x1
+80002040:	93 18       	st.w	r9[0x4],r8
 	usart->MR.filter		= 0;
-8000232c:	ee f9 ff f8 	ld.w	r9,r7[-8]
-80002330:	72 18       	ld.w	r8,r9[0x4]
-80002332:	30 0a       	mov	r10,0
-80002334:	f1 da d3 81 	bfins	r8,r10,0x1c,0x1
-80002338:	93 18       	st.w	r9[0x4],r8
+80002042:	ee f9 ff f8 	ld.w	r9,r7[-8]
+80002046:	72 18       	ld.w	r8,r9[0x4]
+80002048:	30 0a       	mov	r10,0
+8000204a:	f1 da d3 81 	bfins	r8,r10,0x1c,0x1
+8000204e:	93 18       	st.w	r9[0x4],r8
 	usart->MR.max_iteration = 0;
-8000233a:	ee f9 ff f8 	ld.w	r9,r7[-8]
-8000233e:	72 18       	ld.w	r8,r9[0x4]
-80002340:	30 0a       	mov	r10,0
-80002342:	f1 da d3 03 	bfins	r8,r10,0x18,0x3
-80002346:	93 18       	st.w	r9[0x4],r8
+80002050:	ee f9 ff f8 	ld.w	r9,r7[-8]
+80002054:	72 18       	ld.w	r8,r9[0x4]
+80002056:	30 0a       	mov	r10,0
+80002058:	f1 da d3 03 	bfins	r8,r10,0x18,0x3
+8000205c:	93 18       	st.w	r9[0x4],r8
 	usart->MR.var_sync		= 0;
-80002348:	ee f9 ff f8 	ld.w	r9,r7[-8]
-8000234c:	72 18       	ld.w	r8,r9[0x4]
-8000234e:	30 0a       	mov	r10,0
-80002350:	f1 da d2 c1 	bfins	r8,r10,0x16,0x1
-80002354:	93 18       	st.w	r9[0x4],r8
+8000205e:	ee f9 ff f8 	ld.w	r9,r7[-8]
+80002062:	72 18       	ld.w	r8,r9[0x4]
+80002064:	30 0a       	mov	r10,0
+80002066:	f1 da d2 c1 	bfins	r8,r10,0x16,0x1
+8000206a:	93 18       	st.w	r9[0x4],r8
 	usart->MR.dsnack		= 0;
-80002356:	ee f9 ff f8 	ld.w	r9,r7[-8]
-8000235a:	72 18       	ld.w	r8,r9[0x4]
-8000235c:	30 0a       	mov	r10,0
-8000235e:	f1 da d2 a1 	bfins	r8,r10,0x15,0x1
-80002362:	93 18       	st.w	r9[0x4],r8
+8000206c:	ee f9 ff f8 	ld.w	r9,r7[-8]
+80002070:	72 18       	ld.w	r8,r9[0x4]
+80002072:	30 0a       	mov	r10,0
+80002074:	f1 da d2 a1 	bfins	r8,r10,0x15,0x1
+80002078:	93 18       	st.w	r9[0x4],r8
 	usart->MR.inack			= 0;
-80002364:	ee f9 ff f8 	ld.w	r9,r7[-8]
-80002368:	72 18       	ld.w	r8,r9[0x4]
-8000236a:	30 0a       	mov	r10,0
-8000236c:	f1 da d2 81 	bfins	r8,r10,0x14,0x1
-80002370:	93 18       	st.w	r9[0x4],r8
+8000207a:	ee f9 ff f8 	ld.w	r9,r7[-8]
+8000207e:	72 18       	ld.w	r8,r9[0x4]
+80002080:	30 0a       	mov	r10,0
+80002082:	f1 da d2 81 	bfins	r8,r10,0x14,0x1
+80002086:	93 18       	st.w	r9[0x4],r8
 	usart->MR.over          = 0;
-80002372:	ee f9 ff f8 	ld.w	r9,r7[-8]
-80002376:	72 18       	ld.w	r8,r9[0x4]
-80002378:	30 0a       	mov	r10,0
-8000237a:	f1 da d2 61 	bfins	r8,r10,0x13,0x1
-8000237e:	93 18       	st.w	r9[0x4],r8
+80002088:	ee f9 ff f8 	ld.w	r9,r7[-8]
+8000208c:	72 18       	ld.w	r8,r9[0x4]
+8000208e:	30 0a       	mov	r10,0
+80002090:	f1 da d2 61 	bfins	r8,r10,0x13,0x1
+80002094:	93 18       	st.w	r9[0x4],r8
 	usart->MR.clko          = 0;
-80002380:	ee f9 ff f8 	ld.w	r9,r7[-8]
-80002384:	72 18       	ld.w	r8,r9[0x4]
-80002386:	30 0a       	mov	r10,0
-80002388:	f1 da d2 41 	bfins	r8,r10,0x12,0x1
-8000238c:	93 18       	st.w	r9[0x4],r8
+80002096:	ee f9 ff f8 	ld.w	r9,r7[-8]
+8000209a:	72 18       	ld.w	r8,r9[0x4]
+8000209c:	30 0a       	mov	r10,0
+8000209e:	f1 da d2 41 	bfins	r8,r10,0x12,0x1
+800020a2:	93 18       	st.w	r9[0x4],r8
 	usart->MR.mode9         = 0;
-8000238e:	ee f9 ff f8 	ld.w	r9,r7[-8]
-80002392:	72 18       	ld.w	r8,r9[0x4]
-80002394:	30 0a       	mov	r10,0
-80002396:	f1 da d2 21 	bfins	r8,r10,0x11,0x1
-8000239a:	93 18       	st.w	r9[0x4],r8
+800020a4:	ee f9 ff f8 	ld.w	r9,r7[-8]
+800020a8:	72 18       	ld.w	r8,r9[0x4]
+800020aa:	30 0a       	mov	r10,0
+800020ac:	f1 da d2 21 	bfins	r8,r10,0x11,0x1
+800020b0:	93 18       	st.w	r9[0x4],r8
 	usart->MR.msbf          = 0;
-8000239c:	ee f9 ff f8 	ld.w	r9,r7[-8]
-800023a0:	72 18       	ld.w	r8,r9[0x4]
-800023a2:	30 0a       	mov	r10,0
-800023a4:	f1 da d2 01 	bfins	r8,r10,0x10,0x1
-800023a8:	93 18       	st.w	r9[0x4],r8
+800020b2:	ee f9 ff f8 	ld.w	r9,r7[-8]
+800020b6:	72 18       	ld.w	r8,r9[0x4]
+800020b8:	30 0a       	mov	r10,0
+800020ba:	f1 da d2 01 	bfins	r8,r10,0x10,0x1
+800020be:	93 18       	st.w	r9[0x4],r8
 	usart->MR.chmode        = 0; //2bits
-800023aa:	ee f9 ff f8 	ld.w	r9,r7[-8]
-800023ae:	72 18       	ld.w	r8,r9[0x4]
-800023b0:	30 0a       	mov	r10,0
-800023b2:	f1 da d1 c2 	bfins	r8,r10,0xe,0x2
-800023b6:	93 18       	st.w	r9[0x4],r8
+800020c0:	ee f9 ff f8 	ld.w	r9,r7[-8]
+800020c4:	72 18       	ld.w	r8,r9[0x4]
+800020c6:	30 0a       	mov	r10,0
+800020c8:	f1 da d1 c2 	bfins	r8,r10,0xe,0x2
+800020cc:	93 18       	st.w	r9[0x4],r8
 	usart->MR.nbstop        = 0;
-800023b8:	ee f9 ff f8 	ld.w	r9,r7[-8]
-800023bc:	72 18       	ld.w	r8,r9[0x4]
-800023be:	30 0a       	mov	r10,0
-800023c0:	f1 da d1 82 	bfins	r8,r10,0xc,0x2
-800023c4:	93 18       	st.w	r9[0x4],r8
+800020ce:	ee f9 ff f8 	ld.w	r9,r7[-8]
+800020d2:	72 18       	ld.w	r8,r9[0x4]
+800020d4:	30 0a       	mov	r10,0
+800020d6:	f1 da d1 82 	bfins	r8,r10,0xc,0x2
+800020da:	93 18       	st.w	r9[0x4],r8
 	usart->MR.par           = 4;
-800023c6:	ee f9 ff f8 	ld.w	r9,r7[-8]
-800023ca:	72 18       	ld.w	r8,r9[0x4]
-800023cc:	30 4a       	mov	r10,4
-800023ce:	f1 da d1 23 	bfins	r8,r10,0x9,0x3
-800023d2:	93 18       	st.w	r9[0x4],r8
+800020dc:	ee f9 ff f8 	ld.w	r9,r7[-8]
+800020e0:	72 18       	ld.w	r8,r9[0x4]
+800020e2:	30 4a       	mov	r10,4
+800020e4:	f1 da d1 23 	bfins	r8,r10,0x9,0x3
+800020e8:	93 18       	st.w	r9[0x4],r8
 	usart->MR.sync          = 1;
-800023d4:	ee f9 ff f8 	ld.w	r9,r7[-8]
-800023d8:	72 18       	ld.w	r8,r9[0x4]
-800023da:	30 1a       	mov	r10,1
-800023dc:	f1 da d1 01 	bfins	r8,r10,0x8,0x1
-800023e0:	93 18       	st.w	r9[0x4],r8
+800020ea:	ee f9 ff f8 	ld.w	r9,r7[-8]
+800020ee:	72 18       	ld.w	r8,r9[0x4]
+800020f0:	30 1a       	mov	r10,1
+800020f2:	f1 da d1 01 	bfins	r8,r10,0x8,0x1
+800020f6:	93 18       	st.w	r9[0x4],r8
 	usart->MR.chrl          = 3;
-800023e2:	ee f9 ff f8 	ld.w	r9,r7[-8]
-800023e6:	72 18       	ld.w	r8,r9[0x4]
-800023e8:	30 3a       	mov	r10,3
-800023ea:	f1 da d0 c2 	bfins	r8,r10,0x6,0x2
-800023ee:	93 18       	st.w	r9[0x4],r8
+800020f8:	ee f9 ff f8 	ld.w	r9,r7[-8]
+800020fc:	72 18       	ld.w	r8,r9[0x4]
+800020fe:	30 3a       	mov	r10,3
+80002100:	f1 da d0 c2 	bfins	r8,r10,0x6,0x2
+80002104:	93 18       	st.w	r9[0x4],r8
 	usart->MR.usclks        = 0;
-800023f0:	ee f9 ff f8 	ld.w	r9,r7[-8]
-800023f4:	72 18       	ld.w	r8,r9[0x4]
-800023f6:	30 0a       	mov	r10,0
-800023f8:	f1 da d0 82 	bfins	r8,r10,0x4,0x2
-800023fc:	93 18       	st.w	r9[0x4],r8
+80002106:	ee f9 ff f8 	ld.w	r9,r7[-8]
+8000210a:	72 18       	ld.w	r8,r9[0x4]
+8000210c:	30 0a       	mov	r10,0
+8000210e:	f1 da d0 82 	bfins	r8,r10,0x4,0x2
+80002112:	93 18       	st.w	r9[0x4],r8
 	usart->MR.mode          = 0;
-800023fe:	ee f9 ff f8 	ld.w	r9,r7[-8]
-80002402:	72 18       	ld.w	r8,r9[0x4]
-80002404:	30 0a       	mov	r10,0
-80002406:	f1 da d0 04 	bfins	r8,r10,0x0,0x4
-8000240a:	93 18       	st.w	r9[0x4],r8
+80002114:	ee f9 ff f8 	ld.w	r9,r7[-8]
+80002118:	72 18       	ld.w	r8,r9[0x4]
+8000211a:	30 0a       	mov	r10,0
+8000211c:	f1 da d0 04 	bfins	r8,r10,0x0,0x4
+80002120:	93 18       	st.w	r9[0x4],r8
 	
 	// Control register init
-	//usart->cr = CONTROL_SETTINGS;
 	usart->CR.rtsdis		= 0;
-8000240c:	ee f9 ff f8 	ld.w	r9,r7[-8]
-80002410:	72 08       	ld.w	r8,r9[0x0]
-80002412:	30 0a       	mov	r10,0
-80002414:	f1 da d2 61 	bfins	r8,r10,0x13,0x1
-80002418:	93 08       	st.w	r9[0x0],r8
+80002122:	ee f9 ff f8 	ld.w	r9,r7[-8]
+80002126:	72 08       	ld.w	r8,r9[0x0]
+80002128:	30 0a       	mov	r10,0
+8000212a:	f1 da d2 61 	bfins	r8,r10,0x13,0x1
+8000212e:	93 08       	st.w	r9[0x0],r8
 	usart->CR.rtsen         = 0;
-8000241a:	ee f9 ff f8 	ld.w	r9,r7[-8]
-8000241e:	72 08       	ld.w	r8,r9[0x0]
-80002420:	30 0a       	mov	r10,0
-80002422:	f1 da d2 41 	bfins	r8,r10,0x12,0x1
-80002426:	93 08       	st.w	r9[0x0],r8
+80002130:	ee f9 ff f8 	ld.w	r9,r7[-8]
+80002134:	72 08       	ld.w	r8,r9[0x0]
+80002136:	30 0a       	mov	r10,0
+80002138:	f1 da d2 41 	bfins	r8,r10,0x12,0x1
+8000213c:	93 08       	st.w	r9[0x0],r8
 	usart->CR.retto         = 0;
-80002428:	ee f9 ff f8 	ld.w	r9,r7[-8]
-8000242c:	72 08       	ld.w	r8,r9[0x0]
-8000242e:	30 0a       	mov	r10,0
-80002430:	f1 da d1 e1 	bfins	r8,r10,0xf,0x1
-80002434:	93 08       	st.w	r9[0x0],r8
+8000213e:	ee f9 ff f8 	ld.w	r9,r7[-8]
+80002142:	72 08       	ld.w	r8,r9[0x0]
+80002144:	30 0a       	mov	r10,0
+80002146:	f1 da d1 e1 	bfins	r8,r10,0xf,0x1
+8000214a:	93 08       	st.w	r9[0x0],r8
 	usart->CR.rstnack       = 0;
-80002436:	ee f9 ff f8 	ld.w	r9,r7[-8]
-8000243a:	72 08       	ld.w	r8,r9[0x0]
-8000243c:	30 0a       	mov	r10,0
-8000243e:	f1 da d1 c1 	bfins	r8,r10,0xe,0x1
-80002442:	93 08       	st.w	r9[0x0],r8
+8000214c:	ee f9 ff f8 	ld.w	r9,r7[-8]
+80002150:	72 08       	ld.w	r8,r9[0x0]
+80002152:	30 0a       	mov	r10,0
+80002154:	f1 da d1 c1 	bfins	r8,r10,0xe,0x1
+80002158:	93 08       	st.w	r9[0x0],r8
 	usart->CR.rstit         = 0;
-80002444:	ee f9 ff f8 	ld.w	r9,r7[-8]
-80002448:	72 08       	ld.w	r8,r9[0x0]
-8000244a:	30 0a       	mov	r10,0
-8000244c:	f1 da d1 a1 	bfins	r8,r10,0xd,0x1
-80002450:	93 08       	st.w	r9[0x0],r8
+8000215a:	ee f9 ff f8 	ld.w	r9,r7[-8]
+8000215e:	72 08       	ld.w	r8,r9[0x0]
+80002160:	30 0a       	mov	r10,0
+80002162:	f1 da d1 a1 	bfins	r8,r10,0xd,0x1
+80002166:	93 08       	st.w	r9[0x0],r8
 	usart->CR.senda         = 0;
-80002452:	ee f9 ff f8 	ld.w	r9,r7[-8]
-80002456:	72 08       	ld.w	r8,r9[0x0]
-80002458:	30 0a       	mov	r10,0
-8000245a:	f1 da d1 81 	bfins	r8,r10,0xc,0x1
-8000245e:	93 08       	st.w	r9[0x0],r8
+80002168:	ee f9 ff f8 	ld.w	r9,r7[-8]
+8000216c:	72 08       	ld.w	r8,r9[0x0]
+8000216e:	30 0a       	mov	r10,0
+80002170:	f1 da d1 81 	bfins	r8,r10,0xc,0x1
+80002174:	93 08       	st.w	r9[0x0],r8
 	usart->CR.sttto         = 0;
-80002460:	ee f9 ff f8 	ld.w	r9,r7[-8]
-80002464:	72 08       	ld.w	r8,r9[0x0]
-80002466:	30 0a       	mov	r10,0
-80002468:	f1 da d1 61 	bfins	r8,r10,0xb,0x1
-8000246c:	93 08       	st.w	r9[0x0],r8
+80002176:	ee f9 ff f8 	ld.w	r9,r7[-8]
+8000217a:	72 08       	ld.w	r8,r9[0x0]
+8000217c:	30 0a       	mov	r10,0
+8000217e:	f1 da d1 61 	bfins	r8,r10,0xb,0x1
+80002182:	93 08       	st.w	r9[0x0],r8
 	usart->CR.stpbrk        = 0;
-8000246e:	ee f9 ff f8 	ld.w	r9,r7[-8]
-80002472:	72 08       	ld.w	r8,r9[0x0]
-80002474:	30 0a       	mov	r10,0
-80002476:	f1 da d1 41 	bfins	r8,r10,0xa,0x1
-8000247a:	93 08       	st.w	r9[0x0],r8
+80002184:	ee f9 ff f8 	ld.w	r9,r7[-8]
+80002188:	72 08       	ld.w	r8,r9[0x0]
+8000218a:	30 0a       	mov	r10,0
+8000218c:	f1 da d1 41 	bfins	r8,r10,0xa,0x1
+80002190:	93 08       	st.w	r9[0x0],r8
 	usart->CR.sttbrk        = 0;
-8000247c:	ee f9 ff f8 	ld.w	r9,r7[-8]
-80002480:	72 08       	ld.w	r8,r9[0x0]
-80002482:	30 0a       	mov	r10,0
-80002484:	f1 da d1 21 	bfins	r8,r10,0x9,0x1
-80002488:	93 08       	st.w	r9[0x0],r8
+80002192:	ee f9 ff f8 	ld.w	r9,r7[-8]
+80002196:	72 08       	ld.w	r8,r9[0x0]
+80002198:	30 0a       	mov	r10,0
+8000219a:	f1 da d1 21 	bfins	r8,r10,0x9,0x1
+8000219e:	93 08       	st.w	r9[0x0],r8
 	usart->CR.rststa        = 0;
-8000248a:	ee f9 ff f8 	ld.w	r9,r7[-8]
-8000248e:	72 08       	ld.w	r8,r9[0x0]
-80002490:	30 0a       	mov	r10,0
-80002492:	f1 da d1 01 	bfins	r8,r10,0x8,0x1
-80002496:	93 08       	st.w	r9[0x0],r8
+800021a0:	ee f9 ff f8 	ld.w	r9,r7[-8]
+800021a4:	72 08       	ld.w	r8,r9[0x0]
+800021a6:	30 0a       	mov	r10,0
+800021a8:	f1 da d1 01 	bfins	r8,r10,0x8,0x1
+800021ac:	93 08       	st.w	r9[0x0],r8
 	usart->CR.txdis         = 0;
-80002498:	ee f9 ff f8 	ld.w	r9,r7[-8]
-8000249c:	72 08       	ld.w	r8,r9[0x0]
-8000249e:	30 0a       	mov	r10,0
-800024a0:	f1 da d0 e1 	bfins	r8,r10,0x7,0x1
-800024a4:	93 08       	st.w	r9[0x0],r8
+800021ae:	ee f9 ff f8 	ld.w	r9,r7[-8]
+800021b2:	72 08       	ld.w	r8,r9[0x0]
+800021b4:	30 0a       	mov	r10,0
+800021b6:	f1 da d0 e1 	bfins	r8,r10,0x7,0x1
+800021ba:	93 08       	st.w	r9[0x0],r8
 	usart->CR.txen          = 1; // enable transmit
-800024a6:	ee f9 ff f8 	ld.w	r9,r7[-8]
-800024aa:	72 08       	ld.w	r8,r9[0x0]
-800024ac:	30 1a       	mov	r10,1
-800024ae:	f1 da d0 c1 	bfins	r8,r10,0x6,0x1
-800024b2:	93 08       	st.w	r9[0x0],r8
+800021bc:	ee f9 ff f8 	ld.w	r9,r7[-8]
+800021c0:	72 08       	ld.w	r8,r9[0x0]
+800021c2:	30 1a       	mov	r10,1
+800021c4:	f1 da d0 c1 	bfins	r8,r10,0x6,0x1
+800021c8:	93 08       	st.w	r9[0x0],r8
 	usart->CR.rxdis         = 0;
-800024b4:	ee f9 ff f8 	ld.w	r9,r7[-8]
-800024b8:	72 08       	ld.w	r8,r9[0x0]
-800024ba:	30 0a       	mov	r10,0
-800024bc:	f1 da d0 a1 	bfins	r8,r10,0x5,0x1
-800024c0:	93 08       	st.w	r9[0x0],r8
+800021ca:	ee f9 ff f8 	ld.w	r9,r7[-8]
+800021ce:	72 08       	ld.w	r8,r9[0x0]
+800021d0:	30 0a       	mov	r10,0
+800021d2:	f1 da d0 a1 	bfins	r8,r10,0x5,0x1
+800021d6:	93 08       	st.w	r9[0x0],r8
 	usart->CR.rxen          = 1; // enable receive
-800024c2:	ee f9 ff f8 	ld.w	r9,r7[-8]
-800024c6:	72 08       	ld.w	r8,r9[0x0]
-800024c8:	30 1a       	mov	r10,1
-800024ca:	f1 da d0 81 	bfins	r8,r10,0x4,0x1
-800024ce:	93 08       	st.w	r9[0x0],r8
+800021d8:	ee f9 ff f8 	ld.w	r9,r7[-8]
+800021dc:	72 08       	ld.w	r8,r9[0x0]
+800021de:	30 1a       	mov	r10,1
+800021e0:	f1 da d0 81 	bfins	r8,r10,0x4,0x1
+800021e4:	93 08       	st.w	r9[0x0],r8
 	usart->CR.rsttx         = 0;
-800024d0:	ee f9 ff f8 	ld.w	r9,r7[-8]
-800024d4:	72 08       	ld.w	r8,r9[0x0]
-800024d6:	30 0a       	mov	r10,0
-800024d8:	f1 da d0 61 	bfins	r8,r10,0x3,0x1
-800024dc:	93 08       	st.w	r9[0x0],r8
+800021e6:	ee f9 ff f8 	ld.w	r9,r7[-8]
+800021ea:	72 08       	ld.w	r8,r9[0x0]
+800021ec:	30 0a       	mov	r10,0
+800021ee:	f1 da d0 61 	bfins	r8,r10,0x3,0x1
+800021f2:	93 08       	st.w	r9[0x0],r8
 	usart->CR.rstrx         = 0;
-800024de:	ee f9 ff f8 	ld.w	r9,r7[-8]
-800024e2:	72 08       	ld.w	r8,r9[0x0]
-800024e4:	30 0a       	mov	r10,0
-800024e6:	f1 da d0 41 	bfins	r8,r10,0x2,0x1
-800024ea:	93 08       	st.w	r9[0x0],r8
+800021f4:	ee f9 ff f8 	ld.w	r9,r7[-8]
+800021f8:	72 08       	ld.w	r8,r9[0x0]
+800021fa:	30 0a       	mov	r10,0
+800021fc:	f1 da d0 41 	bfins	r8,r10,0x2,0x1
+80002200:	93 08       	st.w	r9[0x0],r8
 	
 	// BaudRateGeneratorRegister
-	//usart->brgr = BAUD_SETTINGS;
-	usart->BRGR.fp			= 2;
-800024ec:	ee f9 ff f8 	ld.w	r9,r7[-8]
-800024f0:	72 88       	ld.w	r8,r9[0x20]
-800024f2:	30 2a       	mov	r10,2
-800024f4:	f1 da d2 03 	bfins	r8,r10,0x10,0x3
-800024f8:	93 88       	st.w	r9[0x20],r8
-	usart->BRGR.cd          = 1;
-800024fa:	ee f9 ff f8 	ld.w	r9,r7[-8]
-800024fe:	72 88       	ld.w	r8,r9[0x20]
-80002500:	30 1a       	mov	r10,1
-80002502:	f1 da d0 10 	bfins	r8,r10,0x0,0x10
-80002506:	93 88       	st.w	r9[0x20],r8
+	//Clock frequency = 115200 Hz
+	usart->BRGR.fp			= 0;
+80002202:	ee f9 ff f8 	ld.w	r9,r7[-8]
+80002206:	72 88       	ld.w	r8,r9[0x20]
+80002208:	30 0a       	mov	r10,0
+8000220a:	f1 da d2 03 	bfins	r8,r10,0x10,0x3
+8000220e:	93 88       	st.w	r9[0x20],r8
+	usart->BRGR.cd          = 12;
+80002210:	ee f9 ff f8 	ld.w	r9,r7[-8]
+80002214:	72 88       	ld.w	r8,r9[0x20]
+80002216:	30 ca       	mov	r10,12
+80002218:	f1 da d0 10 	bfins	r8,r10,0x0,0x10
+8000221c:	93 88       	st.w	r9[0x20],r8
 	
 	volatile avr32_gpio_port_t * usart_gpio;
 	usart_gpio = &AVR32_GPIO.port[USART_RXD_PIN/GPIO_MAX_PIN_NUMBER];
-80002508:	fe 78 10 00 	mov	r8,-61440
-8000250c:	ef 48 ff fc 	st.w	r7[-4],r8
-	usart_gpio->pmr0c = 1 << (USART_RXD_PIN & 0x1F);
-80002510:	ee f8 ff fc 	ld.w	r8,r7[-4]
-80002514:	32 09       	mov	r9,32
-80002516:	91 69       	st.w	r8[0x18],r9
-	usart_gpio->pmr1c = 1 << (USART_RXD_PIN & 0x1F);
-80002518:	ee f8 ff fc 	ld.w	r8,r7[-4]
-8000251c:	32 09       	mov	r9,32
-8000251e:	91 a9       	st.w	r8[0x28],r9
-	usart_gpio->gperc = 1 << (USART_RXD_PIN & 0x1F);
-80002520:	ee f8 ff fc 	ld.w	r8,r7[-4]
-80002524:	32 09       	mov	r9,32
-80002526:	91 29       	st.w	r8[0x8],r9
+8000221e:	fe 78 10 00 	mov	r8,-61440
+80002222:	ef 48 ff fc 	st.w	r7[-4],r8
+	usart_gpio->pmr0c = 1 << (USART_RXD_PIN & 0x1F); //Peripheral MUX register
+80002226:	ee f8 ff fc 	ld.w	r8,r7[-4]
+8000222a:	32 09       	mov	r9,32
+8000222c:	91 69       	st.w	r8[0x18],r9
+	usart_gpio->pmr1c = 1 << (USART_RXD_PIN & 0x1F); //1 << (5 & 31)
+8000222e:	ee f8 ff fc 	ld.w	r8,r7[-4]
+80002232:	32 09       	mov	r9,32
+80002234:	91 a9       	st.w	r8[0x28],r9
+	usart_gpio->gperc = 1 << (USART_RXD_PIN & 0x1F); //Disables GPIO on receiver pin.
+80002236:	ee f8 ff fc 	ld.w	r8,r7[-4]
+8000223a:	32 09       	mov	r9,32
+8000223c:	91 29       	st.w	r8[0x8],r9
 	
-	usart_gpio->pmr0c = 1 << (USART_TXD_PIN & 0x1F);
-80002528:	ee f8 ff fc 	ld.w	r8,r7[-4]
-8000252c:	34 09       	mov	r9,64
-8000252e:	91 69       	st.w	r8[0x18],r9
+	usart_gpio->pmr0c = 1 << (USART_TXD_PIN & 0x1F); //1 << (6 & 31)
+8000223e:	ee f8 ff fc 	ld.w	r8,r7[-4]
+80002242:	34 09       	mov	r9,64
+80002244:	91 69       	st.w	r8[0x18],r9
 	usart_gpio->pmr1c = 1 << (USART_TXD_PIN & 0x1F);
-80002530:	ee f8 ff fc 	ld.w	r8,r7[-4]
-80002534:	34 09       	mov	r9,64
-80002536:	91 a9       	st.w	r8[0x28],r9
-	usart_gpio->gperc = 1 << (USART_TXD_PIN & 0x1F);
-80002538:	ee f8 ff fc 	ld.w	r8,r7[-4]
-8000253c:	34 09       	mov	r9,64
-8000253e:	91 29       	st.w	r8[0x8],r9
+80002246:	ee f8 ff fc 	ld.w	r8,r7[-4]
+8000224a:	34 09       	mov	r9,64
+8000224c:	91 a9       	st.w	r8[0x28],r9
+	usart_gpio->gperc = 1 << (USART_TXD_PIN & 0x1F); //Disables GPIO on transmitter pin.
+8000224e:	ee f8 ff fc 	ld.w	r8,r7[-4]
+80002252:	34 09       	mov	r9,64
+80002254:	91 29       	st.w	r8[0x8],r9
 }
-80002540:	2f ed       	sub	sp,-8
-80002542:	e3 cd 80 80 	ldm	sp++,r7,pc
-80002546:	d7 03       	nop
+80002256:	2f ed       	sub	sp,-8
+80002258:	e3 cd 80 80 	ldm	sp++,r7,pc
+8000225c:	80 00       	ld.sh	r0,r0[0x0]
+8000225e:	22 c6       	sub	r6,44
 
-80002548 <main>:
+80002260 <USART_getChar>:
+
+char USART_getChar()
+{
+80002260:	eb cd 40 80 	pushm	r7,lr
+80002264:	1a 97       	mov	r7,sp
+80002266:	20 1d       	sub	sp,4
+	volatile avr32_usart_t * usart = USART;
+80002268:	fe 78 18 00 	mov	r8,-59392
+8000226c:	ef 48 ff fc 	st.w	r7[-4],r8
+	return usart->RHR.rxchr;
+80002270:	ee f8 ff fc 	ld.w	r8,r7[-4]
+80002274:	70 68       	ld.w	r8,r8[0x18]
+80002276:	f1 d8 c0 09 	bfextu	r8,r8,0x0,0x9
+8000227a:	5c 88       	casts.h	r8
+8000227c:	5c 58       	castu.b	r8
+	
+}
+8000227e:	10 9c       	mov	r12,r8
+80002280:	2f fd       	sub	sp,-4
+80002282:	e3 cd 80 80 	ldm	sp++,r7,pc
+
+80002286 <USART_putChar>:
+void USART_putChar(char c)
+{
+80002286:	eb cd 40 80 	pushm	r7,lr
+8000228a:	1a 97       	mov	r7,sp
+8000228c:	20 2d       	sub	sp,8
+8000228e:	18 98       	mov	r8,r12
+80002290:	ef 68 ff f8 	st.b	r7[-8],r8
+	volatile avr32_usart_t * usart = USART; 
+80002294:	fe 78 18 00 	mov	r8,-59392
+80002298:	ef 48 ff fc 	st.w	r7[-4],r8
+
+	if((USART->csr & AVR32_USART_CSR_TXRDY_MASK) != 0)
+8000229c:	fe 78 18 00 	mov	r8,-59392
+800022a0:	70 58       	ld.w	r8,r8[0x14]
+800022a2:	e2 18 00 02 	andl	r8,0x2,COH
+800022a6:	c0 d0       	breq	800022c0 <USART_putChar+0x3a>
+	{
+		USART->THR.txchr = c; //( c << AVR32_USART_THR_TXCHR_OFFSET) & AVR32_USART_THR_TXCHR_MASK;
+800022a8:	fe 79 18 00 	mov	r9,-59392
+800022ac:	ef 38 ff f8 	ld.ub	r8,r7[-8]
+800022b0:	f1 d8 c0 09 	bfextu	r8,r8,0x0,0x9
+800022b4:	f5 d8 b0 10 	bfexts	r10,r8,0x0,0x10
+800022b8:	72 78       	ld.w	r8,r9[0x1c]
+800022ba:	f1 da d0 09 	bfins	r8,r10,0x0,0x9
+800022be:	93 78       	st.w	r9[0x1c],r8
+	}
+	
+}
+800022c0:	2f ed       	sub	sp,-8
+800022c2:	e3 cd 80 80 	ldm	sp++,r7,pc
+
+800022c6 <USART_reset>:
+
+void USART_reset()
+{
+800022c6:	eb cd 40 80 	pushm	r7,lr
+800022ca:	1a 97       	mov	r7,sp
+800022cc:	20 1d       	sub	sp,4
+	volatile avr32_usart_t * usart = USART;
+800022ce:	fe 78 18 00 	mov	r8,-59392
+800022d2:	ef 48 ff fc 	st.w	r7[-4],r8
+	usart->mr = 0;	 //Reset Mode register	
+800022d6:	ee f8 ff fc 	ld.w	r8,r7[-4]
+800022da:	30 09       	mov	r9,0
+800022dc:	91 19       	st.w	r8[0x4],r9
+	
+	//Reset Control register
+	usart->cr = AVR32_USART_CR_RSTRX_MASK   |
+800022de:	ee f8 ff fc 	ld.w	r8,r7[-4]
+800022e2:	e8 69 61 0c 	mov	r9,549132
+800022e6:	91 09       	st.w	r8[0x0],r9
+	AVR32_USART_CR_RSTTX_MASK   |
+	AVR32_USART_CR_RSTSTA_MASK  |
+	AVR32_USART_CR_RSTIT_MASK   |
+	AVR32_USART_CR_RSTNACK_MASK |
+	AVR32_USART_CR_RTSDIS_MASK;
+800022e8:	2f fd       	sub	sp,-4
+800022ea:	e3 cd 80 80 	ldm	sp++,r7,pc
+800022ee:	d7 03       	nop
+
+800022f0 <_get_interrupt_handler>:
+ *
+ * \return Interrupt handler to execute.
+ */
+__int_handler _get_interrupt_handler(uint32_t int_level);
+__int_handler _get_interrupt_handler(uint32_t int_level)
+{
+800022f0:	eb cd 40 80 	pushm	r7,lr
+800022f4:	1a 97       	mov	r7,sp
+800022f6:	20 3d       	sub	sp,12
+800022f8:	ef 4c ff f4 	st.w	r7[-12],r12
+	/* ICR3 is mapped first, ICR0 last.
+	Code in exception.S puts int_level in R12 which is used by the compiler
+	to pass a single argument to a function. */
+	uint32_t int_grp = AVR32_INTC.icr[AVR32_INTC_INT3 - int_level];
+800022fc:	fe 78 08 00 	mov	r8,-63488
+80002300:	ee f9 ff f4 	ld.w	r9,r7[-12]
+80002304:	f2 09 11 03 	rsub	r9,r9,3
+80002308:	28 09       	sub	r9,-128
+8000230a:	f0 09 03 28 	ld.w	r8,r8[r9<<0x2]
+8000230e:	ef 48 ff f8 	st.w	r7[-8],r8
+	uint32_t int_req = AVR32_INTC.irr[int_grp];
+80002312:	fe 78 08 00 	mov	r8,-63488
+80002316:	ee f9 ff f8 	ld.w	r9,r7[-8]
+8000231a:	2c 09       	sub	r9,-64
+8000231c:	f0 09 03 28 	ld.w	r8,r8[r9<<0x2]
+80002320:	ef 48 ff fc 	st.w	r7[-4],r8
+	exception.S will provide the interrupt handler with a clean interrupt
+	stack frame, with nothing more pushed onto the stack. The interrupt
+	handler must manage the `rete' instruction, which can be done using
+	pure assembly, inline assembly or the `__attribute__((__interrupt__))'
+	C function attribute.*/
+	return (int_req)
+80002324:	ee f8 ff fc 	ld.w	r8,r7[-4]
+80002328:	58 08       	cp.w	r8,0
+8000232a:	c1 30       	breq	80002350 <_get_interrupt_handler+0x60>
+		? _int_handler_table[int_grp]._int_line_handler_table[32
+8000232c:	ee f9 ff f8 	ld.w	r9,r7[-8]
+80002330:	48 b8       	lddpc	r8,8000235c <_get_interrupt_handler+0x6c>
+80002332:	a1 79       	lsl	r9,0x1
+80002334:	2f f9       	sub	r9,-1
+80002336:	f0 09 03 29 	ld.w	r9,r8[r9<<0x2]
+8000233a:	ee f8 ff fc 	ld.w	r8,r7[-4]
+8000233e:	f0 08 12 00 	clz	r8,r8
+80002342:	f0 08 11 1f 	rsub	r8,r8,31
+			- clz(int_req) - 1]
+80002346:	a3 68       	lsl	r8,0x2
+	stack frame, with nothing more pushed onto the stack. The interrupt
+	handler must manage the `rete' instruction, which can be done using
+	pure assembly, inline assembly or the `__attribute__((__interrupt__))'
+	C function attribute.*/
+	return (int_req)
+		? _int_handler_table[int_grp]._int_line_handler_table[32
+80002348:	f2 08 00 08 	add	r8,r9,r8
+	exception.S will provide the interrupt handler with a clean interrupt
+	stack frame, with nothing more pushed onto the stack. The interrupt
+	handler must manage the `rete' instruction, which can be done using
+	pure assembly, inline assembly or the `__attribute__((__interrupt__))'
+	C function attribute.*/
+	return (int_req)
+8000234c:	70 08       	ld.w	r8,r8[0x0]
+8000234e:	c0 28       	rjmp	80002352 <_get_interrupt_handler+0x62>
+80002350:	30 08       	mov	r8,0
+		? _int_handler_table[int_grp]._int_line_handler_table[32
+			- clz(int_req) - 1]
+		: NULL;
+}
+80002352:	10 9c       	mov	r12,r8
+80002354:	2f dd       	sub	sp,-12
+80002356:	e3 cd 80 80 	ldm	sp++,r7,pc
+8000235a:	00 00       	add	r0,r0
+8000235c:	80 00       	ld.sh	r0,r0[0x0]
+8000235e:	28 00       	sub	r0,-128
+
+80002360 <_stext>:
+
+  .global _stext
+  .type _stext, @function
+_stext:
+  // Set initial stack pointer.
+  lda.w   sp, _estack
+80002360:	e0 7d 00 00 	mov	sp,65536
+
+  // Set up EVBA so interrupts can be enabled.
+  lda.w   r0, _evba
+  mtsr    AVR32_EVBA, r0
+80002364:	fe c0 fd 64 	sub	r0,pc,-668
+
+  // Enable the exception processing.
+  csrf    AVR32_SR_EM_OFFSET
+80002368:	e3 b0 00 01 	mtsr	0x4,r0
+
+  // Load initialized data having a global lifetime from the data LMA.
+  lda.w   r0, _data
+  lda.w   r1, _edata
+8000236c:	d5 53       	csrf	0x15
+  cp      r0, r1
+8000236e:	30 80       	mov	r0,8
+  brhs    idata_load_loop_end
+80002370:	30 81       	mov	r1,8
+  lda.w   r2, _data_lma
+80002372:	02 30       	cp.w	r0,r1
+idata_load_loop:
+  ld.d    r4, r2++
+80002374:	c0 72       	brcc	80002382 <idata_load_loop_end>
+  st.d    r0++, r4
+80002376:	fe c2 fa d6 	sub	r2,pc,-1322
+
+8000237a <idata_load_loop>:
+  cp      r0, r1
+  brlo    idata_load_loop
+8000237a:	a5 05       	ld.d	r4,r2++
+idata_load_loop_end:
+
+  // Clear uninitialized data having a global lifetime in the blank static storage section.
+  lda.w   r0, __bss_start
+8000237c:	a1 24       	st.d	r0++,r4
+  lda.w   r1, _end
+8000237e:	02 30       	cp.w	r0,r1
+  cp      r0, r1
+80002380:	cf d3       	brcs	8000237a <idata_load_loop>
+
+80002382 <idata_load_loop_end>:
+  brhs    udata_clear_loop_end
+80002382:	30 80       	mov	r0,8
+  mov     r2, 0
+80002384:	e0 61 00 f8 	mov	r1,248
+  mov     r3, 0
+udata_clear_loop:
+  st.d    r0++, r2
+80002388:	02 30       	cp.w	r0,r1
+  cp      r0, r1
+8000238a:	c0 62       	brcc	80002396 <udata_clear_loop_end>
+  brlo    udata_clear_loop
+8000238c:	30 02       	mov	r2,0
+  // Safety: Set the default "return" @ to the exit routine address.
+  lda.w   lr, exit
+#endif
+
+  // Start the show.
+  lda.w   pc, main
+8000238e:	30 03       	mov	r3,0
+
+80002390 <udata_clear_loop>:
+80002390:	a1 22       	st.d	r0++,r2
+80002392:	02 30       	cp.w	r0,r1
+80002394:	cf e3       	brcs	80002390 <udata_clear_loop>
+
+80002396 <udata_clear_loop_end>:
+80002396:	fe cf ff 6e 	sub	pc,pc,-146
+8000239a:	d7 03       	nop
+
+8000239c <initLED>:
+#define BUTTON_PORT (GPIO_PUSH_BUTTON_2 / GPIO_MAX_PIN_NUMBER)
+// Pin for the button
+#define BUTTON2_PIN (1 << (GPIO_PUSH_BUTTON_2 & (GPIO_MAX_PIN_NUMBER - 1)))
+
+void initLED (void)
+{
+8000239c:	eb cd 40 80 	pushm	r7,lr
+800023a0:	1a 97       	mov	r7,sp
+800023a2:	20 1d       	sub	sp,4
+	// LED port pointer
+	volatile avr32_gpio_port_t * led_port;
+	// pointing to the correct port
+	led_port = &AVR32_GPIO.port[LED_PORT];
+800023a4:	fe 78 11 00 	mov	r8,-61184
+800023a8:	ef 48 ff fc 	st.w	r7[-4],r8
+	
+	// Enables the registers for the LEDs
+	led_port->gpers = LED0_BIT_VALUE;
+800023ac:	ee f8 ff fc 	ld.w	r8,r7[-4]
+800023b0:	fc 19 08 00 	movh	r9,0x800
+800023b4:	91 19       	st.w	r8[0x4],r9
+
+	// Turning all LEDs off
+	led_port->ovrs = LED0_BIT_VALUE;
+800023b6:	ee f8 ff fc 	ld.w	r8,r7[-4]
+800023ba:	fc 19 08 00 	movh	r9,0x800
+800023be:	f1 49 00 54 	st.w	r8[84],r9
+	
+	// setting the led pins to outputs
+	led_port->oders = LED0_BIT_VALUE;
+800023c2:	ee f8 ff fc 	ld.w	r8,r7[-4]
+800023c6:	fc 19 08 00 	movh	r9,0x800
+800023ca:	f1 49 00 44 	st.w	r8[68],r9
+}
+800023ce:	2f fd       	sub	sp,-4
+800023d0:	e3 cd 80 80 	ldm	sp++,r7,pc
+
+800023d4 <initButton>:
+// Initializes the button
+void initButton (void)
+{
+800023d4:	eb cd 40 80 	pushm	r7,lr
+800023d8:	1a 97       	mov	r7,sp
+800023da:	20 1d       	sub	sp,4
+	// Button port pointer
+	volatile avr32_gpio_port_t * button_port;
+	button_port = &AVR32_GPIO.port[BUTTON_PORT];
+800023dc:	fe 78 12 00 	mov	r8,-60928
+800023e0:	ef 48 ff fc 	st.w	r7[-4],r8
+	
+	// Enables the register
+	button_port->gpers = BUTTON2_PIN;
+800023e4:	ee f8 ff fc 	ld.w	r8,r7[-4]
+800023e8:	e4 69 00 00 	mov	r9,262144
+800023ec:	91 19       	st.w	r8[0x4],r9
+	// Sets the pin to an input
+	button_port->oderc = BUTTON2_PIN;
+800023ee:	ee f8 ff fc 	ld.w	r8,r7[-4]
+800023f2:	e4 69 00 00 	mov	r9,262144
+800023f6:	f1 49 00 48 	st.w	r8[72],r9
+	
+}
+800023fa:	2f fd       	sub	sp,-4
+800023fc:	e3 cd 80 80 	ldm	sp++,r7,pc
+
+80002400 <mdelay>:
+
+// Function to create a delay (not in milliseconds)
+void mdelay(int milliseconds)
+{
+80002400:	eb cd 40 80 	pushm	r7,lr
+80002404:	1a 97       	mov	r7,sp
+80002406:	20 1d       	sub	sp,4
+80002408:	ef 4c ff fc 	st.w	r7[-4],r12
+	while (milliseconds != 0)
+8000240c:	c0 68       	rjmp	80002418 <mdelay+0x18>
+	{
+		milliseconds--;
+8000240e:	ee f8 ff fc 	ld.w	r8,r7[-4]
+80002412:	20 18       	sub	r8,1
+80002414:	ef 48 ff fc 	st.w	r7[-4],r8
+}
+
+// Function to create a delay (not in milliseconds)
+void mdelay(int milliseconds)
+{
+	while (milliseconds != 0)
+80002418:	ee f8 ff fc 	ld.w	r8,r7[-4]
+8000241c:	58 08       	cp.w	r8,0
+8000241e:	cf 81       	brne	8000240e <mdelay+0xe>
+	{
+		milliseconds--;
+	}
+}
+80002420:	2f fd       	sub	sp,-4
+80002422:	e3 cd 80 80 	ldm	sp++,r7,pc
+80002426:	d7 03       	nop
+
+80002428 <main>:
 
 int main(void)
 {
-80002548:	eb cd 40 80 	pushm	r7,lr
-8000254c:	1a 97       	mov	r7,sp
-8000254e:	20 2d       	sub	sp,8
-		.stopbits     = USART_1_STOPBIT,
-		.channelmode  = USART_NORMAL_CHMODE
-	};*/
-
-	// Assign GPIO to USART.
-	gpio_enable_module(USART_GPIO_MAP,
-80002550:	30 2b       	mov	r11,2
-80002552:	49 6c       	lddpc	r12,800025a8 <main+0x60>
-80002554:	f0 1f 00 16 	mcall	800025ac <main+0x64>
-			sizeof(USART_GPIO_MAP) / sizeof(USART_GPIO_MAP[0]));
-			
-	// Initialize USART in RS232 mode.
-	//usart_init_rs232(EXAMPLE_USART, &USART_OPTIONS, EXAMPLE_TARGET_PBACLK_FREQ_HZ);			
-	USART_reset(EXAMPLE_USART);
-80002558:	fe 7c 18 00 	mov	r12,-59392
-8000255c:	f0 1f 00 15 	mcall	800025b0 <main+0x68>
-	USART_init(EXAMPLE_USART);		
-80002560:	fe 7c 18 00 	mov	r12,-59392
-80002564:	f0 1f 00 14 	mcall	800025b4 <main+0x6c>
+80002428:	eb cd 40 80 	pushm	r7,lr
+8000242c:	1a 97       	mov	r7,sp
+8000242e:	20 2d       	sub	sp,8
+	volatile avr32_usart_t * usart = USART;
+80002430:	fe 78 18 00 	mov	r8,-59392
+80002434:	ef 48 ff f8 	st.w	r7[-8],r8
+	// Initialize USART in RS232 mode.	
+	USART_init(usart);		
+80002438:	ee fc ff f8 	ld.w	r12,r7[-8]
+8000243c:	f0 1f 00 0f 	mcall	80002478 <main+0x50>
 	
 	// Initialization
 	initLED();
-80002568:	f0 1f 00 14 	mcall	800025b8 <main+0x70>
+80002440:	f0 1f 00 0f 	mcall	8000247c <main+0x54>
 	initButton();
-8000256c:	f0 1f 00 14 	mcall	800025bc <main+0x74>
-	//volatile avr32_usart_t * usart;
-	//usart = USART0;
-	char *a = "bra";
-80002570:	49 48       	lddpc	r8,800025c0 <main+0x78>
-80002572:	ef 48 ff f8 	st.w	r7[-8],r8
-	int c = a[1];
-80002576:	ee f8 ff f8 	ld.w	r8,r7[-8]
-8000257a:	2f f8       	sub	r8,-1
-8000257c:	11 88       	ld.ub	r8,r8[0x0]
-8000257e:	ef 48 ff fc 	st.w	r7[-4],r8
-		USART_putChar(usart, c);
-	}*/
+80002444:	f0 1f 00 0f 	mcall	80002480 <main+0x58>
 	
+	char c = 'a';
+80002448:	36 18       	mov	r8,97
+8000244a:	ef 68 ff fe 	st.b	r7[-2],r8
+	char input_char; 
 	while(1)
 	{
-		if((EXAMPLE_USART->csr & AVR32_USART_CSR_TXRDY_MASK) != 0)
-80002582:	fe 78 18 00 	mov	r8,-59392
-80002586:	70 58       	ld.w	r8,r8[0x14]
-80002588:	e2 18 00 02 	andl	r8,0x2,COH
-8000258c:	c0 80       	breq	8000259c <main+0x54>
+		if(usart->CSR.rxrdy != 0)
+8000244e:	ee f8 ff f8 	ld.w	r8,r7[-8]
+80002452:	70 58       	ld.w	r8,r8[0x14]
+80002454:	f1 d8 c0 01 	bfextu	r8,r8,0x0,0x1
+80002458:	c0 b0       	breq	8000246e <main+0x46>
 		{
-			//EXAMPLE_USART->thr = (c << AVR32_USART_THR_TXCHR_OFFSET) & AVR32_USART_THR_TXCHR_MASK;
-			EXAMPLE_USART->thr = (c << AVR32_USART_THR_TXCHR_OFFSET) & AVR32_USART_THR_TXCHR_MASK;
-8000258e:	fe 78 18 00 	mov	r8,-59392
-80002592:	ee f9 ff fc 	ld.w	r9,r7[-4]
-80002596:	f3 d9 c0 09 	bfextu	r9,r9,0x0,0x9
-8000259a:	91 79       	st.w	r8[0x1c],r9
-		//char_read = AVR32_GPIO.port[0].pvr & (1 << (USART0_RXD_PIN & ( GPIO_MAX_PIN_NUMBER -1))); // Read input
-		/*if(char_read != 0)
-		{
-			AVR32_GPIO.port[LED_PORT].ovrt = LED0_BIT_VALUE; // Toggle output value to make the led toggle
-		}*/
+			input_char = USART_getChar();
+8000245a:	f0 1f 00 0b 	mcall	80002484 <main+0x5c>
+8000245e:	18 98       	mov	r8,r12
+80002460:	ef 68 ff ff 	st.b	r7[-1],r8
+			USART_putChar(input_char);
+80002464:	ef 38 ff ff 	ld.ub	r8,r7[-1]
+80002468:	10 9c       	mov	r12,r8
+8000246a:	f0 1f 00 08 	mcall	80002488 <main+0x60>
+		}
+		//USART_putChar(c);
 		mdelay(1000);
-8000259c:	e0 6c 03 e8 	mov	r12,1000
-800025a0:	f0 1f 00 09 	mcall	800025c4 <main+0x7c>
+8000246e:	e0 6c 03 e8 	mov	r12,1000
+80002472:	f0 1f 00 07 	mcall	8000248c <main+0x64>
 	}
-800025a4:	ce fb       	rjmp	80002582 <main+0x3a>
-800025a6:	00 00       	add	r0,r0
-800025a8:	80 00       	ld.sh	r0,r0[0x0]
-800025aa:	28 a0       	sub	r0,-118
-800025ac:	80 00       	ld.sh	r0,r0[0x0]
-800025ae:	20 08       	sub	r8,0
-800025b0:	80 00       	ld.sh	r0,r0[0x0]
-800025b2:	22 9c       	sub	r12,41
-800025b4:	80 00       	ld.sh	r0,r0[0x0]
-800025b6:	22 f6       	sub	r6,47
-800025b8:	80 00       	ld.sh	r0,r0[0x0]
-800025ba:	22 38       	sub	r8,35
-800025bc:	80 00       	ld.sh	r0,r0[0x0]
-800025be:	22 70       	sub	r0,39
-800025c0:	80 00       	ld.sh	r0,r0[0x0]
-800025c2:	22 34       	sub	r4,35
-800025c4:	80 00       	ld.sh	r0,r0[0x0]
-800025c6:	22 d0       	sub	r0,45
+80002476:	ce cb       	rjmp	8000244e <main+0x26>
+80002478:	80 00       	ld.sh	r0,r0[0x0]
+8000247a:	20 08       	sub	r8,0
+8000247c:	80 00       	ld.sh	r0,r0[0x0]
+8000247e:	23 9c       	sub	r12,57
+80002480:	80 00       	ld.sh	r0,r0[0x0]
+80002482:	23 d4       	sub	r4,61
+80002484:	80 00       	ld.sh	r0,r0[0x0]
+80002486:	22 60       	sub	r0,38
+80002488:	80 00       	ld.sh	r0,r0[0x0]
+8000248a:	22 86       	sub	r6,40
+8000248c:	80 00       	ld.sh	r0,r0[0x0]
+8000248e:	24 00       	sub	r0,64
 
 Disassembly of section .exception:
 
 80002600 <_evba>:
+_evba:
+
+	.org  0x000
+	// Unrecoverable Exception.
+_handle_Unrecoverable_Exception:
+	rjmp $
 80002600:	c0 08       	rjmp	80002600 <_evba>
 	...
 
 80002604 <_handle_TLB_Multiple_Hit>:
+
+	.org  0x004
+	// TLB Multiple Hit.
+_handle_TLB_Multiple_Hit:
+	rjmp $
 80002604:	c0 08       	rjmp	80002604 <_handle_TLB_Multiple_Hit>
 	...
 
 80002608 <_handle_Bus_Error_Data_Fetch>:
+
+	.org  0x008
+	// Bus Error Data Fetch.
+_handle_Bus_Error_Data_Fetch:
+	rjmp $
 80002608:	c0 08       	rjmp	80002608 <_handle_Bus_Error_Data_Fetch>
 	...
 
 8000260c <_handle_Bus_Error_Instruction_Fetch>:
+
+	.org  0x00C
+	// Bus Error Instruction Fetch.
+_handle_Bus_Error_Instruction_Fetch:
+	rjmp $
 8000260c:	c0 08       	rjmp	8000260c <_handle_Bus_Error_Instruction_Fetch>
 	...
 
 80002610 <_handle_NMI>:
+
+	.org  0x010
+	// NMI.
+_handle_NMI:
+	rjmp $
 80002610:	c0 08       	rjmp	80002610 <_handle_NMI>
 	...
 
 80002614 <_handle_Instruction_Address>:
+
+	.org  0x014
+	// Instruction Address.
+_handle_Instruction_Address:
+	rjmp $
 80002614:	c0 08       	rjmp	80002614 <_handle_Instruction_Address>
 	...
 
 80002618 <_handle_ITLB_Protection>:
+
+	.org  0x018
+	// ITLB Protection.
+_handle_ITLB_Protection:
+	rjmp $
 80002618:	c0 08       	rjmp	80002618 <_handle_ITLB_Protection>
 	...
 
 8000261c <_handle_Breakpoint>:
+
+	.org  0x01C
+	// Breakpoint.
+_handle_Breakpoint:
+	rjmp $
 8000261c:	c0 08       	rjmp	8000261c <_handle_Breakpoint>
 	...
 
 80002620 <_handle_Illegal_Opcode>:
+
+	.org  0x020
+	// Illegal Opcode.
+_handle_Illegal_Opcode:
+	rjmp $
 80002620:	c0 08       	rjmp	80002620 <_handle_Illegal_Opcode>
 	...
 
 80002624 <_handle_Unimplemented_Instruction>:
+
+	.org  0x024
+	// Unimplemented Instruction.
+_handle_Unimplemented_Instruction:
+	rjmp $
 80002624:	c0 08       	rjmp	80002624 <_handle_Unimplemented_Instruction>
 	...
 
 80002628 <_handle_Privilege_Violation>:
+
+	.org  0x028
+	// Privilege Violation.
+_handle_Privilege_Violation:
+	rjmp $
 80002628:	c0 08       	rjmp	80002628 <_handle_Privilege_Violation>
 	...
 
 8000262c <_handle_Floating_Point>:
+
+	.org  0x02C
+	// Floating-Point: UNUSED IN AVR32UC and AVR32AP.
+_handle_Floating_Point:
+	rjmp $
 8000262c:	c0 08       	rjmp	8000262c <_handle_Floating_Point>
 	...
 
 80002630 <_handle_Coprocessor_Absent>:
+
+	.org  0x030
+	// Coprocessor Absent: UNUSED IN AVR32UC.
+_handle_Coprocessor_Absent:
+	rjmp $
 80002630:	c0 08       	rjmp	80002630 <_handle_Coprocessor_Absent>
 	...
 
 80002634 <_handle_Data_Address_Read>:
+
+	.org  0x034
+	// Data Address (Read).
+_handle_Data_Address_Read:
+	rjmp $
 80002634:	c0 08       	rjmp	80002634 <_handle_Data_Address_Read>
 	...
 
 80002638 <_handle_Data_Address_Write>:
+
+	.org  0x038
+	// Data Address (Write).
+_handle_Data_Address_Write:
+	rjmp $
 80002638:	c0 08       	rjmp	80002638 <_handle_Data_Address_Write>
 	...
 
 8000263c <_handle_DTLB_Protection_Read>:
+
+	.org  0x03C
+	// DTLB Protection (Read).
+_handle_DTLB_Protection_Read:
+	rjmp $
 8000263c:	c0 08       	rjmp	8000263c <_handle_DTLB_Protection_Read>
 	...
 
 80002640 <_handle_DTLB_Protection_Write>:
+
+	.org  0x040
+	// DTLB Protection (Write).
+_handle_DTLB_Protection_Write:
+	rjmp $
 80002640:	c0 08       	rjmp	80002640 <_handle_DTLB_Protection_Write>
 	...
 
 80002644 <_handle_DTLB_Modified>:
+
+	.org  0x044
+	// DTLB Modified: UNUSED IN AVR32UC.
+_handle_DTLB_Modified:
+	rjmp $
 80002644:	c0 08       	rjmp	80002644 <_handle_DTLB_Modified>
 	...
 
 80002650 <_handle_ITLB_Miss>:
+
+	.org  0x050
+	// ITLB Miss.
+_handle_ITLB_Miss:
+	rjmp $
 80002650:	c0 08       	rjmp	80002650 <_handle_ITLB_Miss>
 	...
 
 80002660 <_handle_DTLB_Miss_Read>:
+
+	.org  0x060
+	// DTLB Miss (Read).
+_handle_DTLB_Miss_Read:
+	rjmp $
 80002660:	c0 08       	rjmp	80002660 <_handle_DTLB_Miss_Read>
 	...
 
 80002670 <_handle_DTLB_Miss_Write>:
+
+	.org  0x070
+	// DTLB Miss (Write).
+_handle_DTLB_Miss_Write:
+	rjmp $
 80002670:	c0 08       	rjmp	80002670 <_handle_DTLB_Miss_Write>
 	...
 
 80002700 <_handle_Supervisor_Call>:
+
+	.org  0x100
+	// Supervisor Call.
+_handle_Supervisor_Call:
+	rjmp $
 80002700:	c0 08       	rjmp	80002700 <_handle_Supervisor_Call>
 80002702:	d7 03       	nop
 
 80002704 <_int0>:
+	 * RSR_INTx by the CPU upon interrupt entry. No other register is saved
+	 * by hardware.
+	 */
+	pushm   r8-r12, lr
+#endif
+	// Pass the int_level parameter to the _get_interrupt_handler function.
 80002704:	30 0c       	mov	r12,0
-80002706:	fe b0 fd 41 	rcall	80002188 <_get_interrupt_handler>
+80002706:	fe b0 fd f5 	rcall	800022f0 <_get_interrupt_handler>
 8000270a:	58 0c       	cp.w	r12,0
 8000270c:	f8 0f 17 10 	movne	pc,r12
+	popm    r8-r12, lr
+#endif
+	/*
+	 * If this was a spurious interrupt (R12 == NULL), return from event
+	 * handler.
+	 */
 80002710:	d6 03       	rete
 
 80002712 <_int1>:
+	 * RSR_INTx by the CPU upon interrupt entry. No other register is saved
+	 * by hardware.
+	 */
+	pushm   r8-r12, lr
+#endif
+	// Pass the int_level parameter to the _get_interrupt_handler function.
 80002712:	30 1c       	mov	r12,1
-80002714:	fe b0 fd 3a 	rcall	80002188 <_get_interrupt_handler>
+80002714:	fe b0 fd ee 	rcall	800022f0 <_get_interrupt_handler>
 80002718:	58 0c       	cp.w	r12,0
 8000271a:	f8 0f 17 10 	movne	pc,r12
+	popm    r8-r12, lr
+#endif
+	/*
+	 * If this was a spurious interrupt (R12 == NULL), return from event
+	 * handler.
+	 */
 8000271e:	d6 03       	rete
 
 80002720 <_int2>:
+	 * RSR_INTx by the CPU upon interrupt entry. No other register is saved
+	 * by hardware.
+	 */
+	pushm   r8-r12, lr
+#endif
+	// Pass the int_level parameter to the _get_interrupt_handler function.
 80002720:	30 2c       	mov	r12,2
-80002722:	fe b0 fd 33 	rcall	80002188 <_get_interrupt_handler>
+80002722:	fe b0 fd e7 	rcall	800022f0 <_get_interrupt_handler>
 80002726:	58 0c       	cp.w	r12,0
 80002728:	f8 0f 17 10 	movne	pc,r12
+	popm    r8-r12, lr
+#endif
+	/*
+	 * If this was a spurious interrupt (R12 == NULL), return from event
+	 * handler.
+	 */
 8000272c:	d6 03       	rete
 
 8000272e <_int3>:
+	 * RSR_INTx by the CPU upon interrupt entry. No other register is saved
+	 * by hardware.
+	 */
+	pushm   r8-r12, lr
+#endif
+	// Pass the int_level parameter to the _get_interrupt_handler function.
 8000272e:	30 3c       	mov	r12,3
-80002730:	fe b0 fd 2c 	rcall	80002188 <_get_interrupt_handler>
+80002730:	fe b0 fd e0 	rcall	800022f0 <_get_interrupt_handler>
 80002734:	58 0c       	cp.w	r12,0
 80002736:	f8 0f 17 10 	movne	pc,r12
+	popm    r8-r12, lr
+#endif
+	/*
+	 * If this was a spurious interrupt (R12 == NULL), return from event
+	 * handler.
+	 */
 8000273a:	d6 03       	rete
 8000273c:	d7 03       	nop
 8000273e:	d7 03       	nop

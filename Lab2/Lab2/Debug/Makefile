@@ -59,6 +59,7 @@ SUBDIRS :=  \
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS +=  \
+../src/USART_driver.c \
 ../src/ASF/avr32/boards/evk1100/init.c \
 ../src/ASF/avr32/boards/evk1100/led.c \
 ../src/ASF/avr32/drivers/gpio/gpio.c \
@@ -76,6 +77,7 @@ ASM_SRCS +=
 
 
 OBJS +=  \
+src/USART_driver.o \
 src/ASF/avr32/boards/evk1100/init.o \
 src/ASF/avr32/boards/evk1100/led.o \
 src/ASF/avr32/drivers/gpio/gpio.o \
@@ -86,6 +88,7 @@ src/ASF/avr32/utils/startup/trampoline_uc3.o \
 src/main.o
 
 OBJS_AS_ARGS +=  \
+src/USART_driver.o \
 src/ASF/avr32/boards/evk1100/init.o \
 src/ASF/avr32/boards/evk1100/led.o \
 src/ASF/avr32/drivers/gpio/gpio.o \
@@ -96,6 +99,7 @@ src/ASF/avr32/utils/startup/trampoline_uc3.o \
 src/main.o
 
 C_DEPS +=  \
+src/USART_driver.d \
 src/ASF/avr32/boards/evk1100/init.d \
 src/ASF/avr32/boards/evk1100/led.d \
 src/ASF/avr32/drivers/gpio/gpio.d \
@@ -106,6 +110,7 @@ src/ASF/avr32/utils/startup/trampoline_uc3.d \
 src/main.d
 
 C_DEPS_AS_ARGS +=  \
+src/USART_driver.d \
 src/ASF/avr32/boards/evk1100/init.d \
 src/ASF/avr32/boards/evk1100/led.d \
 src/ASF/avr32/drivers/gpio/gpio.d \
@@ -141,6 +146,15 @@ LINKER_SCRIPT_DEP+=  \
 
 
 
+
+
+src/%.o: ../src/%.c
+	@echo Building file: $<
+	@echo Invoking: AVR32/GNU C Compiler : 4.4.7
+	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr32\avr32-gnu-toolchain\bin\avr32-gcc.exe$(QUOTE)  -x c -DDEBUG -DBOARD=EVK1100  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\UC3A_DFP\1.0.53\include\AT32UC3A0512" -I"../src/ASF/avr32/utils" -I"../src/ASF/avr32/drivers/gpio" -I"../src/ASF/common/boards" -I"../src/ASF/avr32/boards/evk1100" -I"../src/ASF/avr32/utils/preprocessor" -I"../src/ASF/avr32/drivers/intc" -I"../src/ASF/common/utils" -I"../src" -I"../src/config" -I"../src/ASF/avr32/boards"  -O0 -fdata-sections -ffunction-sections -masm-addr-pseudos -g3 -Wall -mpart=uc3a0512 -c -std=gnu99 -fno-strict-aliasing -Wstrict-prototypes -Wmissing-prototypes -Werror-implicit-function-declaration -Wpointer-arith -mrelax -mno-cond-exec-before-reload -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
+
 src/ASF/avr32/boards/evk1100/%.o: ../src/ASF/avr32/boards/evk1100/%.c
 	@echo Building file: $<
 	@echo Invoking: AVR32/GNU C Compiler : 4.4.7
@@ -156,13 +170,6 @@ src/ASF/avr32/drivers/gpio/%.o: ../src/ASF/avr32/drivers/gpio/%.c
 	
 
 src/ASF/avr32/drivers/intc/%.o: ../src/ASF/avr32/drivers/intc/%.c
-	@echo Building file: $<
-	@echo Invoking: AVR32/GNU C Compiler : 4.4.7
-	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr32\avr32-gnu-toolchain\bin\avr32-gcc.exe$(QUOTE)  -x c -DDEBUG -DBOARD=EVK1100  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\UC3A_DFP\1.0.53\include\AT32UC3A0512" -I"../src/ASF/avr32/utils" -I"../src/ASF/avr32/drivers/gpio" -I"../src/ASF/common/boards" -I"../src/ASF/avr32/boards/evk1100" -I"../src/ASF/avr32/utils/preprocessor" -I"../src/ASF/avr32/drivers/intc" -I"../src/ASF/common/utils" -I"../src" -I"../src/config" -I"../src/ASF/avr32/boards"  -O0 -fdata-sections -ffunction-sections -masm-addr-pseudos -g3 -Wall -mpart=uc3a0512 -c -std=gnu99 -fno-strict-aliasing -Wstrict-prototypes -Wmissing-prototypes -Werror-implicit-function-declaration -Wpointer-arith -mrelax -mno-cond-exec-before-reload -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
-	@echo Finished building: $<
-	
-
-src/%.o: ../src/%.c
 	@echo Building file: $<
 	@echo Invoking: AVR32/GNU C Compiler : 4.4.7
 	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr32\avr32-gnu-toolchain\bin\avr32-gcc.exe$(QUOTE)  -x c -DDEBUG -DBOARD=EVK1100  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\UC3A_DFP\1.0.53\include\AT32UC3A0512" -I"../src/ASF/avr32/utils" -I"../src/ASF/avr32/drivers/gpio" -I"../src/ASF/common/boards" -I"../src/ASF/avr32/boards/evk1100" -I"../src/ASF/avr32/utils/preprocessor" -I"../src/ASF/avr32/drivers/intc" -I"../src/ASF/common/utils" -I"../src" -I"../src/config" -I"../src/ASF/avr32/boards"  -O0 -fdata-sections -ffunction-sections -masm-addr-pseudos -g3 -Wall -mpart=uc3a0512 -c -std=gnu99 -fno-strict-aliasing -Wstrict-prototypes -Wmissing-prototypes -Werror-implicit-function-declaration -Wpointer-arith -mrelax -mno-cond-exec-before-reload -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
