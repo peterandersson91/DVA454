@@ -12,14 +12,14 @@ void USART_init(volatile avr32_usart_t * usart)
 	usart->MR.var_sync		= 0;
 	usart->MR.dsnack		= 0;
 	usart->MR.inack			= 0;
-	usart->MR.over          = 0;
+	usart->MR.over          = 1;
 	usart->MR.clko          = 0;
 	usart->MR.mode9         = 0;
 	usart->MR.msbf          = 0;
 	usart->MR.chmode        = 0; //2bits
 	usart->MR.nbstop        = 0;
 	usart->MR.par           = 4;
-	usart->MR.sync          = 1;
+	usart->MR.sync          = 0;
 	usart->MR.chrl          = 3;
 	usart->MR.usclks        = 0;
 	usart->MR.mode          = 0;
@@ -44,8 +44,8 @@ void USART_init(volatile avr32_usart_t * usart)
 	
 	// BaudRateGeneratorRegister
 	//Clock frequency = 115200 Hz
-	usart->BRGR.fp			= 0;
-	usart->BRGR.cd          = 12;
+	usart->BRGR.fp			= 4;
+	usart->BRGR.cd          = 1;
 	
 	volatile avr32_gpio_port_t * usart_gpio;
 	usart_gpio = &AVR32_GPIO.port[USART_RXD_PIN/GPIO_MAX_PIN_NUMBER];
@@ -61,9 +61,12 @@ void USART_init(volatile avr32_usart_t * usart)
 char USART_getChar()
 {
 	volatile avr32_usart_t * usart = USART;
+	while(usart->CSR.rxrdy == 0)
+	{}
 	return usart->RHR.rxchr;
 	
 }
+
 void USART_putChar(char c)
 {
 	volatile avr32_usart_t * usart = USART; 
@@ -72,7 +75,50 @@ void USART_putChar(char c)
 	{
 		USART->THR.txchr = c; //( c << AVR32_USART_THR_TXCHR_OFFSET) & AVR32_USART_THR_TXCHR_MASK;
 	}
-	
+}
+
+char * USART_getString()
+{
+	char input_string[20] = "\0";
+	char input_char = '\0';
+	int i = 0;
+	volatile avr32_usart_t * usart = USART;
+	while (1) //Read if USART is ready 
+	{		
+		if(usart->CSR.rxrdy != 0)
+		{
+			input_char = USART_getChar();
+			if(input_char == 'a')
+			{
+				input_string[i] = '\0';
+				break;
+			}
+			else
+			{	
+				if (input_char != 254)
+				{
+					input_string[i] = input_char;
+					i++;					
+				}
+			}
+		}
+		
+	}
+	return input_string;
+}
+
+void USART_putString(char * output_string)
+{
+	volatile avr32_usart_t * usart = USART;
+	int i = 0;
+	while ((*(output_string + i)) != '\0')
+	{
+		if (usart->CSR.txrdy != 0)
+		{
+			USART_putChar(*(output_string + i));
+			i++;
+		}		
+	}	
 }
 
 void USART_reset()

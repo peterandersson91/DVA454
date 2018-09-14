@@ -21,5 +21,6 @@ void USART_init(volatile avr32_usart_t * usart);
 char USART_getChar();
 void USART_putChar(char c);
 void USART_reset();
-
+char * USART_getString();
+void USART_putString(char * input_string);
 #endif /* USART_DRIVER_H_ */

@@ -70,16 +70,12 @@ int main(void)
 	initButton();
 	
 	char c = 'a';
-	char input_char; 
+	char * input_string = NULL; 
+	
 	while(1)
-	{
-		if(usart->CSR.rxrdy != 0)
-		{
-			input_char = USART_getChar();
-			USART_putChar(input_char);
-		}
-		//USART_putChar(c);
-		mdelay(1000);
+	{		
+		input_string = USART_getString();
+		USART_putString(input_string);
 	}
 	while(1);
 }
