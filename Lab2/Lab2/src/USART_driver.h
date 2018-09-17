@@ -6,11 +6,13 @@
 // The Maximum number of pins
 #define GPIO_MAX_PIN_NUMBER 32
 
+//USART port 1 defines
 #  define USART                 (&AVR32_USART1)
 #  define USART_RX_PIN          AVR32_USART1_RXD_0_0_PIN
 #  define USART_RX_FUNCTION     AVR32_USART1_RXD_0_0_FUNCTION
 #  define USART_TX_PIN          AVR32_USART1_TXD_0_0_PIN
 #  define USART_TX_FUNCTION     AVR32_USART1_TXD_0_0_FUNCTION
+
 
 #define AVR32_USART_THR_TXCHR_MASK                           0x000001ff
 #define AVR32_USART_THR_TXCHR_OFFSET                                  0
