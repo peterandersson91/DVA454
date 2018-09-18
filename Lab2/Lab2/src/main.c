@@ -70,11 +70,11 @@ int main(void)
 	initButton();
 	
 	char c = 'a';
-	char * input_string = NULL; 
+	char input_string[64];
 	
 	while(1)
 	{		
-		input_string = USART_getString();
+		USART_getString(&input_string);
 		USART_putString(input_string);
 	}
 	while(1);

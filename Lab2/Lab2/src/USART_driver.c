@@ -45,7 +45,7 @@ void USART_init(volatile avr32_usart_t * usart)
 	//BaudRateGeneratorRegister
 	//Clock frequency = 115200 Hz
 	//Baud Rate = 9600 
-	//Baud Rate = Selected Clock/(8*CD)
+	//CD + (FP/8) = Selected clock / (8 * Baudrate)
 	usart->BRGR.fp			= 4; //Fractional Part.
 	usart->BRGR.cd          = 1; //Clock Divider.
 	
@@ -66,59 +66,53 @@ char USART_getChar()
 	volatile avr32_usart_t * usart = USART;
 	while(usart->CSR.rxrdy == 0) //Checks the Control Status Register if there is a character received ready to be read.
 	{}
-	return usart->RHR.rxchr; // Returns the character in the Receive Holding Register.
-	
+	return usart->RHR.rxchr; // Returns the character in the Receive Holding Register.	
 }
 
 void USART_putChar(char c)
 {
 	volatile avr32_usart_t * usart = USART; 
 
-	if((USART->csr & AVR32_USART_CSR_TXRDY_MASK) != 0)
+	if(usart->CSR.txrdy != 0) //Checks the Control Status Register if ready to transmit.
 	{
-		USART->THR.txchr = c; //( c << AVR32_USART_THR_TXCHR_OFFSET) & AVR32_USART_THR_TXCHR_MASK;
+		USART->THR.txchr = c; //Sends a character to the transmit holding register ( c << AVR32_USART_THR_TXCHR_OFFSET) & AVR32_USART_THR_TXCHR_MASK;
 	}
 }
 
-char * USART_getString()
+USART_getString(char input_string[])
 {
-	char input_string[20] = "\0";
-	char input_char = '\0';
+	char input_char = '\0'; // char to receive
 	int i = 0;
 	volatile avr32_usart_t * usart = USART;
-	while (1) //Read if USART is ready 
-	{		
-		if(usart->CSR.rxrdy != 0)
+	while (1) //Read if USART is ready
+	{
+		if(usart->CSR.rxrdy != 0) // If there is something to read
 		{
-			input_char = USART_getChar();
-			if(input_char == 'a')
+			input_char = USART_getChar(); // Read the first char in line
+			if(input_char == '\n') // When the user presses enter, return
 			{
-				input_string[i] = '\0';
+				input_string[i] = '\n';
+				input_string[i+1] = '\0';
 				break;
 			}
 			else
-			{	
-				if (input_char != 254)
-				{
-					input_string[i] = input_char;
-					i++;					
-				}
+			{
+				input_string[i] = input_char; // Put char to string
+				i++;
 			}
-		}
-		
+		}			
 	}
-	return input_string;
 }
 
-void USART_putString(char * output_string)
+void USART_putString(char output_string[])
 {
 	volatile avr32_usart_t * usart = USART;
 	int i = 0;
-	while ((*(output_string + i)) != '\0')
+	while (output_string[i] != '\0') // Loop till end of string
 	{
-		if (usart->CSR.txrdy != 0)
+		if (usart->CSR.txrdy != 0) // If ready to write
 		{
-			USART_putChar(*(output_string + i));
+			USART_putChar(output_string[i]); // Write the next char in line
 			i++;
 		}		
 	}	
@@ -130,10 +124,10 @@ void USART_reset()
 	usart->mr = 0;	 //Reset Mode register	
 	
 	//Reset Control register
-	usart->cr = AVR32_USART_CR_RSTRX_MASK   |
-	AVR32_USART_CR_RSTTX_MASK   |
-	AVR32_USART_CR_RSTSTA_MASK  |
-	AVR32_USART_CR_RSTIT_MASK   |
-	AVR32_USART_CR_RSTNACK_MASK |
-	AVR32_USART_CR_RTSDIS_MASK;
+	usart->cr = AVR32_USART_CR_RSTRX_MASK   |	// Resets receiver
+	AVR32_USART_CR_RSTTX_MASK   |				// Resets transmitter
+	AVR32_USART_CR_RSTSTA_MASK  |				// Resets status bit in CSR
+	AVR32_USART_CR_RSTIT_MASK   |				// Reset iterations
+	AVR32_USART_CR_RSTNACK_MASK |				// Reset NACK
+	AVR32_USART_CR_RTSDIS_MASK;					// Disable Request to send
 }

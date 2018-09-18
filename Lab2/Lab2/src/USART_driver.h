@@ -6,23 +6,11 @@
 // The Maximum number of pins
 #define GPIO_MAX_PIN_NUMBER 32
 
-//USART port 1 defines
-#  define USART                 (&AVR32_USART1)
-#  define USART_RX_PIN          AVR32_USART1_RXD_0_0_PIN
-#  define USART_RX_FUNCTION     AVR32_USART1_RXD_0_0_FUNCTION
-#  define USART_TX_PIN          AVR32_USART1_TXD_0_0_PIN
-#  define USART_TX_FUNCTION     AVR32_USART1_TXD_0_0_FUNCTION
-
-
-#define AVR32_USART_THR_TXCHR_MASK                           0x000001ff
-#define AVR32_USART_THR_TXCHR_OFFSET                                  0
-
-
 //Functions defines
-void USART_init(volatile avr32_usart_t * usart);
-char USART_getChar();
-void USART_putChar(char c);
-void USART_reset();
-char * USART_getString();
-void USART_putString(char * input_string);
+void USART_init(volatile avr32_usart_t * usart); // Initializes the registers
+char USART_getChar(); // Reads char from RHR
+void USART_putChar(char c); // Writes char to THR
+void USART_reset(); // Resets CR and MR
+USART_getString(char input_string[]); // Reads a string from RHR
+void USART_putString(char output_string[]); // Writes a string to THR
 #endif /* USART_DRIVER_H_ */
