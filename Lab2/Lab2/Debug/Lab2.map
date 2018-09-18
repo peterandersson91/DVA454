@@ -1,6 +1,9 @@
 
 Discarded input sections
 
+ .text          0x00000000        0x0 src/USART_driver.o
+ .data          0x00000000        0x0 src/USART_driver.o
+ .bss           0x00000000        0x0 src/USART_driver.o
  .text          0x00000000        0x0 src/ASF/avr32/boards/evk1100/init.o
  .data          0x00000000        0x0 src/ASF/avr32/boards/evk1100/init.o
  .bss           0x00000000        0x0 src/ASF/avr32/boards/evk1100/init.o
@@ -28,7 +31,7 @@ Discarded input sections
  .debug_aranges
                 0x00000000       0x20 src/ASF/avr32/boards/evk1100/init.o
  .debug_ranges  0x00000000       0x18 src/ASF/avr32/boards/evk1100/init.o
- .debug_str     0x00000000      0x182 src/ASF/avr32/boards/evk1100/init.o
+ .debug_str     0x00000000      0x17f src/ASF/avr32/boards/evk1100/init.o
  .comment       0x00000000       0x31 src/ASF/avr32/boards/evk1100/init.o
  .text          0x00000000        0x0 src/ASF/avr32/boards/evk1100/led.o
  .data          0x00000000        0x0 src/ASF/avr32/boards/evk1100/led.o
@@ -71,7 +74,7 @@ Discarded input sections
  .debug_aranges
                 0x00000000       0x78 src/ASF/avr32/boards/evk1100/led.o
  .debug_ranges  0x00000000       0x70 src/ASF/avr32/boards/evk1100/led.o
- .debug_str     0x00000000      0x4c3 src/ASF/avr32/boards/evk1100/led.o
+ .debug_str     0x00000000      0x4c0 src/ASF/avr32/boards/evk1100/led.o
  .comment       0x00000000       0x31 src/ASF/avr32/boards/evk1100/led.o
  .text          0x00000000        0x0 src/ASF/avr32/drivers/gpio/gpio.o
  .data          0x00000000        0x0 src/ASF/avr32/drivers/gpio/gpio.o
@@ -148,7 +151,7 @@ Discarded input sections
  .debug_aranges
                 0x00000000      0x108 src/ASF/avr32/drivers/gpio/gpio.o
  .debug_ranges  0x00000000      0x100 src/ASF/avr32/drivers/gpio/gpio.o
- .debug_str     0x00000000      0x52b src/ASF/avr32/drivers/gpio/gpio.o
+ .debug_str     0x00000000      0x528 src/ASF/avr32/drivers/gpio/gpio.o
  .comment       0x00000000       0x31 src/ASF/avr32/drivers/gpio/gpio.o
  .text          0x00000000        0x0 src/ASF/avr32/drivers/intc/exception.o
  .data          0x00000000        0x0 src/ASF/avr32/drivers/intc/exception.o
@@ -173,12 +176,6 @@ Discarded input sections
  .text          0x00000000        0x0 src/main.o
  .data          0x00000000        0x0 src/main.o
  .bss           0x00000000        0x0 src/main.o
- .text.USART_getChar
-                0x00000000        0xa src/main.o
- .text.USART_putChar
-                0x00000000       0x14 src/main.o
- .text.USART_reset
-                0x00000000        0xa src/main.o
  .text.mdelay   0x00000000       0x26 src/main.o
 
 Memory Configuration
@@ -192,6 +189,7 @@ USERPAGE         0x80800000         0x00000200
 Linker script and memory map
 
                 0x00001000                _stack_size = 0x1000
+LOAD src/USART_driver.o
 LOAD src/ASF/avr32/boards/evk1100/init.o
 LOAD src/ASF/avr32/boards/evk1100/led.o
 LOAD src/ASF/avr32/drivers/gpio/gpio.o
@@ -326,45 +324,61 @@ LOAD c:/program files (x86)/atmel/studio/7.0/toolchain/avr32/avr32-gnu-toolchain
 .plt
  *(.plt)
 
-.text           0x80002008      0x1ac
+.text           0x80002008      0x544
  *(.text .stub .text.* .gnu.linkonce.t.*)
- .text._get_interrupt_handler
-                0x80002008       0x70 src/ASF/avr32/drivers/intc/intc.o
-                0x80002008                _get_interrupt_handler
- .text._stext   0x80002078       0x3c src/ASF/avr32/utils/startup/startup_uc3.o
-                                 0x50 (size before relaxing)
-                0x80002078                _stext
- .text.initLED  0x800020b4       0x38 src/main.o
-                0x800020b4                initLED
- .text.initButton
-                0x800020ec       0x2c src/main.o
-                0x800020ec                initButton
  .text.USART_init
-                0x80002118       0x34 src/main.o
-                0x80002118                USART_init
- .text.main     0x8000214c       0x68 src/main.o
-                0x8000214c                main
+                0x80002008      0x258 src/USART_driver.o
+                0x80002008                USART_init
+ .text.USART_getChar
+                0x80002260       0x32 src/USART_driver.o
+                0x80002260                USART_getChar
+ .text.USART_putChar
+                0x80002292       0x40 src/USART_driver.o
+                0x80002292                USART_putChar
+ *fill*         0x800022d2        0x2 d703d703
+ .text.USART_getString
+                0x800022d4       0x8c src/USART_driver.o
+                0x800022d4                USART_getString
+ .text.USART_putString
+                0x80002360       0x64 src/USART_driver.o
+                0x80002360                USART_putString
+ .text.USART_reset
+                0x800023c4       0x28 src/USART_driver.o
+                0x800023c4                USART_reset
+ .text._get_interrupt_handler
+                0x800023ec       0x70 src/ASF/avr32/drivers/intc/intc.o
+                0x800023ec                _get_interrupt_handler
+ .text._stext   0x8000245c       0x3c src/ASF/avr32/utils/startup/startup_uc3.o
+                                 0x50 (size before relaxing)
+                0x8000245c                _stext
+ .text.initLED  0x80002498       0x38 src/main.o
+                0x80002498                initLED
+ .text.initButton
+                0x800024d0       0x2c src/main.o
+                0x800024d0                initButton
+ .text.main     0x800024fc       0x50 src/main.o
+                0x800024fc                main
  *(.text.*personality*)
  *(.gnu.warning)
 
-.exception      0x80002200      0x200
- .exception     0x80002200      0x200 src/ASF/avr32/drivers/intc/exception.o
-                0x80002200                _evba
-                0x80002304                _int0
-                0x80002310                _int1
-                0x8000231c                _int2
-                0x80002328                _int3
+.exception      0x80002600      0x200
+ .exception     0x80002600      0x200 src/ASF/avr32/drivers/intc/exception.o
+                0x80002600                _evba
+                0x80002704                _int0
+                0x80002710                _int1
+                0x8000271c                _int2
+                0x80002728                _int3
 
 .fini
  *(.fini)
-                0x80002400                PROVIDE (__etext, .)
-                0x80002400                PROVIDE (_etext, .)
-                0x80002400                PROVIDE (etext, .)
+                0x80002800                PROVIDE (__etext, .)
+                0x80002800                PROVIDE (_etext, .)
+                0x80002800                PROVIDE (etext, .)
 
-.rodata         0x80002400       0xa0
+.rodata         0x80002800       0xa0
  *(.rodata .rodata.* .gnu.linkonce.r.*)
  .rodata._int_handler_table
-                0x80002400       0xa0 src/ASF/avr32/drivers/intc/intc.o
+                0x80002800       0xa0 src/ASF/avr32/drivers/intc/intc.o
 
 .rodata1
  *(.rodata1)
@@ -379,9 +393,9 @@ LOAD c:/program files (x86)/atmel/studio/7.0/toolchain/avr32/avr32-gnu-toolchain
  *(.gcc_except_table)
  *(.gcc_except_table.*)
 
-.lalign         0x800024a0        0x0
-                0x800024a0                . = ALIGN (0x8)
-                0x800024a0                PROVIDE (_data_lma, .)
+.lalign         0x800028a0        0x0
+                0x800028a0                . = ALIGN (0x8)
+                0x800028a0                PROVIDE (_data_lma, .)
                 0x00000004                . = ORIGIN (INTRAM)
 
 .dalign         0x00000004        0x4
@@ -447,7 +461,7 @@ LOAD c:/program files (x86)/atmel/studio/7.0/toolchain/avr32/avr32-gnu-toolchain
 .ramtext
  *(.ramtext .ramtext.*)
 
-.ddalign        0x00000008        0x0 load address 0x800024a0
+.ddalign        0x00000008        0x0 load address 0x800028a0
                 0x00000008                . = ALIGN (0x8)
 
 .data
@@ -457,7 +471,7 @@ LOAD c:/program files (x86)/atmel/studio/7.0/toolchain/avr32/avr32-gnu-toolchain
 .data1
  *(.data1)
 
-.balign         0x00000008        0x0 load address 0x800024a0
+.balign         0x00000008        0x0 load address 0x800028a0
                 0x00000008                . = ALIGN (0x8)
                 0x00000008                PROVIDE (_edata, .)
                 0x00000008                PROVIDE (edata, .)
@@ -540,8 +554,9 @@ LOAD c:/program files (x86)/atmel/studio/7.0/toolchain/avr32/avr32-gnu-toolchain
 
 .comment        0x00000000       0x30
  *(.comment)
- .comment       0x00000000       0x30 src/ASF/avr32/drivers/intc/intc.o
+ .comment       0x00000000       0x30 src/USART_driver.o
                                  0x31 (size before relaxing)
+ .comment       0x00000000       0x31 src/ASF/avr32/drivers/intc/intc.o
  .comment       0x00000000       0x31 src/main.o
 
 .debug
@@ -556,74 +571,87 @@ LOAD c:/program files (x86)/atmel/studio/7.0/toolchain/avr32/avr32-gnu-toolchain
 .debug_sfnames
  *(.debug_sfnames)
 
-.debug_aranges  0x00000000      0x100
+.debug_aranges  0x00000000      0x128
  *(.debug_aranges)
  .debug_aranges
-                0x00000000       0x20 src/ASF/avr32/drivers/intc/exception.o
+                0x00000000       0x48 src/USART_driver.o
  .debug_aranges
-                0x00000020       0x40 src/ASF/avr32/drivers/intc/intc.o
+                0x00000048       0x20 src/ASF/avr32/drivers/intc/exception.o
  .debug_aranges
-                0x00000060       0x28 src/ASF/avr32/utils/startup/startup_uc3.o
+                0x00000068       0x40 src/ASF/avr32/drivers/intc/intc.o
  .debug_aranges
-                0x00000088       0x20 src/ASF/avr32/utils/startup/trampoline_uc3.o
+                0x000000a8       0x28 src/ASF/avr32/utils/startup/startup_uc3.o
  .debug_aranges
-                0x000000a8       0x58 src/main.o
+                0x000000d0       0x20 src/ASF/avr32/utils/startup/trampoline_uc3.o
+ .debug_aranges
+                0x000000f0       0x38 src/main.o
 
 .debug_pubnames
-                0x00000000       0xe6
+                0x00000000      0x120
  *(.debug_pubnames)
  .debug_pubnames
-                0x00000000       0x62 src/ASF/avr32/drivers/intc/intc.o
+                0x00000000       0x7d src/USART_driver.o
  .debug_pubnames
-                0x00000062       0x84 src/main.o
+                0x0000007d       0x62 src/ASF/avr32/drivers/intc/intc.o
+ .debug_pubnames
+                0x000000df       0x41 src/main.o
 
-.debug_info     0x00000000     0x1e11
+.debug_info     0x00000000     0x3434
  *(.debug_info .gnu.linkonce.wi.*)
- .debug_info    0x00000000       0x8f src/ASF/avr32/drivers/intc/exception.o
- .debug_info    0x0000008f      0x5b2 src/ASF/avr32/drivers/intc/intc.o
- .debug_info    0x00000641       0x8e src/ASF/avr32/utils/startup/startup_uc3.o
- .debug_info    0x000006cf       0x95 src/ASF/avr32/utils/startup/trampoline_uc3.o
- .debug_info    0x00000764     0x16ad src/main.o
+ .debug_info    0x00000000     0x16b1 src/USART_driver.o
+ .debug_info    0x000016b1       0x8c src/ASF/avr32/drivers/intc/exception.o
+ .debug_info    0x0000173d      0x5b2 src/ASF/avr32/drivers/intc/intc.o
+ .debug_info    0x00001cef       0x8b src/ASF/avr32/utils/startup/startup_uc3.o
+ .debug_info    0x00001d7a       0x92 src/ASF/avr32/utils/startup/trampoline_uc3.o
+ .debug_info    0x00001e0c     0x1628 src/main.o
 
-.debug_abbrev   0x00000000      0x3b2
+.debug_abbrev   0x00000000      0x54a
  *(.debug_abbrev)
- .debug_abbrev  0x00000000       0x14 src/ASF/avr32/drivers/intc/exception.o
- .debug_abbrev  0x00000014      0x1b6 src/ASF/avr32/drivers/intc/intc.o
- .debug_abbrev  0x000001ca       0x12 src/ASF/avr32/utils/startup/startup_uc3.o
- .debug_abbrev  0x000001dc       0x14 src/ASF/avr32/utils/startup/trampoline_uc3.o
- .debug_abbrev  0x000001f0      0x1c2 src/main.o
+ .debug_abbrev  0x00000000      0x1c6 src/USART_driver.o
+ .debug_abbrev  0x000001c6       0x14 src/ASF/avr32/drivers/intc/exception.o
+ .debug_abbrev  0x000001da      0x1b6 src/ASF/avr32/drivers/intc/intc.o
+ .debug_abbrev  0x00000390       0x12 src/ASF/avr32/utils/startup/startup_uc3.o
+ .debug_abbrev  0x000003a2       0x14 src/ASF/avr32/utils/startup/trampoline_uc3.o
+ .debug_abbrev  0x000003b6      0x194 src/main.o
 
-.debug_line     0x00000000     0x1068
+.debug_line     0x00000000     0x1747
  *(.debug_line)
- .debug_line    0x00000000      0x109 src/ASF/avr32/drivers/intc/exception.o
- .debug_line    0x00000109      0x6a9 src/ASF/avr32/drivers/intc/intc.o
- .debug_line    0x000007b2       0xf2 src/ASF/avr32/utils/startup/startup_uc3.o
- .debug_line    0x000008a4       0x67 src/ASF/avr32/utils/startup/trampoline_uc3.o
- .debug_line    0x0000090b      0x75d src/main.o
+ .debug_line    0x00000000      0x72e src/USART_driver.o
+ .debug_line    0x0000072e      0x109 src/ASF/avr32/drivers/intc/exception.o
+ .debug_line    0x00000837      0x6a9 src/ASF/avr32/drivers/intc/intc.o
+ .debug_line    0x00000ee0       0xf2 src/ASF/avr32/utils/startup/startup_uc3.o
+ .debug_line    0x00000fd2       0x67 src/ASF/avr32/utils/startup/trampoline_uc3.o
+ .debug_line    0x00001039      0x70e src/main.o
 
-.debug_frame    0x00000000      0x18c
+.debug_frame    0x00000000      0x1d4
  *(.debug_frame)
- .debug_frame   0x00000000       0x9c src/ASF/avr32/drivers/intc/intc.o
- .debug_frame   0x0000009c       0xf0 src/main.o
+ .debug_frame   0x00000000       0xb8 src/USART_driver.o
+ .debug_frame   0x000000b8       0x9c src/ASF/avr32/drivers/intc/intc.o
+ .debug_frame   0x00000154       0x80 src/main.o
 
-.debug_str      0x00000000      0x98a
+.debug_str      0x00000000      0x9ee
  *(.debug_str)
- .debug_str     0x00000000      0x438 src/ASF/avr32/drivers/intc/intc.o
-                                0x47f (size before relaxing)
- .debug_str     0x00000438      0x552 src/main.o
-                                0x65c (size before relaxing)
+ .debug_str     0x00000000      0x613 src/USART_driver.o
+                                0x671 (size before relaxing)
+ .debug_str     0x00000613      0x38c src/ASF/avr32/drivers/intc/intc.o
+                                0x47c (size before relaxing)
+ .debug_str     0x0000099f       0x4f src/main.o
+                                0x633 (size before relaxing)
 
-.debug_loc      0x00000000      0x22f
+.debug_loc      0x00000000      0x285
  *(.debug_loc)
- .debug_loc     0x00000000       0xd7 src/ASF/avr32/drivers/intc/intc.o
- .debug_loc     0x000000d7      0x158 src/main.o
+ .debug_loc     0x00000000      0x102 src/USART_driver.o
+ .debug_loc     0x00000102       0xd7 src/ASF/avr32/drivers/intc/intc.o
+ .debug_loc     0x000001d9       0xac src/main.o
 
-.debug_macinfo  0x00000000   0x1dc457
+.debug_macinfo  0x00000000   0x2c95b3
  *(.debug_macinfo)
  .debug_macinfo
-                0x00000000    0xec81a src/ASF/avr32/drivers/intc/intc.o
+                0x00000000    0xee09d src/USART_driver.o
  .debug_macinfo
-                0x000ec81a    0xefc3d src/main.o
+                0x000ee09d    0xec81a src/ASF/avr32/drivers/intc/intc.o
+ .debug_macinfo
+                0x001da8b7    0xeecfc src/main.o
 
 .debug_weaknames
  *(.debug_weaknames)
@@ -651,7 +679,8 @@ LOAD c:/program files (x86)/atmel/studio/7.0/toolchain/avr32/avr32-gnu-toolchain
  *(.note.GNU-stack)
 OUTPUT(Lab2.elf elf32-avr32)
 
-.debug_ranges   0x00000000       0xa8
- .debug_ranges  0x00000000       0x38 src/ASF/avr32/drivers/intc/intc.o
- .debug_ranges  0x00000038       0x20 src/ASF/avr32/utils/startup/startup_uc3.o
- .debug_ranges  0x00000058       0x50 src/main.o
+.debug_ranges   0x00000000       0xc8
+ .debug_ranges  0x00000000       0x40 src/USART_driver.o
+ .debug_ranges  0x00000040       0x38 src/ASF/avr32/drivers/intc/intc.o
+ .debug_ranges  0x00000078       0x20 src/ASF/avr32/utils/startup/startup_uc3.o
+ .debug_ranges  0x00000098       0x30 src/main.o

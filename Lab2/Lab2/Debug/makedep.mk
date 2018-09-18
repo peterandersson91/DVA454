@@ -2,6 +2,8 @@
 # Automatically-generated file. Do not edit or delete the file
 ################################################################################
 
+src\USART_driver.c
+
 src\ASF\avr32\boards\evk1100\init.c
 
 src\ASF\avr32\boards\evk1100\led.c
