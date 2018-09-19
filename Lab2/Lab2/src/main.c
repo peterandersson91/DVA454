@@ -68,8 +68,6 @@ int main(void)
 	// Initialization
 	initLED();
 	initButton();
-	
-	char c = 'a';
 	char input_string[64];
 	
 	while(1)
