@@ -324,7 +324,7 @@ LOAD c:/program files (x86)/atmel/studio/7.0/toolchain/avr32/avr32-gnu-toolchain
 .plt
  *(.plt)
 
-.text           0x80002008      0x544
+.text           0x80002008      0x540
  *(.text .stub .text.* .gnu.linkonce.t.*)
  .text.USART_init
                 0x80002008      0x258 src/USART_driver.o
@@ -356,7 +356,7 @@ LOAD c:/program files (x86)/atmel/studio/7.0/toolchain/avr32/avr32-gnu-toolchain
  .text.initButton
                 0x800024d0       0x2c src/main.o
                 0x800024d0                initButton
- .text.main     0x800024fc       0x50 src/main.o
+ .text.main     0x800024fc       0x4c src/main.o
                 0x800024fc                main
  *(.text.*personality*)
  *(.gnu.warning)
@@ -596,32 +596,32 @@ LOAD c:/program files (x86)/atmel/studio/7.0/toolchain/avr32/avr32-gnu-toolchain
  .debug_pubnames
                 0x000000df       0x41 src/main.o
 
-.debug_info     0x00000000     0x3434
+.debug_info     0x00000000     0x3428
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000     0x16b1 src/USART_driver.o
  .debug_info    0x000016b1       0x8c src/ASF/avr32/drivers/intc/exception.o
  .debug_info    0x0000173d      0x5b2 src/ASF/avr32/drivers/intc/intc.o
  .debug_info    0x00001cef       0x8b src/ASF/avr32/utils/startup/startup_uc3.o
  .debug_info    0x00001d7a       0x92 src/ASF/avr32/utils/startup/trampoline_uc3.o
- .debug_info    0x00001e0c     0x1628 src/main.o
+ .debug_info    0x00001e0c     0x161c src/main.o
 
-.debug_abbrev   0x00000000      0x54a
+.debug_abbrev   0x00000000      0x53b
  *(.debug_abbrev)
  .debug_abbrev  0x00000000      0x1c6 src/USART_driver.o
  .debug_abbrev  0x000001c6       0x14 src/ASF/avr32/drivers/intc/exception.o
  .debug_abbrev  0x000001da      0x1b6 src/ASF/avr32/drivers/intc/intc.o
  .debug_abbrev  0x00000390       0x12 src/ASF/avr32/utils/startup/startup_uc3.o
  .debug_abbrev  0x000003a2       0x14 src/ASF/avr32/utils/startup/trampoline_uc3.o
- .debug_abbrev  0x000003b6      0x194 src/main.o
+ .debug_abbrev  0x000003b6      0x185 src/main.o
 
-.debug_line     0x00000000     0x1747
+.debug_line     0x00000000     0x1746
  *(.debug_line)
  .debug_line    0x00000000      0x72e src/USART_driver.o
  .debug_line    0x0000072e      0x109 src/ASF/avr32/drivers/intc/exception.o
  .debug_line    0x00000837      0x6a9 src/ASF/avr32/drivers/intc/intc.o
  .debug_line    0x00000ee0       0xf2 src/ASF/avr32/utils/startup/startup_uc3.o
  .debug_line    0x00000fd2       0x67 src/ASF/avr32/utils/startup/trampoline_uc3.o
- .debug_line    0x00001039      0x70e src/main.o
+ .debug_line    0x00001039      0x70d src/main.o
 
 .debug_frame    0x00000000      0x1d4
  *(.debug_frame)
@@ -644,14 +644,14 @@ LOAD c:/program files (x86)/atmel/studio/7.0/toolchain/avr32/avr32-gnu-toolchain
  .debug_loc     0x00000102       0xd7 src/ASF/avr32/drivers/intc/intc.o
  .debug_loc     0x000001d9       0xac src/main.o
 
-.debug_macinfo  0x00000000   0x2c95b3
+.debug_macinfo  0x00000000   0x2c9389
  *(.debug_macinfo)
  .debug_macinfo
-                0x00000000    0xee09d src/USART_driver.o
+                0x00000000    0xedf88 src/USART_driver.o
  .debug_macinfo
-                0x000ee09d    0xec81a src/ASF/avr32/drivers/intc/intc.o
+                0x000edf88    0xec81a src/ASF/avr32/drivers/intc/intc.o
  .debug_macinfo
-                0x001da8b7    0xeecfc src/main.o
+                0x001da7a2    0xeebe7 src/main.o
 
 .debug_weaknames
  *(.debug_weaknames)

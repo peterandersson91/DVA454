@@ -5,7 +5,7 @@ Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
   0 .reset        00002008  80000000  80000000  00000400  2**2
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  1 .text         00000544  80002008  80002008  00002408  2**2
+  1 .text         00000540  80002008  80002008  00002408  2**2
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
   2 .exception    00000200  80002600  80002600  00002a00  2**9
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
@@ -23,23 +23,23 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING
   9 .debug_pubnames 00000120  00000000  00000000  00002df8  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_info   00003434  00000000  00000000  00002f18  2**0
+ 10 .debug_info   00003428  00000000  00000000  00002f18  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_abbrev 0000054a  00000000  00000000  0000634c  2**0
+ 11 .debug_abbrev 0000053b  00000000  00000000  00006340  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_line   00001747  00000000  00000000  00006896  2**0
+ 12 .debug_line   00001746  00000000  00000000  0000687b  2**0
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_frame  000001d4  00000000  00000000  00007fe0  2**2
+ 13 .debug_frame  000001d4  00000000  00000000  00007fc4  2**2
                   CONTENTS, READONLY, DEBUGGING
- 14 .debug_str    000009ee  00000000  00000000  000081b4  2**0
+ 14 .debug_str    000009ee  00000000  00000000  00008198  2**0
                   CONTENTS, READONLY, DEBUGGING
- 15 .debug_loc    00000285  00000000  00000000  00008ba2  2**0
+ 15 .debug_loc    00000285  00000000  00000000  00008b86  2**0
                   CONTENTS, READONLY, DEBUGGING
- 16 .debug_macinfo 002c95b3  00000000  00000000  00008e27  2**0
+ 16 .debug_macinfo 002c9389  00000000  00000000  00008e0b  2**0
                   CONTENTS, READONLY, DEBUGGING
  17 .stack        00001000  0000f000  0000f000  00000000  2**0
                   ALLOC
- 18 .debug_ranges 000000c8  00000000  00000000  002d23e0  2**3
+ 18 .debug_ranges 000000c8  00000000  00000000  002d2198  2**3
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .reset:
@@ -296,7 +296,7 @@ void USART_init(volatile avr32_usart_t * usart)
 	//BaudRateGeneratorRegister
 	//Clock frequency = 115200 Hz
 	//Baud Rate = 9600 
-	//Baud Rate = Selected Clock/(8*CD)
+	//CD + (FP/8) = Selected clock / (8 * Baudrate)
 	usart->BRGR.fp			= 4; //Fractional Part.
 80002202:	ee f9 ff f8 	ld.w	r9,r7[-8]
 80002206:	72 88       	ld.w	r8,r9[0x20]
@@ -386,13 +386,13 @@ void USART_putChar(char c)
 800022a0:	fe 78 18 00 	mov	r8,-59392
 800022a4:	ef 48 ff fc 	st.w	r7[-4],r8
 
-	if((USART->csr & AVR32_USART_CSR_TXRDY_MASK) != 0)
-800022a8:	fe 78 18 00 	mov	r8,-59392
+	if(usart->CSR.txrdy != 0) //Checks the Control Status Register if ready to transmit.
+800022a8:	ee f8 ff fc 	ld.w	r8,r7[-4]
 800022ac:	70 58       	ld.w	r8,r8[0x14]
 800022ae:	e2 18 00 02 	andl	r8,0x2,COH
 800022b2:	c0 d0       	breq	800022cc <USART_putChar+0x3a>
 	{
-		USART->THR.txchr = c; //( c << AVR32_USART_THR_TXCHR_OFFSET) & AVR32_USART_THR_TXCHR_MASK;
+		USART->THR.txchr = c; //Sends a character to the transmit holding register ( c << AVR32_USART_THR_TXCHR_OFFSET) & AVR32_USART_THR_TXCHR_MASK;
 800022b4:	fe 79 18 00 	mov	r9,-59392
 800022b8:	ef 38 ff f8 	ld.ub	r8,r7[-8]
 800022bc:	f1 d8 c0 09 	bfextu	r8,r8,0x0,0x9
@@ -520,7 +520,7 @@ void USART_putString(char output_string[])
 80002382:	e2 18 00 02 	andl	r8,0x2,COH
 80002386:	c1 00       	breq	800023a6 <USART_putString+0x46>
 		{
-			USART_putChar(output_string[i]);
+			USART_putChar(output_string[i]); // Write the next char in line
 80002388:	ee f8 ff fc 	ld.w	r8,r7[-4]
 8000238c:	ee f9 ff f4 	ld.w	r9,r7[-12]
 80002390:	f2 08 00 08 	add	r8,r9,r8
@@ -544,7 +544,7 @@ void USART_putString(char output_string[])
 800023b4:	58 08       	cp.w	r8,0
 800023b6:	ce 31       	brne	8000237c <USART_putString+0x1c>
 		{
-			USART_putChar(output_string[i]);
+			USART_putChar(output_string[i]); // Write the next char in line
 			i++;
 		}		
 	}	
@@ -571,15 +571,15 @@ void USART_reset()
 800023da:	91 19       	st.w	r8[0x4],r9
 	
 	//Reset Control register
-	usart->cr = AVR32_USART_CR_RSTRX_MASK   |
+	usart->cr = AVR32_USART_CR_RSTRX_MASK   |	// Resets receiver
 800023dc:	ee f8 ff fc 	ld.w	r8,r7[-4]
 800023e0:	e8 69 61 0c 	mov	r9,549132
 800023e4:	91 09       	st.w	r8[0x0],r9
-	AVR32_USART_CR_RSTTX_MASK   |
-	AVR32_USART_CR_RSTSTA_MASK  |
-	AVR32_USART_CR_RSTIT_MASK   |
-	AVR32_USART_CR_RSTNACK_MASK |
-	AVR32_USART_CR_RTSDIS_MASK;
+	AVR32_USART_CR_RSTTX_MASK   |				// Resets transmitter
+	AVR32_USART_CR_RSTSTA_MASK  |				// Resets status bit in CSR
+	AVR32_USART_CR_RSTIT_MASK   |				// Reset iterations
+	AVR32_USART_CR_RSTNACK_MASK |				// Reset NACK
+	AVR32_USART_CR_RTSDIS_MASK;					// Disable Request to send
 800023e6:	2f fd       	sub	sp,-4
 800023e8:	e3 cd 80 80 	ldm	sp++,r7,pc
 
@@ -810,48 +810,45 @@ int main(void)
 {
 800024fc:	eb cd 40 80 	pushm	r7,lr
 80002500:	1a 97       	mov	r7,sp
-80002502:	21 2d       	sub	sp,72
+80002502:	21 1d       	sub	sp,68
 	volatile avr32_usart_t * usart = USART;
 80002504:	fe 78 18 00 	mov	r8,-59392
-80002508:	ef 48 ff f8 	st.w	r7[-8],r8
+80002508:	ef 48 ff fc 	st.w	r7[-4],r8
 	// Initialize USART in RS232 mode.	
 	USART_init(usart);		
-8000250c:	ee fc ff f8 	ld.w	r12,r7[-8]
-80002510:	f0 1f 00 0a 	mcall	80002538 <main+0x3c>
+8000250c:	ee fc ff fc 	ld.w	r12,r7[-4]
+80002510:	f0 1f 00 09 	mcall	80002534 <main+0x38>
 	
 	// Initialization
 	initLED();
-80002514:	f0 1f 00 0a 	mcall	8000253c <main+0x40>
+80002514:	f0 1f 00 09 	mcall	80002538 <main+0x3c>
 	initButton();
-80002518:	f0 1f 00 0a 	mcall	80002540 <main+0x44>
-	
-	char c = 'a';
-8000251c:	36 18       	mov	r8,97
-8000251e:	ef 68 ff ff 	st.b	r7[-1],r8
+80002518:	f0 1f 00 09 	mcall	8000253c <main+0x40>
 	char input_string[64];
 	
 	while(1)
 	{		
 		USART_getString(&input_string);
-80002522:	ee c8 00 48 	sub	r8,r7,72
-80002526:	10 9c       	mov	r12,r8
-80002528:	f0 1f 00 07 	mcall	80002544 <main+0x48>
+8000251c:	ee c8 00 44 	sub	r8,r7,68
+80002520:	10 9c       	mov	r12,r8
+80002522:	f0 1f 00 08 	mcall	80002540 <main+0x44>
 		USART_putString(input_string);
-8000252c:	ee c8 00 48 	sub	r8,r7,72
-80002530:	10 9c       	mov	r12,r8
-80002532:	f0 1f 00 06 	mcall	80002548 <main+0x4c>
+80002526:	ee c8 00 44 	sub	r8,r7,68
+8000252a:	10 9c       	mov	r12,r8
+8000252c:	f0 1f 00 06 	mcall	80002544 <main+0x48>
 	}
-80002536:	cf 6b       	rjmp	80002522 <main+0x26>
+80002530:	cf 6b       	rjmp	8000251c <main+0x20>
+80002532:	00 00       	add	r0,r0
+80002534:	80 00       	ld.sh	r0,r0[0x0]
+80002536:	20 08       	sub	r8,0
 80002538:	80 00       	ld.sh	r0,r0[0x0]
-8000253a:	20 08       	sub	r8,0
+8000253a:	24 98       	sub	r8,73
 8000253c:	80 00       	ld.sh	r0,r0[0x0]
-8000253e:	24 98       	sub	r8,73
+8000253e:	24 d0       	sub	r0,77
 80002540:	80 00       	ld.sh	r0,r0[0x0]
-80002542:	24 d0       	sub	r0,77
+80002542:	22 d4       	sub	r4,45
 80002544:	80 00       	ld.sh	r0,r0[0x0]
-80002546:	22 d4       	sub	r4,45
-80002548:	80 00       	ld.sh	r0,r0[0x0]
-8000254a:	23 60       	sub	r0,54
+80002546:	23 60       	sub	r0,54
 
 Disassembly of section .exception:
 

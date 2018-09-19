@@ -62,7 +62,7 @@ void mdelay(int milliseconds)
 int main(void)
 {
 	volatile avr32_usart_t * usart = USART;
-	// Initialize USART in RS232 mode.	
+	// Initialize USART
 	USART_init(usart);		
 	
 	// Initialization
