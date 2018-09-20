@@ -73,10 +73,10 @@ void USART_putChar(char c)
 {
 	volatile avr32_usart_t * usart = USART;
 
-	if(usart->CSR.txrdy != 0) //Checks the Control Status Register if ready to transmit.
-	{
-		USART->THR.txchr = c; //Sends a character to the transmit holding register ( c << AVR32_USART_THR_TXCHR_OFFSET) & AVR32_USART_THR_TXCHR_MASK;
+	while(usart->CSR.txrdy == 0) //Checks the Control Status Register if ready to transmit.
+	{		
 	}
+	USART->THR.txchr = c; //Sends a character to the transmit holding register ( c << AVR32_USART_THR_TXCHR_OFFSET) & AVR32_USART_THR_TXCHR_MASK;
 }
 
 USART_getString(char input_string[])
@@ -116,6 +116,40 @@ void USART_putString(char output_string[])
 			i++;
 		}
 	}
+}
+
+void USART_putInt(int number)
+{
+	volatile avr32_usart_t * usart = USART;
+	char temp[7];
+	int i = sizeof(temp) - 1;
+	temp [i] = '\0';
+	i--;
+	temp [i] = '\n';
+	do 
+	{
+		i--;
+		temp[i] = '0' + number % 10;
+		number /= 10; 
+	} while(i); // Loop till end of int
+	
+	USART_putString(temp); // Write the int
+}
+
+void USART_put2Int(int number)
+{
+	volatile avr32_usart_t * usart = USART;
+	char temp[3];
+	int i = sizeof(temp) - 1;
+	temp [i] = '\0';
+	do
+	{
+		i--;
+		temp[i] = '0' + number % 10;
+		number /= 10;
+	} while(i); // Loop till end of int
+	
+	USART_putString(temp); // Write the int
 }
 
 void USART_reset()
