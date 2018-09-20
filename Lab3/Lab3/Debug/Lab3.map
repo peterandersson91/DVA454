@@ -356,7 +356,7 @@ LOAD c:/program files (x86)/atmel/studio/7.0/toolchain/avr32/avr32-gnu-toolchain
 .plt
  *(.plt)
 
-.text           0x80002008      0xf0c
+.text           0x80002008      0xf04
  *(.text .stub .text.* .gnu.linkonce.t.*)
  .text.cpu_irq_is_enabled_flags
                 0x80002008       0x20 src/ASF/avr32/drivers/tc/tc.o
@@ -401,46 +401,46 @@ LOAD c:/program files (x86)/atmel/studio/7.0/toolchain/avr32/avr32-gnu-toolchain
                 0x80002674                update_time
  *fill*         0x8000279e        0x2 d703d703
  .text.tc_irq_handler
-                0x800027a0       0x34 src/TC_driver.o
- .text.tc_init  0x800027d4       0x78 src/TC_driver.o
-                0x800027d4                tc_init
+                0x800027a0       0x2c src/TC_driver.o
+ .text.tc_init  0x800027cc       0x78 src/TC_driver.o
+                0x800027cc                tc_init
  .text.USART_init
-                0x8000284c      0x258 src/USART_driver.o
-                0x8000284c                USART_init
+                0x80002844      0x258 src/USART_driver.o
+                0x80002844                USART_init
  .text.USART_getChar
-                0x80002aa4       0x32 src/USART_driver.o
-                0x80002aa4                USART_getChar
+                0x80002a9c       0x32 src/USART_driver.o
+                0x80002a9c                USART_getChar
  .text.USART_putChar
-                0x80002ad6       0x40 src/USART_driver.o
-                0x80002ad6                USART_putChar
- *fill*         0x80002b16        0x2 d703d703
+                0x80002ace       0x40 src/USART_driver.o
+                0x80002ace                USART_putChar
+ *fill*         0x80002b0e        0x2 d703d703
  .text.USART_putString
-                0x80002b18       0x64 src/USART_driver.o
-                0x80002b18                USART_putString
+                0x80002b10       0x64 src/USART_driver.o
+                0x80002b10                USART_putString
  .text.USART_put2Int
-                0x80002b7c       0xa4 src/USART_driver.o
-                0x80002b7c                USART_put2Int
+                0x80002b74       0xa4 src/USART_driver.o
+                0x80002b74                USART_put2Int
  .text.USART_reset
-                0x80002c20       0x28 src/USART_driver.o
-                0x80002c20                USART_reset
+                0x80002c18       0x28 src/USART_driver.o
+                0x80002c18                USART_reset
  .text._unhandled_interrupt
-                0x80002c48        0x8 src/ASF/avr32/drivers/intc/intc.o
+                0x80002c40        0x8 src/ASF/avr32/drivers/intc/intc.o
  .text._get_interrupt_handler
-                0x80002c50       0x70 src/ASF/avr32/drivers/intc/intc.o
-                0x80002c50                _get_interrupt_handler
+                0x80002c48       0x70 src/ASF/avr32/drivers/intc/intc.o
+                0x80002c48                _get_interrupt_handler
  .text.INTC_init_evba
-                0x80002cc0       0x14 src/ASF/avr32/drivers/intc/intc.o
+                0x80002cb8       0x14 src/ASF/avr32/drivers/intc/intc.o
  .text.INTC_init_interrupts
-                0x80002cd4       0x98 src/ASF/avr32/drivers/intc/intc.o
-                0x80002cd4                INTC_init_interrupts
+                0x80002ccc       0x98 src/ASF/avr32/drivers/intc/intc.o
+                0x80002ccc                INTC_init_interrupts
  .text.INTC_register_interrupt
-                0x80002d6c       0xd4 src/ASF/avr32/drivers/intc/intc.o
-                0x80002d6c                INTC_register_interrupt
- .text._stext   0x80002e40       0x3c src/ASF/avr32/utils/startup/startup_uc3.o
+                0x80002d64       0xd4 src/ASF/avr32/drivers/intc/intc.o
+                0x80002d64                INTC_register_interrupt
+ .text._stext   0x80002e38       0x3c src/ASF/avr32/utils/startup/startup_uc3.o
                                  0x50 (size before relaxing)
-                0x80002e40                _stext
- .text.main     0x80002e7c       0x98 src/main.o
-                0x80002e7c                main
+                0x80002e38                _stext
+ .text.main     0x80002e74       0x98 src/main.o
+                0x80002e74                main
  *(.text.*personality*)
  *(.gnu.warning)
 
@@ -460,9 +460,9 @@ LOAD c:/program files (x86)/atmel/studio/7.0/toolchain/avr32/avr32-gnu-toolchain
 
 .rodata         0x80003200       0xac
  *(.rodata .rodata.* .gnu.linkonce.r.*)
- .rodata.waveform_opt.10563
+ .rodata.waveform_opt.10561
                 0x80003200        0x8 src/TC_driver.o
- .rodata.tc_interrupt.10564
+ .rodata.tc_interrupt.10562
                 0x80003208        0x4 src/TC_driver.o
  .rodata._int_handler_table
                 0x8000320c       0xa0 src/ASF/avr32/drivers/intc/intc.o
@@ -552,84 +552,80 @@ LOAD c:/program files (x86)/atmel/studio/7.0/toolchain/avr32/avr32-gnu-toolchain
 .ddalign        0x00000008        0x0 load address 0x800032b0
                 0x00000008                . = ALIGN (0x8)
 
-.data           0x00000008        0x1 load address 0x800032b0
+.data
  *(.data .data.* .gnu.linkonce.d.*)
- .data.update_timer
-                0x00000008        0x1 src/TC_driver.o
-                0x00000008                update_timer
  *(.gnu.linkonce.d.*personality*)
 
 .data1
  *(.data1)
 
-.balign         0x00000009        0x7 load address 0x800032b1
-                0x00000010                . = ALIGN (0x8)
- *fill*         0x00000009        0x7 
-                0x00000010                PROVIDE (_edata, .)
-                0x00000010                PROVIDE (edata, .)
-                0x00000010                __bss_start = .
+.balign         0x00000008        0x0 load address 0x800032b0
+                0x00000008                . = ALIGN (0x8)
+                0x00000008                PROVIDE (_edata, .)
+                0x00000008                PROVIDE (edata, .)
+                0x00000008                __bss_start = .
 
-.bss            0x00000010       0xf8
+.bss            0x00000008       0xf8
  *(.dynbss)
  *(.bss .bss.* .gnu.linkonce.b.*)
  .bss.timer_running
-                0x00000010        0x1 src/stopwatch.o
-                0x00000010                timer_running
- *fill*         0x00000011        0x3 
- .bss.centa_s   0x00000014        0x4 src/TC_driver.o
-                0x00000014                centa_s
+                0x00000008        0x1 src/stopwatch.o
+                0x00000008                timer_running
+ *fill*         0x00000009        0x3 
+ .bss.centa_s   0x0000000c        0x4 src/TC_driver.o
+                0x0000000c                centa_s
  .bss._int_line_handler_table_0
-                0x00000018        0x4 src/ASF/avr32/drivers/intc/intc.o
+                0x00000010        0x4 src/ASF/avr32/drivers/intc/intc.o
  .bss._int_line_handler_table_1
-                0x0000001c       0x2c src/ASF/avr32/drivers/intc/intc.o
+                0x00000014       0x2c src/ASF/avr32/drivers/intc/intc.o
  .bss._int_line_handler_table_2
-                0x00000048       0x38 src/ASF/avr32/drivers/intc/intc.o
+                0x00000040       0x38 src/ASF/avr32/drivers/intc/intc.o
  .bss._int_line_handler_table_3
-                0x00000080       0x3c src/ASF/avr32/drivers/intc/intc.o
+                0x00000078       0x3c src/ASF/avr32/drivers/intc/intc.o
  .bss._int_line_handler_table_4
-                0x000000bc        0x4 src/ASF/avr32/drivers/intc/intc.o
+                0x000000b4        0x4 src/ASF/avr32/drivers/intc/intc.o
  .bss._int_line_handler_table_5
-                0x000000c0        0x4 src/ASF/avr32/drivers/intc/intc.o
+                0x000000b8        0x4 src/ASF/avr32/drivers/intc/intc.o
  .bss._int_line_handler_table_6
-                0x000000c4        0x4 src/ASF/avr32/drivers/intc/intc.o
+                0x000000bc        0x4 src/ASF/avr32/drivers/intc/intc.o
  .bss._int_line_handler_table_7
-                0x000000c8        0x4 src/ASF/avr32/drivers/intc/intc.o
+                0x000000c0        0x4 src/ASF/avr32/drivers/intc/intc.o
  .bss._int_line_handler_table_8
-                0x000000cc        0x4 src/ASF/avr32/drivers/intc/intc.o
+                0x000000c4        0x4 src/ASF/avr32/drivers/intc/intc.o
  .bss._int_line_handler_table_9
-                0x000000d0        0x4 src/ASF/avr32/drivers/intc/intc.o
+                0x000000c8        0x4 src/ASF/avr32/drivers/intc/intc.o
  .bss._int_line_handler_table_10
-                0x000000d4        0x4 src/ASF/avr32/drivers/intc/intc.o
+                0x000000cc        0x4 src/ASF/avr32/drivers/intc/intc.o
  .bss._int_line_handler_table_11
-                0x000000d8        0x4 src/ASF/avr32/drivers/intc/intc.o
+                0x000000d0        0x4 src/ASF/avr32/drivers/intc/intc.o
  .bss._int_line_handler_table_12
-                0x000000dc        0x4 src/ASF/avr32/drivers/intc/intc.o
+                0x000000d4        0x4 src/ASF/avr32/drivers/intc/intc.o
  .bss._int_line_handler_table_13
-                0x000000e0        0x4 src/ASF/avr32/drivers/intc/intc.o
+                0x000000d8        0x4 src/ASF/avr32/drivers/intc/intc.o
  .bss._int_line_handler_table_14
-                0x000000e4        0xc src/ASF/avr32/drivers/intc/intc.o
+                0x000000dc        0xc src/ASF/avr32/drivers/intc/intc.o
  .bss._int_line_handler_table_15
-                0x000000f0        0x4 src/ASF/avr32/drivers/intc/intc.o
+                0x000000e8        0x4 src/ASF/avr32/drivers/intc/intc.o
  .bss._int_line_handler_table_16
-                0x000000f4        0x4 src/ASF/avr32/drivers/intc/intc.o
+                0x000000ec        0x4 src/ASF/avr32/drivers/intc/intc.o
  .bss._int_line_handler_table_17
-                0x000000f8        0x4 src/ASF/avr32/drivers/intc/intc.o
+                0x000000f0        0x4 src/ASF/avr32/drivers/intc/intc.o
  .bss._int_line_handler_table_18
-                0x000000fc        0x4 src/ASF/avr32/drivers/intc/intc.o
+                0x000000f4        0x4 src/ASF/avr32/drivers/intc/intc.o
  .bss._int_line_handler_table_19
-                0x00000100        0x4 src/ASF/avr32/drivers/intc/intc.o
+                0x000000f8        0x4 src/ASF/avr32/drivers/intc/intc.o
  *(COMMON)
-                0x00000108                . = ALIGN (0x8)
- *fill*         0x00000104        0x4 
-                0x00000108                . = ALIGN (0x8)
-                0x00000108                _end = .
-                0x00000108                PROVIDE (end, .)
-                0x00000108                __heap_start__ = ALIGN (0x8)
+                0x00000100                . = ALIGN (0x8)
+ *fill*         0x000000fc        0x4 
+                0x00000100                . = ALIGN (0x8)
+                0x00000100                _end = .
+                0x00000100                PROVIDE (end, .)
+                0x00000100                __heap_start__ = ALIGN (0x8)
 
-.heap           0x00000108     0xeef8
+.heap           0x00000100     0xef00
  *(.heap)
-                0x0000eef8                . = (__heap_size__ == __max_heap_size__)?(((ORIGIN (INTRAM) + 0xfffc) - __stack_size__) - ABSOLUTE (.)):__heap_size__
- *fill*         0x00000108     0xeef8 
+                0x0000ef00                . = (__heap_size__ == __max_heap_size__)?(((ORIGIN (INTRAM) + 0xfffc) - __stack_size__) - ABSOLUTE (.)):__heap_size__
+ *fill*         0x00000100     0xef00 
                 0x0000f000                __heap_end__ = .
 
 .stab
@@ -694,32 +690,32 @@ LOAD c:/program files (x86)/atmel/studio/7.0/toolchain/avr32/avr32-gnu-toolchain
                 0x00000230       0x28 src/main.o
 
 .debug_pubnames
-                0x00000000      0x365
+                0x00000000      0x354
  *(.debug_pubnames)
  .debug_pubnames
                 0x00000000      0x164 src/ASF/avr32/drivers/tc/tc.o
  .debug_pubnames
                 0x00000164       0x8e src/stopwatch.o
  .debug_pubnames
-                0x000001f2       0x4b src/TC_driver.o
+                0x000001f2       0x3a src/TC_driver.o
  .debug_pubnames
-                0x0000023d       0xa0 src/USART_driver.o
+                0x0000022c       0xa0 src/USART_driver.o
  .debug_pubnames
-                0x000002dd       0x62 src/ASF/avr32/drivers/intc/intc.o
+                0x000002cc       0x62 src/ASF/avr32/drivers/intc/intc.o
  .debug_pubnames
-                0x0000033f       0x26 src/main.o
+                0x0000032e       0x26 src/main.o
 
-.debug_info     0x00000000     0x70b3
+.debug_info     0x00000000     0x70a1
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000     0x117d src/ASF/avr32/drivers/tc/tc.o
  .debug_info    0x0000117d     0x16d3 src/stopwatch.o
- .debug_info    0x00002850      0xd06 src/TC_driver.o
- .debug_info    0x00003556     0x1771 src/USART_driver.o
- .debug_info    0x00004cc7       0x8c src/ASF/avr32/drivers/intc/exception.o
- .debug_info    0x00004d53      0x5b2 src/ASF/avr32/drivers/intc/intc.o
- .debug_info    0x00005305       0x8b src/ASF/avr32/utils/startup/startup_uc3.o
- .debug_info    0x00005390       0x92 src/ASF/avr32/utils/startup/trampoline_uc3.o
- .debug_info    0x00005422     0x1c91 src/main.o
+ .debug_info    0x00002850      0xcf4 src/TC_driver.o
+ .debug_info    0x00003544     0x1771 src/USART_driver.o
+ .debug_info    0x00004cb5       0x8c src/ASF/avr32/drivers/intc/exception.o
+ .debug_info    0x00004d41      0x5b2 src/ASF/avr32/drivers/intc/intc.o
+ .debug_info    0x000052f3       0x8b src/ASF/avr32/utils/startup/startup_uc3.o
+ .debug_info    0x0000537e       0x92 src/ASF/avr32/utils/startup/trampoline_uc3.o
+ .debug_info    0x00005410     0x1c91 src/main.o
 
 .debug_abbrev   0x00000000      0xb09
  *(.debug_abbrev)
@@ -736,8 +732,8 @@ LOAD c:/program files (x86)/atmel/studio/7.0/toolchain/avr32/avr32-gnu-toolchain
 .debug_line     0x00000000     0x2e2c
  *(.debug_line)
  .debug_line    0x00000000      0x839 src/ASF/avr32/drivers/tc/tc.o
- .debug_line    0x00000839      0x758 src/stopwatch.o
- .debug_line    0x00000f91      0x6f9 src/TC_driver.o
+ .debug_line    0x00000839      0x759 src/stopwatch.o
+ .debug_line    0x00000f92      0x6f8 src/TC_driver.o
  .debug_line    0x0000168a      0x768 src/USART_driver.o
  .debug_line    0x00001df2      0x109 src/ASF/avr32/drivers/intc/exception.o
  .debug_line    0x00001efb      0x6a9 src/ASF/avr32/drivers/intc/intc.o
@@ -754,19 +750,19 @@ LOAD c:/program files (x86)/atmel/studio/7.0/toolchain/avr32/avr32-gnu-toolchain
  .debug_frame   0x00000450       0x9c src/ASF/avr32/drivers/intc/intc.o
  .debug_frame   0x000004ec       0x50 src/main.o
 
-.debug_str      0x00000000      0xea7
+.debug_str      0x00000000      0xe9a
  *(.debug_str)
  .debug_str     0x00000000      0x469 src/ASF/avr32/drivers/tc/tc.o
                                 0x4c9 (size before relaxing)
  .debug_str     0x00000469      0x566 src/stopwatch.o
                                 0x682 (size before relaxing)
- .debug_str     0x000009cf       0x6d src/TC_driver.o
-                                0x3bc (size before relaxing)
- .debug_str     0x00000a3c       0xc1 src/USART_driver.o
+ .debug_str     0x000009cf       0x60 src/TC_driver.o
+                                0x3af (size before relaxing)
+ .debug_str     0x00000a2f       0xc1 src/USART_driver.o
                                 0x698 (size before relaxing)
- .debug_str     0x00000afd      0x383 src/ASF/avr32/drivers/intc/intc.o
+ .debug_str     0x00000af0      0x383 src/ASF/avr32/drivers/intc/intc.o
                                 0x47c (size before relaxing)
- .debug_str     0x00000e80       0x27 src/main.o
+ .debug_str     0x00000e73       0x27 src/main.o
                                 0x723 (size before relaxing)
 
 .debug_loc      0x00000000      0x764

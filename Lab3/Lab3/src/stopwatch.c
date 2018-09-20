@@ -1,6 +1,6 @@
 #include "stopwatch.h"
 
-bool timer_running = false;
+bool timer_running = false; // Global variable to see if the timer is running
 
 void stopwatch_init(void)
 {
@@ -8,15 +8,17 @@ void stopwatch_init(void)
 	resetTimer();
 }
 
-void startTimer(void)
+// Enable interrupts to start the clock
+void startTimer(void) 
 {
 	volatile avr32_gpio_port_t * led_port = &AVR32_GPIO.port[LED_PORT];
 	led_port->ovrc = LED5_BIT_VALUE;
 	led_port->ovrs = LED4_BIT_VALUE;
-	Enable_global_interrupt();
+	Enable_global_interrupt(); 
 	timer_running = true;
 }
 
+// Disable interrupts to stop the clock
 void stopTimer(void)
 {
 	volatile avr32_gpio_port_t * led_port = &AVR32_GPIO.port[LED_PORT];
@@ -26,6 +28,7 @@ void stopTimer(void)
 	timer_running = false;
 }
 
+// Resets global counting variable
 void resetTimer(void)
 {
 	volatile avr32_gpio_port_t * led_port = &AVR32_GPIO.port[LED_PORT];
@@ -34,6 +37,7 @@ void resetTimer(void)
 	centa_s = 0;
 }
 
+// Checks if there is something to read
 void checkInput(void)
 {
 	volatile avr32_usart_t * usart = USART;
@@ -47,11 +51,11 @@ void checkInput(void)
 			startTimer();
 			break;
 			case 's':
-			if (timer_running == true)
+			if (timer_running == true) // Stop only if timer is running
 				stopTimer();
 			break;
 			case 'd':
-			if (timer_running == false)
+			if (timer_running == false) // Reset only if timer is stopped
 				resetTimer();
 			break;
 			default:
@@ -60,16 +64,17 @@ void checkInput(void)
 	}
 }
 
+// Writes the current time to USART
 void displayTime(struct time_struct ts)
 {	
 	USART_putChar('\r');
-	USART_put2Int(ts.hour);
+	USART_put2Int(ts.hour); // hours
 	USART_putString(":");
-	USART_put2Int(ts.minute);
+	USART_put2Int(ts.minute); // minutes
 	USART_putString(":");
-	USART_put2Int(ts.second);
+	USART_put2Int(ts.second); // seconds
 	USART_putString(":");
-	USART_put2Int(ts.centa);
+	USART_put2Int(ts.centa); // hundredths
 }
 
 void initLED (void)

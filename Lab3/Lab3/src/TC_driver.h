@@ -17,7 +17,6 @@ struct time_struct
 };
 
 extern int centa_s;
-extern bool update_timer;
 
 static void tc_irq(void);
 __attribute__((__interrupt__))static void tc_irq_handler(void);

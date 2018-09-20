@@ -8,12 +8,16 @@
 // The pin number for each led
 #define LED0_PIN (LED0_GPIO & ( GPIO_MAX_PIN_NUMBER -1))
 #define LED1_PIN (LED1_GPIO & ( GPIO_MAX_PIN_NUMBER -1))
+#define LED2_PIN (LED2_GPIO & ( GPIO_MAX_PIN_NUMBER -1))
+#define LED3_PIN (LED3_GPIO & ( GPIO_MAX_PIN_NUMBER -1))
 #define LED4_PIN (LED4_GPIO & ( GPIO_MAX_PIN_NUMBER -1))
 #define LED5_PIN (LED5_GPIO & ( GPIO_MAX_PIN_NUMBER -1))
 
 // Bit value for each led
 #define LED0_BIT_VALUE (1 << LED0_PIN)
 #define LED1_BIT_VALUE (1 << LED1_PIN)
+#define LED2_BIT_VALUE (1 << LED2_PIN)
+#define LED3_BIT_VALUE (1 << LED3_PIN)
 #define LED4_BIT_VALUE (1 << LED4_PIN)
 #define LED5_BIT_VALUE (1 << LED5_PIN)
 
