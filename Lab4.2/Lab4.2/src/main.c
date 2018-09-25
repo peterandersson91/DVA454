@@ -10,9 +10,20 @@
 
 #define GPIO_PORT1_GPER (*((volatile int*)(GPIO_PORT1_ADDRESS + GPIO_GPER_OFFSET)))
 #define GPIO_PORT1_ODER (*((volatile int*)(GPIO_PORT1_ADDRESS + GPIO_ODER_OFFSET)))
-#define GPIO_PORT1_OVR (*((volatile int*)(GPIO_PORT1_ADDRESS + GPIO_OVR_OFFSET)))// TIMER/COUNTER DEFINES#define TC_BASE_ADRESS	0xFFFF3800#define TC_CHANNEL0		0x00#define TC_CHANNEL0_ADRESS TC_BASE_ADRESS+TC_CHANNEL0#define TC_CCR			0x00#define TC_CMR			0x04#define TC_CV			0x10#define TC_RA			0x14#define TC_RB			0x18#define TC_RC			0x1C#define TC_SR			0x20#define TC0_REG_CMR (*((volatile int*)(TC_CHANNEL0_ADRESS + TC_CMR)))
+#define GPIO_PORT1_OVR (*((volatile int*)(GPIO_PORT1_ADDRESS + GPIO_OVR_OFFSET)))// TIMER/COUNTER DEFINES#define TC_BASE_ADRESS	0xFFFF3800#define TC_CHANNEL0		0x00#define TC_CHANNEL0_ADRESS TC_BASE_ADRESS+TC_CHANNEL0#define TC_CCR			0x00#define TC_CMR			0x04#define TC_CV			0x10#define TC_RA			0x14#define TC_RB			0x18#define TC_RC			0x1C#define TC_SR			0x20#define TC_IER			0x28#define TC_IDR			0x2C#define TC0_REG_CMR (*((volatile int*)(TC_CHANNEL0_ADRESS + TC_CMR)))
 #define TC0_REG_CCR (*((volatile int*)(TC_CHANNEL0_ADRESS + TC_CCR)))
 #define TC0_REG_CV (*((volatile int*)(TC_CHANNEL0_ADRESS + TC_CV)))
+
+#define TC0_REG_RC (*((volatile int*)(TC_CHANNEL0_ADRESS + TC_RC)))
+
+#define TC0_REG_SR (*((volatile int*)(TC_CHANNEL0_ADRESS + TC_SR)))
+
+#define TC0_REG_IER (*((volatile int*)(TC_CHANNEL0_ADRESS + TC_IER)))
+#define TC0_REG_IDR (*((volatile int*)(TC_CHANNEL0_ADRESS + TC_IDR)))
+
+// INTERUPT CONTROLLER
+
+#define INTC_BASE_ADRESS 0xFFFF0800
 
 void LED0_init(void)
 {	
@@ -41,6 +52,12 @@ void TC_init()
 	TC0_REG_CMR |= (0x01 << 1); // CLK selection, clock 3
 	TC0_REG_CMR |= (0x01 << 14); // WAVESEL 10
 	TC0_REG_CMR |= (0x01 << 15); // WAVEFORM MODE
+	
+	// configure enabled interrupts
+	TC0_REG_IER = 0xFF;
+	TC0_REG_IDR = 0x00;
+	
+	TC0_REG_SR; // Clears all flags
 }
 
 void TC_start()
@@ -48,7 +65,7 @@ void TC_start()
 	TC0_REG_CCR |= (0x01 << 0); // Reset counter and the clock starts
 	TC0_REG_CCR |= (0x01 << 2); // Enable clock
 }
-
+void INTC_init(){	}
 
 int main (void)
 {
@@ -56,7 +73,11 @@ int main (void)
 	LED0_init();
 	TC_init();
 	TC_start();
+	TC0_REG_RC = 14400;
+	
+	
 	int counter = 0;
+	
 	
 	while(1)
 	{
