@@ -5,7 +5,7 @@ Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
   0 .reset        00002008  80000000  80000000  00000400  2**2
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  1 .text         00000592  80002008  80002008  00002408  2**2
+  1 .text         00000566  80002008  80002008  00002408  2**2
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
   2 .exception    00000200  80002600  80002600  00002a00  2**9
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
@@ -23,23 +23,23 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING
   9 .debug_pubnames 000000e6  00000000  00000000  00002df0  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_info   00000932  00000000  00000000  00002ed6  2**0
+ 10 .debug_info   00000916  00000000  00000000  00002ed6  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_abbrev 000002f8  00000000  00000000  00003808  2**0
+ 11 .debug_abbrev 000002f8  00000000  00000000  000037ec  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_line   00000d0c  00000000  00000000  00003b00  2**0
+ 12 .debug_line   00000d00  00000000  00000000  00003ae4  2**0
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_frame  0000017c  00000000  00000000  0000480c  2**2
+ 13 .debug_frame  0000017c  00000000  00000000  000047e4  2**2
                   CONTENTS, READONLY, DEBUGGING
- 14 .debug_str    00000505  00000000  00000000  00004988  2**0
+ 14 .debug_str    000004f2  00000000  00000000  00004960  2**0
                   CONTENTS, READONLY, DEBUGGING
- 15 .debug_loc    000001d9  00000000  00000000  00004e8d  2**0
+ 15 .debug_loc    000001d9  00000000  00000000  00004e52  2**0
                   CONTENTS, READONLY, DEBUGGING
- 16 .debug_macinfo 000f2027  00000000  00000000  00005066  2**0
+ 16 .debug_macinfo 000f2027  00000000  00000000  0000502b  2**0
                   CONTENTS, READONLY, DEBUGGING
  17 .stack        00001000  0000f000  0000f000  00000000  2**0
                   ALLOC
- 18 .debug_ranges 000000b8  00000000  00000000  000f7090  2**3
+ 18 .debug_ranges 000000b8  00000000  00000000  000f7058  2**3
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .reset:
@@ -182,13 +182,13 @@ void TC_start()
 {
 800020c0:	eb cd 40 80 	pushm	r7,lr
 800020c4:	1a 97       	mov	r7,sp
-	TC0_REG_CCR |= (0x01 << 0); // Reset counter and the clock starts
+	TC0_REG_CCR |= (0x01 << 0); // Enable clock 
 800020c6:	fe 78 38 00 	mov	r8,-51200
 800020ca:	fe 79 38 00 	mov	r9,-51200
 800020ce:	72 09       	ld.w	r9,r9[0x0]
 800020d0:	a1 a9       	sbr	r9,0x0
 800020d2:	91 09       	st.w	r8[0x0],r9
-	TC0_REG_CCR |= (0x01 << 2); // Enable clock
+	TC0_REG_CCR |= (0x01 << 2); // Reset counter and the clock starts
 800020d4:	fe 78 38 00 	mov	r8,-51200
 800020d8:	fe 79 38 00 	mov	r9,-51200
 800020dc:	72 09       	ld.w	r9,r9[0x0]
@@ -365,433 +365,412 @@ udata_clear_loop:
 800021a4 <main>:
 800021a4:	eb cd 40 e0 	pushm	r5-r7,lr
 800021a8:	1a 97       	mov	r7,sp
-800021aa:	20 4d       	sub	sp,16
-800021ac:	f0 1f 00 30 	mcall	8000226c <main+0xc8>
-800021b0:	f0 1f 00 30 	mcall	80002270 <main+0xcc>
-800021b4:	f0 1f 00 30 	mcall	80002274 <main+0xd0>
+800021aa:	20 2d       	sub	sp,8
+800021ac:	f0 1f 00 25 	mcall	80002240 <main+0x9c>
+800021b0:	f0 1f 00 25 	mcall	80002244 <main+0xa0>
+800021b4:	f0 1f 00 25 	mcall	80002248 <main+0xa4>
 {
-	/* Insert system clock initialization code here (sysclk_init()). */
+	// Init everything
 	LED0_init();
 	TC_init();
 	TC_start();
-	TC0_REG_RC = 65000;
+	TC0_REG_RC = 10000;	// Set RC
 800021b8:	fe 78 38 1c 	mov	r8,-51172
-800021bc:	e0 69 fd e8 	mov	r9,65000
+800021bc:	e0 69 27 10 	mov	r9,10000
 800021c0:	91 09       	st.w	r8[0x0],r9
 	
-	int counter = 0;
-800021c2:	30 08       	mov	r8,0
-800021c4:	ef 48 ff f0 	st.w	r7[-16],r8
-	int pwm_low = 1;
-800021c8:	30 18       	mov	r8,1
-800021ca:	ef 48 ff f4 	st.w	r7[-12],r8
-	int counterMax = 10000;
-800021ce:	e0 68 27 10 	mov	r8,10000
-800021d2:	ef 48 ff f8 	st.w	r7[-8],r8
+	int pwm_low = 1;	// PWM status
+800021c2:	30 18       	mov	r8,1
+800021c4:	ef 48 ff f8 	st.w	r7[-8],r8
 	
 	float dutyCycle = 0.9; //Sets the duty cycle
-800021d6:	e0 68 66 66 	mov	r8,26214
-800021da:	ea 18 3f 66 	orh	r8,0x3f66
-800021de:	ef 48 ff fc 	st.w	r7[-4],r8
-800021e2:	c0 28       	rjmp	800021e6 <main+0x42>
-		{
-			i++;
-			counter = TC0_REG_CV;
-		}
-		*/
-	}
-800021e4:	d7 03       	nop
-	float dutyCycle = 0.9; //Sets the duty cycle
-	
+800021c8:	e0 68 66 66 	mov	r8,26214
+800021cc:	ea 18 3f 66 	orh	r8,0x3f66
+800021d0:	ef 48 ff fc 	st.w	r7[-4],r8
 	
 	while(1)
 	{
-		counter = get_tc_cv();
-800021e6:	f0 1f 00 25 	mcall	80002278 <main+0xd4>
-800021ea:	18 98       	mov	r8,r12
-800021ec:	ef 48 ff f0 	st.w	r7[-16],r8
-		
-		if(counter > counterMax*(1-dutyCycle))
-800021f0:	ee fc ff f0 	ld.w	r12,r7[-16]
-800021f4:	f0 1f 00 22 	mcall	8000227c <main+0xd8>
-800021f8:	18 95       	mov	r5,r12
-800021fa:	ee fc ff f8 	ld.w	r12,r7[-8]
-800021fe:	f0 1f 00 20 	mcall	8000227c <main+0xd8>
-80002202:	18 96       	mov	r6,r12
-80002204:	ee fb ff fc 	ld.w	r11,r7[-4]
-80002208:	fc 1c 3f 80 	movh	r12,0x3f80
-8000220c:	f0 1f 00 1d 	mcall	80002280 <main+0xdc>
-80002210:	18 98       	mov	r8,r12
-80002212:	10 9b       	mov	r11,r8
-80002214:	0c 9c       	mov	r12,r6
-80002216:	f0 1f 00 1c 	mcall	80002284 <main+0xe0>
-8000221a:	18 98       	mov	r8,r12
-8000221c:	30 06       	mov	r6,0
-8000221e:	0a 9b       	mov	r11,r5
-80002220:	10 9c       	mov	r12,r8
-80002222:	f0 1f 00 1a 	mcall	80002288 <main+0xe4>
-80002226:	18 98       	mov	r8,r12
-80002228:	58 08       	cp.w	r8,0
-8000222a:	c0 20       	breq	8000222e <main+0x8a>
-8000222c:	30 16       	mov	r6,1
-8000222e:	f1 d6 c0 08 	bfextu	r8,r6,0x0,0x8
-80002232:	c0 80       	breq	80002242 <main+0x9e>
+		// When timer exceeds the duty threshold the PWM gets high
+		if(get_tc_cv() > TC0_REG_RC*(1-dutyCycle))
+800021d4:	f0 1f 00 1e 	mcall	8000224c <main+0xa8>
+800021d8:	18 98       	mov	r8,r12
+800021da:	10 9c       	mov	r12,r8
+800021dc:	f0 1f 00 1d 	mcall	80002250 <main+0xac>
+800021e0:	18 95       	mov	r5,r12
+800021e2:	fe 78 38 1c 	mov	r8,-51172
+800021e6:	70 08       	ld.w	r8,r8[0x0]
+800021e8:	10 9c       	mov	r12,r8
+800021ea:	f0 1f 00 1a 	mcall	80002250 <main+0xac>
+800021ee:	18 96       	mov	r6,r12
+800021f0:	ee fb ff fc 	ld.w	r11,r7[-4]
+800021f4:	fc 1c 3f 80 	movh	r12,0x3f80
+800021f8:	f0 1f 00 17 	mcall	80002254 <main+0xb0>
+800021fc:	18 98       	mov	r8,r12
+800021fe:	10 9b       	mov	r11,r8
+80002200:	0c 9c       	mov	r12,r6
+80002202:	f0 1f 00 16 	mcall	80002258 <main+0xb4>
+80002206:	18 98       	mov	r8,r12
+80002208:	30 06       	mov	r6,0
+8000220a:	0a 9b       	mov	r11,r5
+8000220c:	10 9c       	mov	r12,r8
+8000220e:	f0 1f 00 14 	mcall	8000225c <main+0xb8>
+80002212:	18 98       	mov	r8,r12
+80002214:	58 08       	cp.w	r8,0
+80002216:	c0 20       	breq	8000221a <main+0x76>
+80002218:	30 16       	mov	r6,1
+8000221a:	f1 d6 c0 08 	bfextu	r8,r6,0x0,0x8
+8000221e:	c0 90       	breq	80002230 <main+0x8c>
 		{
 			pwm_low = 0;
-80002234:	30 08       	mov	r8,0
-80002236:	ef 48 ff f4 	st.w	r7[-12],r8
+80002220:	30 08       	mov	r8,0
+80002222:	ef 48 ff f8 	st.w	r7[-8],r8
 			LED0_output(pwm_low);
-8000223a:	ee fc ff f4 	ld.w	r12,r7[-12]
-8000223e:	f0 1f 00 14 	mcall	8000228c <main+0xe8>
-		}
-		if(counter > counterMax)
-80002242:	ee f9 ff f0 	ld.w	r9,r7[-16]
-80002246:	ee f8 ff f8 	ld.w	r8,r7[-8]
-8000224a:	10 39       	cp.w	r9,r8
-8000224c:	fe 9a ff cc 	brle	800021e4 <main+0x40>
+80002226:	ee fc ff f8 	ld.w	r12,r7[-8]
+8000222a:	f0 1f 00 0e 	mcall	80002260 <main+0xbc>
+		else // When the timer is lower than the threshold the PWM is low
 		{
-			counter = 0;
-80002250:	30 08       	mov	r8,0
-80002252:	ef 48 ff f0 	st.w	r7[-16],r8
-			TC_start();
-80002256:	f0 1f 00 08 	mcall	80002274 <main+0xd0>
 			pwm_low = 1;
-8000225a:	30 18       	mov	r8,1
-8000225c:	ef 48 ff f4 	st.w	r7[-12],r8
 			LED0_output(pwm_low);
-80002260:	ee fc ff f4 	ld.w	r12,r7[-12]
-80002264:	f0 1f 00 0a 	mcall	8000228c <main+0xe8>
-		{
-			i++;
-			counter = TC0_REG_CV;
 		}
-		*/
 	}
-80002268:	cb fb       	rjmp	800021e6 <main+0x42>
-8000226a:	00 00       	add	r0,r0
-8000226c:	80 00       	ld.sh	r0,r0[0x0]
-8000226e:	20 08       	sub	r8,0
-80002270:	80 00       	ld.sh	r0,r0[0x0]
-80002272:	20 74       	sub	r4,7
-80002274:	80 00       	ld.sh	r0,r0[0x0]
-80002276:	20 c0       	sub	r0,12
-80002278:	80 00       	ld.sh	r0,r0[0x0]
-8000227a:	20 e6       	sub	r6,14
-8000227c:	80 00       	ld.sh	r0,r0[0x0]
-8000227e:	25 26       	sub	r6,82
-80002280:	80 00       	ld.sh	r0,r0[0x0]
-80002282:	22 c8       	sub	r8,44
-80002284:	80 00       	ld.sh	r0,r0[0x0]
-80002286:	24 44       	sub	r4,68
-80002288:	80 00       	ld.sh	r0,r0[0x0]
-8000228a:	22 90       	sub	r0,41
-8000228c:	80 00       	ld.sh	r0,r0[0x0]
-8000228e:	20 3c       	sub	r12,3
+8000222e:	cd 3b       	rjmp	800021d4 <main+0x30>
+			pwm_low = 0;
+			LED0_output(pwm_low);
+		}
+		else // When the timer is lower than the threshold the PWM is low
+		{
+			pwm_low = 1;
+80002230:	30 18       	mov	r8,1
+80002232:	ef 48 ff f8 	st.w	r7[-8],r8
+			LED0_output(pwm_low);
+80002236:	ee fc ff f8 	ld.w	r12,r7[-8]
+8000223a:	f0 1f 00 0a 	mcall	80002260 <main+0xbc>
+		}
+	}
+8000223e:	cc bb       	rjmp	800021d4 <main+0x30>
+80002240:	80 00       	ld.sh	r0,r0[0x0]
+80002242:	20 08       	sub	r8,0
+80002244:	80 00       	ld.sh	r0,r0[0x0]
+80002246:	20 74       	sub	r4,7
+80002248:	80 00       	ld.sh	r0,r0[0x0]
+8000224a:	20 c0       	sub	r0,12
+8000224c:	80 00       	ld.sh	r0,r0[0x0]
+8000224e:	20 e6       	sub	r6,14
+80002250:	80 00       	ld.sh	r0,r0[0x0]
+80002252:	24 fa       	sub	r10,79
+80002254:	80 00       	ld.sh	r0,r0[0x0]
+80002256:	22 9c       	sub	r12,41
+80002258:	80 00       	ld.sh	r0,r0[0x0]
+8000225a:	24 18       	sub	r8,65
+8000225c:	80 00       	ld.sh	r0,r0[0x0]
+8000225e:	22 64       	sub	r4,38
+80002260:	80 00       	ld.sh	r0,r0[0x0]
+80002262:	20 3c       	sub	r12,3
 
-80002290 <__avr32_f32_cmp_lt>:
-80002290:	f8 0a 15 01 	lsl	r10,r12,0x1
-80002294:	f6 09 15 01 	lsl	r9,r11,0x1
-80002298:	f5 ba 00 00 	subfeq	r10,0
-8000229c:	5e 0d       	reteq	0
-8000229e:	fc 18 ff 00 	movh	r8,0xff00
-800022a2:	10 3a       	cp.w	r10,r8
-800022a4:	5e bd       	rethi	0
-800022a6:	10 39       	cp.w	r9,r8
-800022a8:	5e bd       	rethi	0
-800022aa:	f7 ec 20 08 	eor	r8,r11,r12
-800022ae:	ed bc 00 1f 	bld	r12,0x1f
-800022b2:	5f 38       	srlo	r8
-800022b4:	5e 68       	retmi	r8
-800022b6:	c0 43       	brcs	800022be <__avr32_f32_cmp_lt+0x2e>
-800022b8:	16 3c       	cp.w	r12,r11
-800022ba:	5e 2d       	reths	0
-800022bc:	5e 3f       	retlo	1
-800022be:	18 3b       	cp.w	r11,r12
-800022c0:	5e 2d       	reths	0
-800022c2:	5e 3f       	retlo	1
+80002264 <__avr32_f32_cmp_lt>:
+80002264:	f8 0a 15 01 	lsl	r10,r12,0x1
+80002268:	f6 09 15 01 	lsl	r9,r11,0x1
+8000226c:	f5 ba 00 00 	subfeq	r10,0
+80002270:	5e 0d       	reteq	0
+80002272:	fc 18 ff 00 	movh	r8,0xff00
+80002276:	10 3a       	cp.w	r10,r8
+80002278:	5e bd       	rethi	0
+8000227a:	10 39       	cp.w	r9,r8
+8000227c:	5e bd       	rethi	0
+8000227e:	f7 ec 20 08 	eor	r8,r11,r12
+80002282:	ed bc 00 1f 	bld	r12,0x1f
+80002286:	5f 38       	srlo	r8
+80002288:	5e 68       	retmi	r8
+8000228a:	c0 43       	brcs	80002292 <__avr32_f32_cmp_lt+0x2e>
+8000228c:	16 3c       	cp.w	r12,r11
+8000228e:	5e 2d       	reths	0
+80002290:	5e 3f       	retlo	1
+80002292:	18 3b       	cp.w	r11,r12
+80002294:	5e 2d       	reths	0
+80002296:	5e 3f       	retlo	1
 
-800022c4 <__avr32_f32_sub_from_add>:
-800022c4:	ee 1b 80 00 	eorh	r11,0x8000
+80002298 <__avr32_f32_sub_from_add>:
+80002298:	ee 1b 80 00 	eorh	r11,0x8000
 
-800022c8 <__avr32_f32_sub>:
-800022c8:	f7 ec 20 08 	eor	r8,r11,r12
-800022cc:	c6 46       	brmi	80002394 <__avr32_f32_add_from_sub>
-800022ce:	18 98       	mov	r8,r12
-800022d0:	e6 1c 80 00 	andh	r12,0x8000,COH
-800022d4:	bf db       	cbr	r11,0x1f
-800022d6:	bf d8       	cbr	r8,0x1f
-800022d8:	f0 0b 0c 4a 	max	r10,r8,r11
-800022dc:	f0 0b 0d 49 	min	r9,r8,r11
-800022e0:	10 3a       	cp.w	r10,r8
-800022e2:	f7 bc 01 01 	subne	r12,1
-800022e6:	e6 1c 80 00 	andh	r12,0x8000,COH
-800022ea:	f4 08 15 08 	lsl	r8,r10,0x8
-800022ee:	bf b8       	sbr	r8,0x1f
-800022f0:	b7 9a       	lsr	r10,0x17
-800022f2:	e0 4a 00 ff 	cp.w	r10,255
-800022f6:	c3 80       	breq	80002366 <__avr32_f32_sub_op1_nan_or_inf>
-800022f8:	f2 0b 15 08 	lsl	r11,r9,0x8
-800022fc:	bf bb       	sbr	r11,0x1f
-800022fe:	b7 99       	lsr	r9,0x17
-80002300:	1a dc       	st.w	--sp,r12
-80002302:	c2 90       	breq	80002354 <__avr32_f32_sub_op2_subnormal>
-80002304:	f4 09 01 0c 	sub	r12,r10,r9
-80002308:	c0 c0       	breq	80002320 <__avr32_f32_sub_shift_done>
-8000230a:	f1 bc 04 a0 	satu	r12,0x5
-8000230e:	f8 09 11 20 	rsub	r9,r12,32
-80002312:	f6 09 09 49 	lsl	r9,r11,r9
-80002316:	f7 b8 01 01 	subne	r8,1
-8000231a:	5f 19       	srne	r9
-8000231c:	f6 0c 0a 4b 	lsr	r11,r11,r12
+8000229c <__avr32_f32_sub>:
+8000229c:	f7 ec 20 08 	eor	r8,r11,r12
+800022a0:	c6 46       	brmi	80002368 <__avr32_f32_add_from_sub>
+800022a2:	18 98       	mov	r8,r12
+800022a4:	e6 1c 80 00 	andh	r12,0x8000,COH
+800022a8:	bf db       	cbr	r11,0x1f
+800022aa:	bf d8       	cbr	r8,0x1f
+800022ac:	f0 0b 0c 4a 	max	r10,r8,r11
+800022b0:	f0 0b 0d 49 	min	r9,r8,r11
+800022b4:	10 3a       	cp.w	r10,r8
+800022b6:	f7 bc 01 01 	subne	r12,1
+800022ba:	e6 1c 80 00 	andh	r12,0x8000,COH
+800022be:	f4 08 15 08 	lsl	r8,r10,0x8
+800022c2:	bf b8       	sbr	r8,0x1f
+800022c4:	b7 9a       	lsr	r10,0x17
+800022c6:	e0 4a 00 ff 	cp.w	r10,255
+800022ca:	c3 80       	breq	8000233a <__avr32_f32_sub_op1_nan_or_inf>
+800022cc:	f2 0b 15 08 	lsl	r11,r9,0x8
+800022d0:	bf bb       	sbr	r11,0x1f
+800022d2:	b7 99       	lsr	r9,0x17
+800022d4:	1a dc       	st.w	--sp,r12
+800022d6:	c2 90       	breq	80002328 <__avr32_f32_sub_op2_subnormal>
+800022d8:	f4 09 01 0c 	sub	r12,r10,r9
+800022dc:	c0 c0       	breq	800022f4 <__avr32_f32_sub_shift_done>
+800022de:	f1 bc 04 a0 	satu	r12,0x5
+800022e2:	f8 09 11 20 	rsub	r9,r12,32
+800022e6:	f6 09 09 49 	lsl	r9,r11,r9
+800022ea:	f7 b8 01 01 	subne	r8,1
+800022ee:	5f 19       	srne	r9
+800022f0:	f6 0c 0a 4b 	lsr	r11,r11,r12
 
-80002320 <__avr32_f32_sub_shift_done>:
-80002320:	16 18       	sub	r8,r11
-80002322:	1b 0c       	ld.w	r12,sp++
-80002324:	f0 0b 12 00 	clz	r11,r8
-80002328:	5e 3d       	retlo	0
-8000232a:	f0 0b 09 48 	lsl	r8,r8,r11
-8000232e:	16 1a       	sub	r10,r11
-80002330:	e0 8a 00 26 	brle	8000237c <__avr32_f32_sub_subnormal_result>
-80002334:	f3 e8 11 89 	or	r9,r9,r8<<0x18
-80002338:	f9 e8 12 8c 	or	r12,r12,r8>>0x8
-8000233c:	f9 da d2 e8 	bfins	r12,r10,0x17,0x8
+800022f4 <__avr32_f32_sub_shift_done>:
+800022f4:	16 18       	sub	r8,r11
+800022f6:	1b 0c       	ld.w	r12,sp++
+800022f8:	f0 0b 12 00 	clz	r11,r8
+800022fc:	5e 3d       	retlo	0
+800022fe:	f0 0b 09 48 	lsl	r8,r8,r11
+80002302:	16 1a       	sub	r10,r11
+80002304:	e0 8a 00 26 	brle	80002350 <__avr32_f32_sub_subnormal_result>
+80002308:	f3 e8 11 89 	or	r9,r9,r8<<0x18
+8000230c:	f9 e8 12 8c 	or	r12,r12,r8>>0x8
+80002310:	f9 da d2 e8 	bfins	r12,r10,0x17,0x8
 
-80002340 <__avr32_f32_sub_round>:
-80002340:	fc 1a 80 00 	movh	r10,0x8000
-80002344:	ed bc 00 00 	bld	r12,0x0
-80002348:	f7 ba 01 ff 	subne	r10,-1
-8000234c:	14 39       	cp.w	r9,r10
-8000234e:	f7 bc 02 ff 	subhs	r12,-1
-80002352:	5e fc       	retal	r12
+80002314 <__avr32_f32_sub_round>:
+80002314:	fc 1a 80 00 	movh	r10,0x8000
+80002318:	ed bc 00 00 	bld	r12,0x0
+8000231c:	f7 ba 01 ff 	subne	r10,-1
+80002320:	14 39       	cp.w	r9,r10
+80002322:	f7 bc 02 ff 	subhs	r12,-1
+80002326:	5e fc       	retal	r12
 
-80002354 <__avr32_f32_sub_op2_subnormal>:
-80002354:	bf db       	cbr	r11,0x1f
-80002356:	f9 b9 01 01 	movne	r9,1
-8000235a:	58 0a       	cp.w	r10,0
-8000235c:	cd 41       	brne	80002304 <__avr32_f32_sub+0x3c>
-8000235e:	bf d8       	cbr	r8,0x1f
-80002360:	f9 ba 01 01 	movne	r10,1
-80002364:	cd 0b       	rjmp	80002304 <__avr32_f32_sub+0x3c>
+80002328 <__avr32_f32_sub_op2_subnormal>:
+80002328:	bf db       	cbr	r11,0x1f
+8000232a:	f9 b9 01 01 	movne	r9,1
+8000232e:	58 0a       	cp.w	r10,0
+80002330:	cd 41       	brne	800022d8 <__avr32_f32_sub+0x3c>
+80002332:	bf d8       	cbr	r8,0x1f
+80002334:	f9 ba 01 01 	movne	r10,1
+80002338:	cd 0b       	rjmp	800022d8 <__avr32_f32_sub+0x3c>
 
-80002366 <__avr32_f32_sub_op1_nan_or_inf>:
-80002366:	f0 0b 15 01 	lsl	r11,r8,0x1
-8000236a:	5e 1e       	retne	-1
-8000236c:	f9 da d2 e8 	bfins	r12,r10,0x17,0x8
-80002370:	f2 0b 16 17 	lsr	r11,r9,0x17
-80002374:	e0 4b 00 ff 	cp.w	r11,255
-80002378:	5e 1c       	retne	r12
-8000237a:	5e fe       	retal	-1
+8000233a <__avr32_f32_sub_op1_nan_or_inf>:
+8000233a:	f0 0b 15 01 	lsl	r11,r8,0x1
+8000233e:	5e 1e       	retne	-1
+80002340:	f9 da d2 e8 	bfins	r12,r10,0x17,0x8
+80002344:	f2 0b 16 17 	lsr	r11,r9,0x17
+80002348:	e0 4b 00 ff 	cp.w	r11,255
+8000234c:	5e 1c       	retne	r12
+8000234e:	5e fe       	retal	-1
 
-8000237c <__avr32_f32_sub_subnormal_result>:
-8000237c:	f4 0a 11 09 	rsub	r10,r10,9
-80002380:	f4 0b 11 20 	rsub	r11,r10,32
-80002384:	5e 3d       	retlo	0
-80002386:	f0 0a 0a 4a 	lsr	r10,r8,r10
-8000238a:	14 4c       	or	r12,r10
-8000238c:	f0 0b 09 48 	lsl	r8,r8,r11
-80002390:	10 49       	or	r9,r8
-80002392:	cd 7b       	rjmp	80002340 <__avr32_f32_sub_round>
+80002350 <__avr32_f32_sub_subnormal_result>:
+80002350:	f4 0a 11 09 	rsub	r10,r10,9
+80002354:	f4 0b 11 20 	rsub	r11,r10,32
+80002358:	5e 3d       	retlo	0
+8000235a:	f0 0a 0a 4a 	lsr	r10,r8,r10
+8000235e:	14 4c       	or	r12,r10
+80002360:	f0 0b 09 48 	lsl	r8,r8,r11
+80002364:	10 49       	or	r9,r8
+80002366:	cd 7b       	rjmp	80002314 <__avr32_f32_sub_round>
 
-80002394 <__avr32_f32_add_from_sub>:
-80002394:	ee 1b 80 00 	eorh	r11,0x8000
+80002368 <__avr32_f32_add_from_sub>:
+80002368:	ee 1b 80 00 	eorh	r11,0x8000
 
-80002398 <__avr32_f32_add>:
-80002398:	f7 ec 20 08 	eor	r8,r11,r12
-8000239c:	c9 46       	brmi	800022c4 <__avr32_f32_sub_from_add>
-8000239e:	18 98       	mov	r8,r12
-800023a0:	e6 1c 80 00 	andh	r12,0x8000,COH
-800023a4:	bf db       	cbr	r11,0x1f
-800023a6:	bf d8       	cbr	r8,0x1f
-800023a8:	f0 0b 0c 4a 	max	r10,r8,r11
-800023ac:	f0 0b 0d 49 	min	r9,r8,r11
-800023b0:	f4 08 15 08 	lsl	r8,r10,0x8
-800023b4:	bf b8       	sbr	r8,0x1f
-800023b6:	b7 9a       	lsr	r10,0x17
-800023b8:	e0 4a 00 ff 	cp.w	r10,255
-800023bc:	c2 d0       	breq	80002416 <__avr32_f32_add_op1_nan_or_inf>
-800023be:	f2 0b 15 08 	lsl	r11,r9,0x8
-800023c2:	bf bb       	sbr	r11,0x1f
-800023c4:	b7 99       	lsr	r9,0x17
-800023c6:	c1 e0       	breq	80002402 <__avr32_f32_add_op2_subnormal>
-800023c8:	1a dc       	st.w	--sp,r12
-800023ca:	14 29       	rsub	r9,r10
-800023cc:	f1 b9 04 a0 	satu	r9,0x5
-800023d0:	f6 09 0a 4c 	lsr	r12,r11,r9
-800023d4:	f2 09 11 18 	rsub	r9,r9,24
-800023d8:	f6 09 09 4b 	lsl	r11,r11,r9
-800023dc:	f7 dc d3 08 	bfins	r11,r12,0x18,0x8
-800023e0:	18 08       	add	r8,r12
-800023e2:	1b 0c       	ld.w	r12,sp++
-800023e4:	c2 63       	brcs	80002430 <__avr32_f32_add_res_of>
-800023e6:	f9 e8 12 8c 	or	r12,r12,r8>>0x8
-800023ea:	f9 da d2 e8 	bfins	r12,r10,0x17,0x8
-800023ee:	fc 1a 80 00 	movh	r10,0x8000
-800023f2:	ed bc 00 00 	bld	r12,0x0
-800023f6:	f7 ba 01 ff 	subne	r10,-1
-800023fa:	14 3b       	cp.w	r11,r10
-800023fc:	f7 bc 02 ff 	subhs	r12,-1
-80002400:	5e fc       	retal	r12
+8000236c <__avr32_f32_add>:
+8000236c:	f7 ec 20 08 	eor	r8,r11,r12
+80002370:	c9 46       	brmi	80002298 <__avr32_f32_sub_from_add>
+80002372:	18 98       	mov	r8,r12
+80002374:	e6 1c 80 00 	andh	r12,0x8000,COH
+80002378:	bf db       	cbr	r11,0x1f
+8000237a:	bf d8       	cbr	r8,0x1f
+8000237c:	f0 0b 0c 4a 	max	r10,r8,r11
+80002380:	f0 0b 0d 49 	min	r9,r8,r11
+80002384:	f4 08 15 08 	lsl	r8,r10,0x8
+80002388:	bf b8       	sbr	r8,0x1f
+8000238a:	b7 9a       	lsr	r10,0x17
+8000238c:	e0 4a 00 ff 	cp.w	r10,255
+80002390:	c2 d0       	breq	800023ea <__avr32_f32_add_op1_nan_or_inf>
+80002392:	f2 0b 15 08 	lsl	r11,r9,0x8
+80002396:	bf bb       	sbr	r11,0x1f
+80002398:	b7 99       	lsr	r9,0x17
+8000239a:	c1 e0       	breq	800023d6 <__avr32_f32_add_op2_subnormal>
+8000239c:	1a dc       	st.w	--sp,r12
+8000239e:	14 29       	rsub	r9,r10
+800023a0:	f1 b9 04 a0 	satu	r9,0x5
+800023a4:	f6 09 0a 4c 	lsr	r12,r11,r9
+800023a8:	f2 09 11 18 	rsub	r9,r9,24
+800023ac:	f6 09 09 4b 	lsl	r11,r11,r9
+800023b0:	f7 dc d3 08 	bfins	r11,r12,0x18,0x8
+800023b4:	18 08       	add	r8,r12
+800023b6:	1b 0c       	ld.w	r12,sp++
+800023b8:	c2 63       	brcs	80002404 <__avr32_f32_add_res_of>
+800023ba:	f9 e8 12 8c 	or	r12,r12,r8>>0x8
+800023be:	f9 da d2 e8 	bfins	r12,r10,0x17,0x8
+800023c2:	fc 1a 80 00 	movh	r10,0x8000
+800023c6:	ed bc 00 00 	bld	r12,0x0
+800023ca:	f7 ba 01 ff 	subne	r10,-1
+800023ce:	14 3b       	cp.w	r11,r10
+800023d0:	f7 bc 02 ff 	subhs	r12,-1
+800023d4:	5e fc       	retal	r12
 
-80002402 <__avr32_f32_add_op2_subnormal>:
-80002402:	bf db       	cbr	r11,0x1f
-80002404:	f9 b9 01 01 	movne	r9,1
-80002408:	58 0a       	cp.w	r10,0
-8000240a:	cd f1       	brne	800023c8 <__avr32_f32_add+0x30>
-8000240c:	bf d8       	cbr	r8,0x1f
-8000240e:	10 0b       	add	r11,r8
-80002410:	f9 eb 12 8c 	or	r12,r12,r11>>0x8
-80002414:	5e fc       	retal	r12
+800023d6 <__avr32_f32_add_op2_subnormal>:
+800023d6:	bf db       	cbr	r11,0x1f
+800023d8:	f9 b9 01 01 	movne	r9,1
+800023dc:	58 0a       	cp.w	r10,0
+800023de:	cd f1       	brne	8000239c <__avr32_f32_add+0x30>
+800023e0:	bf d8       	cbr	r8,0x1f
+800023e2:	10 0b       	add	r11,r8
+800023e4:	f9 eb 12 8c 	or	r12,r12,r11>>0x8
+800023e8:	5e fc       	retal	r12
 
-80002416 <__avr32_f32_add_op1_nan_or_inf>:
-80002416:	f0 0b 15 01 	lsl	r11,r8,0x1
-8000241a:	5e 1e       	retne	-1
-8000241c:	f9 da d2 e8 	bfins	r12,r10,0x17,0x8
-80002420:	f2 0b 16 17 	lsr	r11,r9,0x17
-80002424:	e0 4b 00 ff 	cp.w	r11,255
-80002428:	5e 1c       	retne	r12
-8000242a:	a9 79       	lsl	r9,0x9
-8000242c:	5e 0c       	reteq	r12
-8000242e:	5e fe       	retal	-1
+800023ea <__avr32_f32_add_op1_nan_or_inf>:
+800023ea:	f0 0b 15 01 	lsl	r11,r8,0x1
+800023ee:	5e 1e       	retne	-1
+800023f0:	f9 da d2 e8 	bfins	r12,r10,0x17,0x8
+800023f4:	f2 0b 16 17 	lsr	r11,r9,0x17
+800023f8:	e0 4b 00 ff 	cp.w	r11,255
+800023fc:	5e 1c       	retne	r12
+800023fe:	a9 79       	lsl	r9,0x9
+80002400:	5e 0c       	reteq	r12
+80002402:	5e fe       	retal	-1
 
-80002430 <__avr32_f32_add_res_of>:
-80002430:	a1 98       	lsr	r8,0x1
-80002432:	2f fa       	sub	r10,-1
-80002434:	e0 4a 00 ff 	cp.w	r10,255
-80002438:	f9 b8 00 00 	moveq	r8,0
-8000243c:	f9 bb 00 00 	moveq	r11,0
-80002440:	cd 3b       	rjmp	800023e6 <__avr32_f32_add+0x4e>
-80002442:	d7 03       	nop
+80002404 <__avr32_f32_add_res_of>:
+80002404:	a1 98       	lsr	r8,0x1
+80002406:	2f fa       	sub	r10,-1
+80002408:	e0 4a 00 ff 	cp.w	r10,255
+8000240c:	f9 b8 00 00 	moveq	r8,0
+80002410:	f9 bb 00 00 	moveq	r11,0
+80002414:	cd 3b       	rjmp	800023ba <__avr32_f32_add+0x4e>
+80002416:	d7 03       	nop
 
-80002444 <__avr32_f32_mul>:
-80002444:	18 98       	mov	r8,r12
-80002446:	16 5c       	eor	r12,r11
-80002448:	e6 1c 80 00 	andh	r12,0x8000,COH
-8000244c:	bf d8       	cbr	r8,0x1f
-8000244e:	c6 60       	breq	8000251a <__avr32_f32_mul_op1_zero>
-80002450:	bf db       	cbr	r11,0x1f
-80002452:	f0 0b 0c 4a 	max	r10,r8,r11
-80002456:	f0 0b 0d 49 	min	r9,r8,r11
-8000245a:	f4 08 15 08 	lsl	r8,r10,0x8
-8000245e:	bf b8       	sbr	r8,0x1f
-80002460:	b7 9a       	lsr	r10,0x17
-80002462:	e0 4a 00 ff 	cp.w	r10,255
-80002466:	c3 d0       	breq	800024e0 <__avr32_f32_mul_op1_nan_or_inf>
-80002468:	f2 0b 15 08 	lsl	r11,r9,0x8
-8000246c:	bf bb       	sbr	r11,0x1f
-8000246e:	b7 99       	lsr	r9,0x17
-80002470:	c2 40       	breq	800024b8 <__avr32_f32_mul_op2_subnormal>
-80002472:	14 09       	add	r9,r10
-80002474:	f0 0b 06 4a 	mulu.d	r10,r8,r11
-80002478:	f6 08 15 01 	lsl	r8,r11,0x1
-8000247c:	f0 0b 17 20 	movhs	r11,r8
-80002480:	f7 b9 02 01 	subhs	r9,1
-80002484:	a9 8a       	lsr	r10,0x8
-80002486:	f5 db d3 08 	bfins	r10,r11,0x18,0x8
-8000248a:	27 e9       	sub	r9,126
-8000248c:	e0 8a 00 39 	brle	800024fe <__avr32_f32_mul_res_subnormal>
-80002490:	e0 49 00 ff 	cp.w	r9,255
-80002494:	c0 f4       	brge	800024b2 <__avr32_f32_mul_round+0x14>
-80002496:	f9 eb 12 8c 	or	r12,r12,r11>>0x8
-8000249a:	f9 d9 d2 e8 	bfins	r12,r9,0x17,0x8
+80002418 <__avr32_f32_mul>:
+80002418:	18 98       	mov	r8,r12
+8000241a:	16 5c       	eor	r12,r11
+8000241c:	e6 1c 80 00 	andh	r12,0x8000,COH
+80002420:	bf d8       	cbr	r8,0x1f
+80002422:	c6 60       	breq	800024ee <__avr32_f32_mul_op1_zero>
+80002424:	bf db       	cbr	r11,0x1f
+80002426:	f0 0b 0c 4a 	max	r10,r8,r11
+8000242a:	f0 0b 0d 49 	min	r9,r8,r11
+8000242e:	f4 08 15 08 	lsl	r8,r10,0x8
+80002432:	bf b8       	sbr	r8,0x1f
+80002434:	b7 9a       	lsr	r10,0x17
+80002436:	e0 4a 00 ff 	cp.w	r10,255
+8000243a:	c3 d0       	breq	800024b4 <__avr32_f32_mul_op1_nan_or_inf>
+8000243c:	f2 0b 15 08 	lsl	r11,r9,0x8
+80002440:	bf bb       	sbr	r11,0x1f
+80002442:	b7 99       	lsr	r9,0x17
+80002444:	c2 40       	breq	8000248c <__avr32_f32_mul_op2_subnormal>
+80002446:	14 09       	add	r9,r10
+80002448:	f0 0b 06 4a 	mulu.d	r10,r8,r11
+8000244c:	f6 08 15 01 	lsl	r8,r11,0x1
+80002450:	f0 0b 17 20 	movhs	r11,r8
+80002454:	f7 b9 02 01 	subhs	r9,1
+80002458:	a9 8a       	lsr	r10,0x8
+8000245a:	f5 db d3 08 	bfins	r10,r11,0x18,0x8
+8000245e:	27 e9       	sub	r9,126
+80002460:	e0 8a 00 39 	brle	800024d2 <__avr32_f32_mul_res_subnormal>
+80002464:	e0 49 00 ff 	cp.w	r9,255
+80002468:	c0 f4       	brge	80002486 <__avr32_f32_mul_round+0x14>
+8000246a:	f9 eb 12 8c 	or	r12,r12,r11>>0x8
+8000246e:	f9 d9 d2 e8 	bfins	r12,r9,0x17,0x8
 
-8000249e <__avr32_f32_mul_round>:
-8000249e:	fc 18 80 00 	movh	r8,0x8000
-800024a2:	ed bc 00 00 	bld	r12,0x0
-800024a6:	f7 b8 01 ff 	subne	r8,-1
-800024aa:	10 3a       	cp.w	r10,r8
-800024ac:	f7 bc 02 ff 	subhs	r12,-1
-800024b0:	5e fc       	retal	r12
-800024b2:	ea 1c 7f 80 	orh	r12,0x7f80
-800024b6:	5e fc       	retal	r12
+80002472 <__avr32_f32_mul_round>:
+80002472:	fc 18 80 00 	movh	r8,0x8000
+80002476:	ed bc 00 00 	bld	r12,0x0
+8000247a:	f7 b8 01 ff 	subne	r8,-1
+8000247e:	10 3a       	cp.w	r10,r8
+80002480:	f7 bc 02 ff 	subhs	r12,-1
+80002484:	5e fc       	retal	r12
+80002486:	ea 1c 7f 80 	orh	r12,0x7f80
+8000248a:	5e fc       	retal	r12
 
-800024b8 <__avr32_f32_mul_op2_subnormal>:
-800024b8:	bf db       	cbr	r11,0x1f
-800024ba:	f6 09 12 00 	clz	r9,r11
-800024be:	5e 3d       	retlo	0
-800024c0:	20 89       	sub	r9,8
-800024c2:	f6 09 09 4b 	lsl	r11,r11,r9
-800024c6:	f2 09 11 01 	rsub	r9,r9,1
-800024ca:	14 7a       	tst	r10,r10
-800024cc:	cd 31       	brne	80002472 <__avr32_f32_mul+0x2e>
-800024ce:	bf d8       	cbr	r8,0x1f
-800024d0:	f6 0a 12 00 	clz	r10,r11
-800024d4:	5e 3d       	retlo	0
-800024d6:	f0 0a 09 48 	lsl	r8,r8,r10
-800024da:	f4 0a 11 01 	rsub	r10,r10,1
-800024de:	cc ab       	rjmp	80002472 <__avr32_f32_mul+0x2e>
+8000248c <__avr32_f32_mul_op2_subnormal>:
+8000248c:	bf db       	cbr	r11,0x1f
+8000248e:	f6 09 12 00 	clz	r9,r11
+80002492:	5e 3d       	retlo	0
+80002494:	20 89       	sub	r9,8
+80002496:	f6 09 09 4b 	lsl	r11,r11,r9
+8000249a:	f2 09 11 01 	rsub	r9,r9,1
+8000249e:	14 7a       	tst	r10,r10
+800024a0:	cd 31       	brne	80002446 <__avr32_f32_mul+0x2e>
+800024a2:	bf d8       	cbr	r8,0x1f
+800024a4:	f6 0a 12 00 	clz	r10,r11
+800024a8:	5e 3d       	retlo	0
+800024aa:	f0 0a 09 48 	lsl	r8,r8,r10
+800024ae:	f4 0a 11 01 	rsub	r10,r10,1
+800024b2:	cc ab       	rjmp	80002446 <__avr32_f32_mul+0x2e>
 
-800024e0 <__avr32_f32_mul_op1_nan_or_inf>:
-800024e0:	f0 0b 15 01 	lsl	r11,r8,0x1
-800024e4:	5e 1e       	retne	-1
-800024e6:	12 79       	tst	r9,r9
-800024e8:	5e 0e       	reteq	-1
-800024ea:	f9 da d2 e8 	bfins	r12,r10,0x17,0x8
-800024ee:	f2 0b 16 17 	lsr	r11,r9,0x17
-800024f2:	e0 4b 00 ff 	cp.w	r11,255
+800024b4 <__avr32_f32_mul_op1_nan_or_inf>:
+800024b4:	f0 0b 15 01 	lsl	r11,r8,0x1
+800024b8:	5e 1e       	retne	-1
+800024ba:	12 79       	tst	r9,r9
+800024bc:	5e 0e       	reteq	-1
+800024be:	f9 da d2 e8 	bfins	r12,r10,0x17,0x8
+800024c2:	f2 0b 16 17 	lsr	r11,r9,0x17
+800024c6:	e0 4b 00 ff 	cp.w	r11,255
+800024ca:	5e 1c       	retne	r12
+800024cc:	a9 79       	lsl	r9,0x9
+800024ce:	5e 0c       	reteq	r12
+800024d0:	5e fe       	retal	-1
+
+800024d2 <__avr32_f32_mul_res_subnormal>:
+800024d2:	f2 09 11 09 	rsub	r9,r9,9
+800024d6:	f2 08 11 20 	rsub	r8,r9,32
+800024da:	5e 3d       	retlo	0
+800024dc:	f6 09 0a 49 	lsr	r9,r11,r9
+800024e0:	12 4c       	or	r12,r9
+800024e2:	f6 08 09 4b 	lsl	r11,r11,r8
+800024e6:	e4 1a 00 ff 	andh	r10,0xff
+800024ea:	16 4a       	or	r10,r11
+800024ec:	cc 3b       	rjmp	80002472 <__avr32_f32_mul_round>
+
+800024ee <__avr32_f32_mul_op1_zero>:
+800024ee:	f5 db c2 e8 	bfextu	r10,r11,0x17,0x8
+800024f2:	e0 4a 00 ff 	cp.w	r10,255
 800024f6:	5e 1c       	retne	r12
-800024f8:	a9 79       	lsl	r9,0x9
-800024fa:	5e 0c       	reteq	r12
-800024fc:	5e fe       	retal	-1
+800024f8:	5e 0e       	reteq	-1
 
-800024fe <__avr32_f32_mul_res_subnormal>:
-800024fe:	f2 09 11 09 	rsub	r9,r9,9
-80002502:	f2 08 11 20 	rsub	r8,r9,32
-80002506:	5e 3d       	retlo	0
-80002508:	f6 09 0a 49 	lsr	r9,r11,r9
-8000250c:	12 4c       	or	r12,r9
-8000250e:	f6 08 09 4b 	lsl	r11,r11,r8
-80002512:	e4 1a 00 ff 	andh	r10,0xff
-80002516:	16 4a       	or	r10,r11
-80002518:	cc 3b       	rjmp	8000249e <__avr32_f32_mul_round>
+800024fa <__avr32_s32_to_f32>:
+800024fa:	58 0c       	cp.w	r12,0
+800024fc:	5e 0c       	reteq	r12
+800024fe:	18 9b       	mov	r11,r12
+80002500:	5c 4c       	abs	r12
+80002502:	e0 6a 00 9e 	mov	r10,158
+80002506:	f8 09 12 00 	clz	r9,r12
+8000250a:	12 1a       	sub	r10,r9
+8000250c:	f8 09 09 4c 	lsl	r12,r12,r9
+80002510:	58 0a       	cp.w	r10,0
+80002512:	e0 8a 00 15 	brle	8000253c <__avr32_s32_to_f32_subnormal>
+80002516:	37 f9       	mov	r9,127
+80002518:	ed bc 00 08 	bld	r12,0x8
+8000251c:	f7 b9 00 ff 	subeq	r9,-1
+80002520:	12 0c       	add	r12,r9
+80002522:	f7 ba 03 fe 	sublo	r10,-2
+80002526:	ed bc 00 1f 	bld	r12,0x1f
+8000252a:	f7 ba 01 01 	subne	r10,1
+8000252e:	f8 0c 16 07 	lsr	r12,r12,0x7
+80002532:	f9 da d3 08 	bfins	r12,r10,0x18,0x8
+80002536:	a1 7b       	lsl	r11,0x1
+80002538:	5d 0c       	ror	r12
+8000253a:	5e fc       	retal	r12
 
-8000251a <__avr32_f32_mul_op1_zero>:
-8000251a:	f5 db c2 e8 	bfextu	r10,r11,0x17,0x8
-8000251e:	e0 4a 00 ff 	cp.w	r10,255
-80002522:	5e 1c       	retne	r12
-80002524:	5e 0e       	reteq	-1
-
-80002526 <__avr32_s32_to_f32>:
-80002526:	58 0c       	cp.w	r12,0
-80002528:	5e 0c       	reteq	r12
-8000252a:	18 9b       	mov	r11,r12
-8000252c:	5c 4c       	abs	r12
-8000252e:	e0 6a 00 9e 	mov	r10,158
-80002532:	f8 09 12 00 	clz	r9,r12
-80002536:	12 1a       	sub	r10,r9
-80002538:	f8 09 09 4c 	lsl	r12,r12,r9
-8000253c:	58 0a       	cp.w	r10,0
-8000253e:	e0 8a 00 15 	brle	80002568 <__avr32_s32_to_f32_subnormal>
-80002542:	37 f9       	mov	r9,127
-80002544:	ed bc 00 08 	bld	r12,0x8
-80002548:	f7 b9 00 ff 	subeq	r9,-1
-8000254c:	12 0c       	add	r12,r9
-8000254e:	f7 ba 03 fe 	sublo	r10,-2
-80002552:	ed bc 00 1f 	bld	r12,0x1f
-80002556:	f7 ba 01 01 	subne	r10,1
-8000255a:	f8 0c 16 07 	lsr	r12,r12,0x7
-8000255e:	f9 da d3 08 	bfins	r12,r10,0x18,0x8
-80002562:	a1 7b       	lsl	r11,0x1
-80002564:	5d 0c       	ror	r12
-80002566:	5e fc       	retal	r12
-
-80002568 <__avr32_s32_to_f32_subnormal>:
-80002568:	f4 0a 11 01 	rsub	r10,r10,1
-8000256c:	59 9a       	cp.w	r10,25
-8000256e:	f9 bc 02 00 	movhs	r12,0
-80002572:	c1 32       	brcc	80002598 <__avr32_s32_to_f32_subnormal+0x30>
-80002574:	f4 09 11 20 	rsub	r9,r10,32
-80002578:	f8 09 09 49 	lsl	r9,r12,r9
-8000257c:	5f 19       	srne	r9
-8000257e:	f8 0a 0a 4c 	lsr	r12,r12,r10
-80002582:	12 4c       	or	r12,r9
-80002584:	37 f9       	mov	r9,127
-80002586:	ed bc 00 08 	bld	r12,0x8
-8000258a:	f7 b9 00 ff 	subeq	r9,-1
-8000258e:	12 0c       	add	r12,r9
-80002590:	f8 0c 16 07 	lsr	r12,r12,0x7
-80002594:	a1 7b       	lsl	r11,0x1
-80002596:	5d 0c       	ror	r12
-80002598:	5e fc       	retal	r12
+8000253c <__avr32_s32_to_f32_subnormal>:
+8000253c:	f4 0a 11 01 	rsub	r10,r10,1
+80002540:	59 9a       	cp.w	r10,25
+80002542:	f9 bc 02 00 	movhs	r12,0
+80002546:	c1 32       	brcc	8000256c <__avr32_s32_to_f32_subnormal+0x30>
+80002548:	f4 09 11 20 	rsub	r9,r10,32
+8000254c:	f8 09 09 49 	lsl	r9,r12,r9
+80002550:	5f 19       	srne	r9
+80002552:	f8 0a 0a 4c 	lsr	r12,r12,r10
+80002556:	12 4c       	or	r12,r9
+80002558:	37 f9       	mov	r9,127
+8000255a:	ed bc 00 08 	bld	r12,0x8
+8000255e:	f7 b9 00 ff 	subeq	r9,-1
+80002562:	12 0c       	add	r12,r9
+80002564:	f8 0c 16 07 	lsr	r12,r12,0x7
+80002568:	a1 7b       	lsl	r11,0x1
+8000256a:	5d 0c       	ror	r12
+8000256c:	5e fc       	retal	r12
 
 Disassembly of section .exception:
 

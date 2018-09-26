@@ -1,14 +1,18 @@
 #ifndef LED_H_
 #define LED_H_
 
+// GPIO addresses
 #define GPIO_BASE_ADDRESS 0xFFFF1000#define GPIO_PORT1_OFFSET 0x100
 
+// GPIO port 1 address
 #define GPIO_PORT1_ADDRESS GPIO_BASE_ADDRESS+GPIO_PORT1_OFFSET
 
+// Address offsets to GPIO registers
 #define GPIO_GPER_OFFSET 0x00
 #define GPIO_ODER_OFFSET 0x40
 #define GPIO_OVR_OFFSET 0x50
 
+// Addresses to GPIO registers
 #define GPIO_PORT1_GPER (*((volatile int*)(GPIO_PORT1_ADDRESS + GPIO_GPER_OFFSET)))
 #define GPIO_PORT1_ODER (*((volatile int*)(GPIO_PORT1_ADDRESS + GPIO_ODER_OFFSET)))
 #define GPIO_PORT1_OVR (*((volatile int*)(GPIO_PORT1_ADDRESS + GPIO_OVR_OFFSET)))

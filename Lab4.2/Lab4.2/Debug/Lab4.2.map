@@ -345,7 +345,7 @@ LOAD c:/program files (x86)/atmel/studio/7.0/toolchain/avr32/avr32-gnu-toolchain
 .plt
  *(.plt)
 
-.text           0x80002008      0x592
+.text           0x80002008      0x566
  *(.text .stub .text.* .gnu.linkonce.t.*)
  .text.LED0_init
                 0x80002008       0x34 src/LED.o
@@ -367,17 +367,17 @@ LOAD c:/program files (x86)/atmel/studio/7.0/toolchain/avr32/avr32-gnu-toolchain
  .text._stext   0x80002168       0x3c src/ASF/avr32/utils/startup/startup_uc3.o
                                  0x50 (size before relaxing)
                 0x80002168                _stext
- .text.main     0x800021a4       0xec src/main.o
+ .text.main     0x800021a4       0xc0 src/main.o
                 0x800021a4                main
- .text          0x80002290       0x34 c:/program files (x86)/atmel/studio/7.0/toolchain/avr32/avr32-gnu-toolchain/bin/../lib/gcc/avr32/4.4.7/ucr2\libgcc.a(_avr32_f32_cmp_lt.o)
-                0x80002290                __avr32_f32_cmp_lt
- .text          0x800022c4      0x180 c:/program files (x86)/atmel/studio/7.0/toolchain/avr32/avr32-gnu-toolchain/bin/../lib/gcc/avr32/4.4.7/ucr2\libgcc.a(_avr32_f32_addsub.o)
-                0x800022c8                __avr32_f32_sub
-                0x80002398                __avr32_f32_add
- .text          0x80002444       0xe2 c:/program files (x86)/atmel/studio/7.0/toolchain/avr32/avr32-gnu-toolchain/bin/../lib/gcc/avr32/4.4.7/ucr2\libgcc.a(_avr32_f32_mul.o)
-                0x80002444                __avr32_f32_mul
- .text          0x80002526       0x74 c:/program files (x86)/atmel/studio/7.0/toolchain/avr32/avr32-gnu-toolchain/bin/../lib/gcc/avr32/4.4.7/ucr2\libgcc.a(_avr32_s32_to_f32.o)
-                0x80002526                __avr32_s32_to_f32
+ .text          0x80002264       0x34 c:/program files (x86)/atmel/studio/7.0/toolchain/avr32/avr32-gnu-toolchain/bin/../lib/gcc/avr32/4.4.7/ucr2\libgcc.a(_avr32_f32_cmp_lt.o)
+                0x80002264                __avr32_f32_cmp_lt
+ .text          0x80002298      0x180 c:/program files (x86)/atmel/studio/7.0/toolchain/avr32/avr32-gnu-toolchain/bin/../lib/gcc/avr32/4.4.7/ucr2\libgcc.a(_avr32_f32_addsub.o)
+                0x8000229c                __avr32_f32_sub
+                0x8000236c                __avr32_f32_add
+ .text          0x80002418       0xe2 c:/program files (x86)/atmel/studio/7.0/toolchain/avr32/avr32-gnu-toolchain/bin/../lib/gcc/avr32/4.4.7/ucr2\libgcc.a(_avr32_f32_mul.o)
+                0x80002418                __avr32_f32_mul
+ .text          0x800024fa       0x74 c:/program files (x86)/atmel/studio/7.0/toolchain/avr32/avr32-gnu-toolchain/bin/../lib/gcc/avr32/4.4.7/ucr2\libgcc.a(_avr32_s32_to_f32.o)
+                0x800024fa                __avr32_s32_to_f32
  *(.text.*personality*)
  *(.gnu.warning)
 
@@ -621,7 +621,7 @@ LOAD c:/program files (x86)/atmel/studio/7.0/toolchain/avr32/avr32-gnu-toolchain
  .debug_pubnames
                 0x000000cb       0x1b src/main.o
 
-.debug_info     0x00000000      0x932
+.debug_info     0x00000000      0x916
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000       0x72 src/LED.o
  .debug_info    0x00000072       0x75 src/timer.o
@@ -629,7 +629,7 @@ LOAD c:/program files (x86)/atmel/studio/7.0/toolchain/avr32/avr32-gnu-toolchain
  .debug_info    0x0000017a      0x5b2 src/ASF/avr32/drivers/intc/intc.o
  .debug_info    0x0000072c       0x92 src/ASF/avr32/utils/startup/startup_uc3.o
  .debug_info    0x000007be       0x99 src/ASF/avr32/utils/startup/trampoline_uc3.o
- .debug_info    0x00000857       0xdb src/main.o
+ .debug_info    0x00000857       0xbf src/main.o
 
 .debug_abbrev   0x00000000      0x2f8
  *(.debug_abbrev)
@@ -641,7 +641,7 @@ LOAD c:/program files (x86)/atmel/studio/7.0/toolchain/avr32/avr32-gnu-toolchain
  .debug_abbrev  0x00000285       0x14 src/ASF/avr32/utils/startup/trampoline_uc3.o
  .debug_abbrev  0x00000299       0x5f src/main.o
 
-.debug_line     0x00000000      0xd0c
+.debug_line     0x00000000      0xd00
  *(.debug_line)
  .debug_line    0x00000000       0x5a src/LED.o
  .debug_line    0x0000005a       0x71 src/timer.o
@@ -649,7 +649,7 @@ LOAD c:/program files (x86)/atmel/studio/7.0/toolchain/avr32/avr32-gnu-toolchain
  .debug_line    0x000001d4      0x6a9 src/ASF/avr32/drivers/intc/intc.o
  .debug_line    0x0000087d       0xf2 src/ASF/avr32/utils/startup/startup_uc3.o
  .debug_line    0x0000096f       0x67 src/ASF/avr32/utils/startup/trampoline_uc3.o
- .debug_line    0x000009d6      0x336 src/main.o
+ .debug_line    0x000009d6      0x32a src/main.o
 
 .debug_frame    0x00000000      0x17c
  *(.debug_frame)
@@ -658,15 +658,15 @@ LOAD c:/program files (x86)/atmel/studio/7.0/toolchain/avr32/avr32-gnu-toolchain
  .debug_frame   0x000000ac       0x9c src/ASF/avr32/drivers/intc/intc.o
  .debug_frame   0x00000148       0x34 src/main.o
 
-.debug_str      0x00000000      0x505
+.debug_str      0x00000000      0x4f2
  *(.debug_str)
  .debug_str     0x00000000       0x73 src/LED.o
  .debug_str     0x00000073       0x2a src/timer.o
                                  0x74 (size before relaxing)
  .debug_str     0x0000009d      0x430 src/ASF/avr32/drivers/intc/intc.o
                                 0x483 (size before relaxing)
- .debug_str     0x000004cd       0x38 src/main.o
-                                0x111 (size before relaxing)
+ .debug_str     0x000004cd       0x25 src/main.o
+                                 0xfe (size before relaxing)
 
 .debug_loc      0x00000000      0x1d9
  *(.debug_loc)
