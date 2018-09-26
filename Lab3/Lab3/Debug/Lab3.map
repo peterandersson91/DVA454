@@ -205,7 +205,6 @@ Discarded input sections
  .text          0x00000000        0x0 src/main.o
  .data          0x00000000        0x0 src/main.o
  .bss           0x00000000        0x0 src/main.o
- .text.mdelay   0x00000000       0x26 src/main.o
 
 Memory Configuration
 
@@ -460,9 +459,9 @@ LOAD c:/program files (x86)/atmel/studio/7.0/toolchain/avr32/avr32-gnu-toolchain
 
 .rodata         0x80003200       0xac
  *(.rodata .rodata.* .gnu.linkonce.r.*)
- .rodata.waveform_opt.10561
+ .rodata.waveform_opt.10559
                 0x80003200        0x8 src/TC_driver.o
- .rodata.tc_interrupt.10562
+ .rodata.tc_interrupt.10560
                 0x80003208        0x4 src/TC_driver.o
  .rodata._int_handler_table
                 0x8000320c       0xa0 src/ASF/avr32/drivers/intc/intc.o
@@ -668,7 +667,7 @@ LOAD c:/program files (x86)/atmel/studio/7.0/toolchain/avr32/avr32-gnu-toolchain
 .debug_sfnames
  *(.debug_sfnames)
 
-.debug_aranges  0x00000000      0x258
+.debug_aranges  0x00000000      0x250
  *(.debug_aranges)
  .debug_aranges
                 0x00000000       0xb0 src/ASF/avr32/drivers/tc/tc.o
@@ -687,10 +686,10 @@ LOAD c:/program files (x86)/atmel/studio/7.0/toolchain/avr32/avr32-gnu-toolchain
  .debug_aranges
                 0x00000210       0x20 src/ASF/avr32/utils/startup/trampoline_uc3.o
  .debug_aranges
-                0x00000230       0x28 src/main.o
+                0x00000230       0x20 src/main.o
 
 .debug_pubnames
-                0x00000000      0x354
+                0x00000000      0x349
  *(.debug_pubnames)
  .debug_pubnames
                 0x00000000      0x164 src/ASF/avr32/drivers/tc/tc.o
@@ -703,9 +702,9 @@ LOAD c:/program files (x86)/atmel/studio/7.0/toolchain/avr32/avr32-gnu-toolchain
  .debug_pubnames
                 0x000002cc       0x62 src/ASF/avr32/drivers/intc/intc.o
  .debug_pubnames
-                0x0000032e       0x26 src/main.o
+                0x0000032e       0x1b src/main.o
 
-.debug_info     0x00000000     0x70a1
+.debug_info     0x00000000     0x7079
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000     0x117d src/ASF/avr32/drivers/tc/tc.o
  .debug_info    0x0000117d     0x16d3 src/stopwatch.o
@@ -715,9 +714,9 @@ LOAD c:/program files (x86)/atmel/studio/7.0/toolchain/avr32/avr32-gnu-toolchain
  .debug_info    0x00004d41      0x5b2 src/ASF/avr32/drivers/intc/intc.o
  .debug_info    0x000052f3       0x8b src/ASF/avr32/utils/startup/startup_uc3.o
  .debug_info    0x0000537e       0x92 src/ASF/avr32/utils/startup/trampoline_uc3.o
- .debug_info    0x00005410     0x1c91 src/main.o
+ .debug_info    0x00005410     0x1c69 src/main.o
 
-.debug_abbrev   0x00000000      0xb09
+.debug_abbrev   0x00000000      0xae3
  *(.debug_abbrev)
  .debug_abbrev  0x00000000      0x21f src/ASF/avr32/drivers/tc/tc.o
  .debug_abbrev  0x0000021f      0x1ab src/stopwatch.o
@@ -727,9 +726,9 @@ LOAD c:/program files (x86)/atmel/studio/7.0/toolchain/avr32/avr32-gnu-toolchain
  .debug_abbrev  0x00000791      0x1b6 src/ASF/avr32/drivers/intc/intc.o
  .debug_abbrev  0x00000947       0x12 src/ASF/avr32/utils/startup/startup_uc3.o
  .debug_abbrev  0x00000959       0x14 src/ASF/avr32/utils/startup/trampoline_uc3.o
- .debug_abbrev  0x0000096d      0x19c src/main.o
+ .debug_abbrev  0x0000096d      0x176 src/main.o
 
-.debug_line     0x00000000     0x2e2c
+.debug_line     0x00000000     0x2e17
  *(.debug_line)
  .debug_line    0x00000000      0x839 src/ASF/avr32/drivers/tc/tc.o
  .debug_line    0x00000839      0x759 src/stopwatch.o
@@ -739,55 +738,55 @@ LOAD c:/program files (x86)/atmel/studio/7.0/toolchain/avr32/avr32-gnu-toolchain
  .debug_line    0x00001efb      0x6a9 src/ASF/avr32/drivers/intc/intc.o
  .debug_line    0x000025a4       0xf2 src/ASF/avr32/utils/startup/startup_uc3.o
  .debug_line    0x00002696       0x67 src/ASF/avr32/utils/startup/trampoline_uc3.o
- .debug_line    0x000026fd      0x72f src/main.o
+ .debug_line    0x000026fd      0x71a src/main.o
 
-.debug_frame    0x00000000      0x53c
+.debug_frame    0x00000000      0x520
  *(.debug_frame)
  .debug_frame   0x00000000      0x224 src/ASF/avr32/drivers/tc/tc.o
  .debug_frame   0x00000224       0xd8 src/stopwatch.o
  .debug_frame   0x000002fc       0x64 src/TC_driver.o
  .debug_frame   0x00000360       0xf0 src/USART_driver.o
  .debug_frame   0x00000450       0x9c src/ASF/avr32/drivers/intc/intc.o
- .debug_frame   0x000004ec       0x50 src/main.o
+ .debug_frame   0x000004ec       0x34 src/main.o
 
-.debug_str      0x00000000      0xe9a
+.debug_str      0x00000000      0xec0
  *(.debug_str)
  .debug_str     0x00000000      0x469 src/ASF/avr32/drivers/tc/tc.o
                                 0x4c9 (size before relaxing)
- .debug_str     0x00000469      0x566 src/stopwatch.o
+ .debug_str     0x00000469      0x5a0 src/stopwatch.o
                                 0x682 (size before relaxing)
- .debug_str     0x000009cf       0x60 src/TC_driver.o
+ .debug_str     0x00000a09       0x60 src/TC_driver.o
                                 0x3af (size before relaxing)
- .debug_str     0x00000a2f       0xc1 src/USART_driver.o
+ .debug_str     0x00000a69       0xc1 src/USART_driver.o
                                 0x698 (size before relaxing)
- .debug_str     0x00000af0      0x383 src/ASF/avr32/drivers/intc/intc.o
+ .debug_str     0x00000b2a      0x383 src/ASF/avr32/drivers/intc/intc.o
                                 0x47c (size before relaxing)
- .debug_str     0x00000e73       0x27 src/main.o
-                                0x723 (size before relaxing)
+ .debug_str     0x00000ead       0x13 src/main.o
+                                0x70f (size before relaxing)
 
-.debug_loc      0x00000000      0x764
+.debug_loc      0x00000000      0x739
  *(.debug_loc)
  .debug_loc     0x00000000      0x331 src/ASF/avr32/drivers/tc/tc.o
  .debug_loc     0x00000331      0x12d src/stopwatch.o
  .debug_loc     0x0000045e       0x81 src/TC_driver.o
  .debug_loc     0x000004df      0x158 src/USART_driver.o
  .debug_loc     0x00000637       0xd7 src/ASF/avr32/drivers/intc/intc.o
- .debug_loc     0x0000070e       0x56 src/main.o
+ .debug_loc     0x0000070e       0x2b src/main.o
 
-.debug_macinfo  0x00000000   0x594026
+.debug_macinfo  0x00000000   0x594176
  *(.debug_macinfo)
  .debug_macinfo
                 0x00000000    0xece52 src/ASF/avr32/drivers/tc/tc.o
  .debug_macinfo
-                0x000ece52    0xeeb41 src/stopwatch.o
+                0x000ece52    0xeebe9 src/stopwatch.o
  .debug_macinfo
-                0x001db993    0xee8a5 src/TC_driver.o
+                0x001dba3b    0xee8a5 src/TC_driver.o
  .debug_macinfo
-                0x002ca238    0xedf88 src/USART_driver.o
+                0x002ca2e0    0xedf88 src/USART_driver.o
  .debug_macinfo
-                0x003b81c0    0xec81a src/ASF/avr32/drivers/intc/intc.o
+                0x003b8268    0xec81a src/ASF/avr32/drivers/intc/intc.o
  .debug_macinfo
-                0x004a49da    0xef64c src/main.o
+                0x004a4a82    0xef6f4 src/main.o
 
 .debug_weaknames
  *(.debug_weaknames)
@@ -815,11 +814,11 @@ LOAD c:/program files (x86)/atmel/studio/7.0/toolchain/avr32/avr32-gnu-toolchain
  *(.note.GNU-stack)
 OUTPUT(Lab3.elf elf32-avr32)
 
-.debug_ranges   0x00000000      0x1e0
+.debug_ranges   0x00000000      0x1d8
  .debug_ranges  0x00000000       0xa8 src/ASF/avr32/drivers/tc/tc.o
  .debug_ranges  0x000000a8       0x48 src/stopwatch.o
  .debug_ranges  0x000000f0       0x28 src/TC_driver.o
  .debug_ranges  0x00000118       0x50 src/USART_driver.o
  .debug_ranges  0x00000168       0x38 src/ASF/avr32/drivers/intc/intc.o
  .debug_ranges  0x000001a0       0x20 src/ASF/avr32/utils/startup/startup_uc3.o
- .debug_ranges  0x000001c0       0x20 src/main.o
+ .debug_ranges  0x000001c0       0x18 src/main.o

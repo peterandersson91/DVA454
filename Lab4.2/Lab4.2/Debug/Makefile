@@ -60,6 +60,7 @@ SUBDIRS :=  \
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS +=  \
 ../src/LED.c \
+../src/timer.c \
 ../src/ASF/avr32/boards/evk1100/init.c \
 ../src/ASF/avr32/boards/evk1100/led.c \
 ../src/ASF/avr32/drivers/gpio/gpio.c \
@@ -78,6 +79,7 @@ ASM_SRCS +=
 
 OBJS +=  \
 src/LED.o \
+src/timer.o \
 src/ASF/avr32/boards/evk1100/init.o \
 src/ASF/avr32/boards/evk1100/led.o \
 src/ASF/avr32/drivers/gpio/gpio.o \
@@ -89,6 +91,7 @@ src/main.o
 
 OBJS_AS_ARGS +=  \
 src/LED.o \
+src/timer.o \
 src/ASF/avr32/boards/evk1100/init.o \
 src/ASF/avr32/boards/evk1100/led.o \
 src/ASF/avr32/drivers/gpio/gpio.o \
@@ -100,6 +103,7 @@ src/main.o
 
 C_DEPS +=  \
 src/LED.d \
+src/timer.d \
 src/ASF/avr32/boards/evk1100/init.d \
 src/ASF/avr32/boards/evk1100/led.d \
 src/ASF/avr32/drivers/gpio/gpio.d \
@@ -111,6 +115,7 @@ src/main.d
 
 C_DEPS_AS_ARGS +=  \
 src/LED.d \
+src/timer.d \
 src/ASF/avr32/boards/evk1100/init.d \
 src/ASF/avr32/boards/evk1100/led.d \
 src/ASF/avr32/drivers/gpio/gpio.d \
@@ -135,6 +140,8 @@ LINKER_SCRIPT_DEP+=  \
 
 
 # AVR32/GNU C Compiler
+
+
 
 
 

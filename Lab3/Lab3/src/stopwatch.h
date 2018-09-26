@@ -29,7 +29,7 @@
 #define BUTTON1_PIN (1 << (GPIO_PUSH_BUTTON_1 & (GPIO_MAX_PIN_NUMBER - 1)))
 #define BUTTON2_PIN (1 << (GPIO_PUSH_BUTTON_2 & (GPIO_MAX_PIN_NUMBER - 1)))
 
-extern bool timer_running;
+extern bool timer_running;					// =true if the timer is running, else false
 
 void stopwatch_init(void);
 void startTimer(void);

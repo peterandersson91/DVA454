@@ -32,12 +32,11 @@ __attribute__((__interrupt__))static void tc_irq_handler(void)
 
 void tc_init(volatile avr32_tc_t *tc)
 {
-	// Options for waveform generation.
+	// Struct with waveform options for the TC
 	static const tc_waveform_opt_t waveform_opt = {
-		// Channel selection.
+		// Select channel
 		.channel  = TC_CHANNEL,
-		 /* Waveform selection: Up mode with automatic trigger(reset)
-		 * on RC compare.*/
+		// Selects type of timer and interrupt
 		.wavsel   = TC_WAVEFORM_SEL_UP_MODE_RC_TRIGGER,
 		// External event trigger enable.
 		.enetrg   = false,
@@ -57,7 +56,7 @@ void tc_init(volatile avr32_tc_t *tc)
 		.tcclks   = TC_CLOCK_SOURCE_TC3
 	};
 
-	// Options for enabling TC interrupts
+	// Struct containing interrupt options
 	static const tc_interrupt_t tc_interrupt = {
 		.cpcs  = 1, // Enable interrupt on RC compare alone
 	};
@@ -65,7 +64,7 @@ void tc_init(volatile avr32_tc_t *tc)
 	tc_init_waveform(tc, &waveform_opt);
 	// Set trigger to every 10ms, Rc = (115200/8) / 100 = 144
 	tc_write_rc(tc, TC_CHANNEL, (115200 / 8 / 100));
-	// configure the timer interrupt
+	// Configure the timer interrupt
 	tc_configure_interrupts(tc, TC_CHANNEL, &tc_interrupt);
 	// Start the timer/counter.
 	tc_start(tc, TC_CHANNEL);

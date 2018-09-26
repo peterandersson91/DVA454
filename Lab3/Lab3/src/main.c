@@ -5,24 +5,15 @@
 #include "USART_driver.h"
 #include "stopwatch.h"
 
-// Function to create a delay (not in milliseconds)
-void mdelay(int milliseconds)
-{
-	while (milliseconds != 0)
-	{
-		milliseconds--;
-	}
-}
-
 int main(void)
 {
 	volatile avr32_usart_t * usart = USART;
 	volatile avr32_tc_t *tc = &AVR32_TC;
-	USART_init(usart);
-	tc_init(tc);
-	stopwatch_init();
+	USART_init(usart);						// Init USART
+	tc_init(tc);							// Init Timer/Counter
+	stopwatch_init();						// Init Stopwatch
 	
-	
+	// Struct containing the time in hours, minutes, seconds, hundredths
 	struct time_struct ts;
 	ts.hour = 0;
 	ts.minute = 0;
@@ -31,9 +22,9 @@ int main(void)
 	
 	while(1)
 	{
-		ts = update_time(centa_s);
-		displayTime(ts);
-		checkInput();
+		ts = update_time(centa_s);	// Updates the time struct with the current timer count
+		displayTime(ts);			// Displays the time on the serial port
+		checkInput();				// Checks input from serial port
 	}
 	while(1);
 }

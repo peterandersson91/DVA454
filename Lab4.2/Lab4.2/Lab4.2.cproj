@@ -82,8 +82,7 @@
       <ToolOptions>
         <InterfaceProperties>
         </InterfaceProperties>
-        <InterfaceName>
-        </InterfaceName>
+        <InterfaceName>JTAG</InterfaceName>
       </ToolOptions>
       <ToolType>com.atmel.avrdbg.tool.simulator</ToolType>
       <ToolNumber>
@@ -291,6 +290,12 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\LED.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\timer.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\timer.h">
       <SubType>compile</SubType>
     </Compile>
     <None Include="src\asf.h">

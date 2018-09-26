@@ -21,38 +21,32 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   ALLOC
   8 .comment      00000030  00000000  00000000  000036ac  2**0
                   CONTENTS, READONLY
-  9 .debug_aranges 00000258  00000000  00000000  000036e0  2**3
+  9 .debug_aranges 00000250  00000000  00000000  000036e0  2**3
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_pubnames 00000354  00000000  00000000  00003938  2**0
+ 10 .debug_pubnames 00000349  00000000  00000000  00003930  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_info   000070a1  00000000  00000000  00003c8c  2**0
+ 11 .debug_info   00007079  00000000  00000000  00003c79  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_abbrev 00000b09  00000000  00000000  0000ad2d  2**0
+ 12 .debug_abbrev 00000ae3  00000000  00000000  0000acf2  2**0
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_line   00002e2c  00000000  00000000  0000b836  2**0
+ 13 .debug_line   00002e17  00000000  00000000  0000b7d5  2**0
                   CONTENTS, READONLY, DEBUGGING
- 14 .debug_frame  0000053c  00000000  00000000  0000e664  2**2
+ 14 .debug_frame  00000520  00000000  00000000  0000e5ec  2**2
                   CONTENTS, READONLY, DEBUGGING
- 15 .debug_str    00000e9a  00000000  00000000  0000eba0  2**0
+ 15 .debug_str    00000ec0  00000000  00000000  0000eb0c  2**0
                   CONTENTS, READONLY, DEBUGGING
- 16 .debug_loc    00000764  00000000  00000000  0000fa3a  2**0
+ 16 .debug_loc    00000739  00000000  00000000  0000f9cc  2**0
                   CONTENTS, READONLY, DEBUGGING
- 17 .debug_macinfo 00594026  00000000  00000000  0001019e  2**0
+ 17 .debug_macinfo 00594176  00000000  00000000  00010105  2**0
                   CONTENTS, READONLY, DEBUGGING
  18 .stack        00001000  0000f000  0000f000  00000000  2**0
                   ALLOC
- 19 .debug_ranges 000001e0  00000000  00000000  005a41c8  2**3
+ 19 .debug_ranges 000001d8  00000000  00000000  005a4280  2**3
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .reset:
 
 80000000 <_start>:
-
-  .global _start
-  .type _start, @function
-_start:
-  // Jump to the C runtime startup routine.
-  lda.w   pc, _stext
 80000000:	fe cf d1 c8 	sub	pc,pc,-11832
 
 80000004 <_trampoline>:
@@ -60,127 +54,86 @@ _start:
 	...
 
 80002004 <program_start>:
-  rjmp    program_start
-
-  .org  PROGRAM_START_OFFSET
-program_start:
-  // Jump to the C runtime startup routine.
-  lda.w   pc, _stext
 80002004:	fe cf f1 cc 	sub	pc,pc,-3636
 
 Disassembly of section .text:
 
 80002008 <cpu_irq_is_enabled_flags>:
 80002008:	eb cd 40 80 	pushm	r7,lr
-
-	return flags;
-}
-
-static inline bool cpu_irq_is_enabled_flags(irqflags_t flags)
-{
 8000200c:	1a 97       	mov	r7,sp
 8000200e:	20 1d       	sub	sp,4
 80002010:	ef 4c ff fc 	st.w	r7[-4],r12
-	return !(flags & AVR32_SR_GM_MASK);
 80002014:	ee f8 ff fc 	ld.w	r8,r7[-4]
 80002018:	e6 18 00 01 	andh	r8,0x1,COH
 8000201c:	5f 08       	sreq	r8
 8000201e:	5c 58       	castu.b	r8
-}
 80002020:	10 9c       	mov	r12,r8
 80002022:	2f fd       	sub	sp,-4
 80002024:	e3 cd 80 80 	ldm	sp++,r7,pc
 
 80002028 <tc_configure_interrupts>:
-  return tc->channel[channel].imr;
-}
-
-
-int tc_configure_interrupts(volatile avr32_tc_t *tc, unsigned int channel, const tc_interrupt_t *bitfield)
-{
 80002028:	eb cd 40 80 	pushm	r7,lr
 8000202c:	1a 97       	mov	r7,sp
 8000202e:	20 4d       	sub	sp,16
 80002030:	ef 4c ff f8 	st.w	r7[-8],r12
 80002034:	ef 4b ff f4 	st.w	r7[-12],r11
 80002038:	ef 4a ff f0 	st.w	r7[-16],r10
-  bool global_interrupt_enabled = Is_global_interrupt_enabled();
 8000203c:	e1 b8 00 00 	mfsr	r8,0x0
 80002040:	10 9c       	mov	r12,r8
 80002042:	f0 1f 00 73 	mcall	8000220c <tc_configure_interrupts+0x1e4>
 80002046:	18 98       	mov	r8,r12
 80002048:	ef 68 ff ff 	st.b	r7[-1],r8
-
-  // Check for valid input.
-  if (channel >= TC_NUMBER_OF_CHANNELS)
 8000204c:	ee f8 ff f4 	ld.w	r8,r7[-12]
 80002050:	58 28       	cp.w	r8,2
 80002052:	e0 88 00 04 	brls	8000205a <tc_configure_interrupts+0x32>
-    return TC_INVALID_ARGUMENT;
 80002056:	3f f8       	mov	r8,-1
 80002058:	cd 68       	rjmp	80002204 <tc_configure_interrupts+0x1dc>
-
-  // Enable the appropriate interrupts.
-  tc->channel[channel].ier = bitfield->etrgs << AVR32_TC_ETRGS_OFFSET |
 8000205a:	ee fb ff f4 	ld.w	r11,r7[-12]
 8000205e:	ee f8 ff f0 	ld.w	r8,r7[-16]
 80002062:	70 08       	ld.w	r8,r8[0x0]
 80002064:	f1 d8 c0 e1 	bfextu	r8,r8,0x7,0x1
 80002068:	5c 58       	castu.b	r8
 8000206a:	f0 09 15 07 	lsl	r9,r8,0x7
-                             bitfield->ldrbs << AVR32_TC_LDRBS_OFFSET |
 8000206e:	ee f8 ff f0 	ld.w	r8,r7[-16]
 80002072:	70 08       	ld.w	r8,r8[0x0]
 80002074:	f1 d8 c0 c1 	bfextu	r8,r8,0x6,0x1
 80002078:	5c 58       	castu.b	r8
 8000207a:	a7 68       	lsl	r8,0x6
 8000207c:	10 49       	or	r9,r8
-                             bitfield->ldras << AVR32_TC_LDRAS_OFFSET |
 8000207e:	ee f8 ff f0 	ld.w	r8,r7[-16]
 80002082:	70 08       	ld.w	r8,r8[0x0]
 80002084:	f1 d8 c0 a1 	bfextu	r8,r8,0x5,0x1
 80002088:	5c 58       	castu.b	r8
 8000208a:	a5 78       	lsl	r8,0x5
 8000208c:	10 49       	or	r9,r8
-                             bitfield->cpcs << AVR32_TC_CPCS_OFFSET |
 8000208e:	ee f8 ff f0 	ld.w	r8,r7[-16]
 80002092:	70 08       	ld.w	r8,r8[0x0]
 80002094:	f1 d8 c0 81 	bfextu	r8,r8,0x4,0x1
 80002098:	5c 58       	castu.b	r8
 8000209a:	a5 68       	lsl	r8,0x4
 8000209c:	10 49       	or	r9,r8
-                             bitfield->cpbs << AVR32_TC_CPBS_OFFSET |
 8000209e:	ee f8 ff f0 	ld.w	r8,r7[-16]
 800020a2:	70 08       	ld.w	r8,r8[0x0]
 800020a4:	f1 d8 c0 61 	bfextu	r8,r8,0x3,0x1
 800020a8:	5c 58       	castu.b	r8
 800020aa:	a3 78       	lsl	r8,0x3
 800020ac:	10 49       	or	r9,r8
-                             bitfield->cpas << AVR32_TC_CPAS_OFFSET |
 800020ae:	ee f8 ff f0 	ld.w	r8,r7[-16]
 800020b2:	70 08       	ld.w	r8,r8[0x0]
 800020b4:	f1 d8 c0 41 	bfextu	r8,r8,0x2,0x1
 800020b8:	5c 58       	castu.b	r8
 800020ba:	a3 68       	lsl	r8,0x2
 800020bc:	10 49       	or	r9,r8
-                             bitfield->lovrs << AVR32_TC_LOVRS_OFFSET |
 800020be:	ee f8 ff f0 	ld.w	r8,r7[-16]
 800020c2:	70 08       	ld.w	r8,r8[0x0]
 800020c4:	f1 d8 c0 21 	bfextu	r8,r8,0x1,0x1
 800020c8:	5c 58       	castu.b	r8
 800020ca:	a1 78       	lsl	r8,0x1
 800020cc:	10 49       	or	r9,r8
-                             bitfield->covfs << AVR32_TC_COVFS_OFFSET;
 800020ce:	ee f8 ff f0 	ld.w	r8,r7[-16]
 800020d2:	70 08       	ld.w	r8,r8[0x0]
 800020d4:	f1 d8 c0 01 	bfextu	r8,r8,0x0,0x1
 800020d8:	5c 58       	castu.b	r8
-  // Check for valid input.
-  if (channel >= TC_NUMBER_OF_CHANNELS)
-    return TC_INVALID_ARGUMENT;
-
-  // Enable the appropriate interrupts.
-  tc->channel[channel].ier = bitfield->etrgs << AVR32_TC_ETRGS_OFFSET |
 800020da:	f3 e8 10 08 	or	r8,r9,r8
 800020de:	10 99       	mov	r9,r8
 800020e0:	ee fa ff f8 	ld.w	r10,r7[-8]
@@ -188,18 +141,11 @@ int tc_configure_interrupts(volatile avr32_tc_t *tc, unsigned int channel, const
 800020e8:	f4 08 00 08 	add	r8,r10,r8
 800020ec:	2d c8       	sub	r8,-36
 800020ee:	91 09       	st.w	r8[0x0],r9
-                             bitfield->cpas << AVR32_TC_CPAS_OFFSET |
-                             bitfield->lovrs << AVR32_TC_LOVRS_OFFSET |
-                             bitfield->covfs << AVR32_TC_COVFS_OFFSET;
-
-  // Disable the appropriate interrupts.
-  if (global_interrupt_enabled) Disable_global_interrupt();
 800020f0:	ef 39 ff ff 	ld.ub	r9,r7[-1]
 800020f4:	30 08       	mov	r8,0
 800020f6:	f0 09 18 00 	cp.b	r9,r8
 800020fa:	c0 20       	breq	800020fe <tc_configure_interrupts+0xd6>
 800020fc:	d3 03       	ssrf	0x10
-  tc->channel[channel].idr = (~bitfield->etrgs & 1) << AVR32_TC_ETRGS_OFFSET |
 800020fe:	ee fb ff f4 	ld.w	r11,r7[-12]
 80002102:	ee f8 ff f0 	ld.w	r8,r7[-16]
 80002106:	70 08       	ld.w	r8,r8[0x0]
@@ -210,7 +156,6 @@ int tc_configure_interrupts(volatile avr32_tc_t *tc, unsigned int channel, const
 80002114:	e0 69 00 80 	mov	r9,128
 80002118:	c0 28       	rjmp	8000211c <tc_configure_interrupts+0xf4>
 8000211a:	30 09       	mov	r9,0
-                             (~bitfield->ldrbs & 1) << AVR32_TC_LDRBS_OFFSET |
 8000211c:	ee f8 ff f0 	ld.w	r8,r7[-16]
 80002120:	70 08       	ld.w	r8,r8[0x0]
 80002122:	f1 d8 c0 c1 	bfextu	r8,r8,0x6,0x1
@@ -221,7 +166,6 @@ int tc_configure_interrupts(volatile avr32_tc_t *tc, unsigned int channel, const
 80002130:	c0 28       	rjmp	80002134 <tc_configure_interrupts+0x10c>
 80002132:	30 08       	mov	r8,0
 80002134:	10 49       	or	r9,r8
-                             (~bitfield->ldras & 1) << AVR32_TC_LDRAS_OFFSET |
 80002136:	ee f8 ff f0 	ld.w	r8,r7[-16]
 8000213a:	70 08       	ld.w	r8,r8[0x0]
 8000213c:	f1 d8 c0 a1 	bfextu	r8,r8,0x5,0x1
@@ -232,7 +176,6 @@ int tc_configure_interrupts(volatile avr32_tc_t *tc, unsigned int channel, const
 8000214a:	c0 28       	rjmp	8000214e <tc_configure_interrupts+0x126>
 8000214c:	30 08       	mov	r8,0
 8000214e:	10 49       	or	r9,r8
-                             (~bitfield->cpcs & 1) << AVR32_TC_CPCS_OFFSET |
 80002150:	ee f8 ff f0 	ld.w	r8,r7[-16]
 80002154:	70 08       	ld.w	r8,r8[0x0]
 80002156:	f1 d8 c0 81 	bfextu	r8,r8,0x4,0x1
@@ -243,7 +186,6 @@ int tc_configure_interrupts(volatile avr32_tc_t *tc, unsigned int channel, const
 80002164:	c0 28       	rjmp	80002168 <tc_configure_interrupts+0x140>
 80002166:	30 08       	mov	r8,0
 80002168:	10 49       	or	r9,r8
-                             (~bitfield->cpbs & 1) << AVR32_TC_CPBS_OFFSET |
 8000216a:	ee f8 ff f0 	ld.w	r8,r7[-16]
 8000216e:	70 08       	ld.w	r8,r8[0x0]
 80002170:	f1 d8 c0 61 	bfextu	r8,r8,0x3,0x1
@@ -254,7 +196,6 @@ int tc_configure_interrupts(volatile avr32_tc_t *tc, unsigned int channel, const
 8000217e:	c0 28       	rjmp	80002182 <tc_configure_interrupts+0x15a>
 80002180:	30 08       	mov	r8,0
 80002182:	10 49       	or	r9,r8
-                             (~bitfield->cpas & 1) << AVR32_TC_CPAS_OFFSET |
 80002184:	ee f8 ff f0 	ld.w	r8,r7[-16]
 80002188:	70 08       	ld.w	r8,r8[0x0]
 8000218a:	f1 d8 c0 41 	bfextu	r8,r8,0x2,0x1
@@ -265,7 +206,6 @@ int tc_configure_interrupts(volatile avr32_tc_t *tc, unsigned int channel, const
 80002198:	c0 28       	rjmp	8000219c <tc_configure_interrupts+0x174>
 8000219a:	30 08       	mov	r8,0
 8000219c:	10 49       	or	r9,r8
-                             (~bitfield->lovrs & 1) << AVR32_TC_LOVRS_OFFSET |
 8000219e:	ee f8 ff f0 	ld.w	r8,r7[-16]
 800021a2:	70 08       	ld.w	r8,r8[0x0]
 800021a4:	f1 d8 c0 21 	bfextu	r8,r8,0x1,0x1
@@ -276,19 +216,12 @@ int tc_configure_interrupts(volatile avr32_tc_t *tc, unsigned int channel, const
 800021b2:	c0 28       	rjmp	800021b6 <tc_configure_interrupts+0x18e>
 800021b4:	30 08       	mov	r8,0
 800021b6:	10 49       	or	r9,r8
-                             (~bitfield->covfs & 1) << AVR32_TC_COVFS_OFFSET;
 800021b8:	ee f8 ff f0 	ld.w	r8,r7[-16]
 800021bc:	70 08       	ld.w	r8,r8[0x0]
 800021be:	f1 d8 c0 01 	bfextu	r8,r8,0x0,0x1
 800021c2:	5c 58       	castu.b	r8
 800021c4:	f1 d8 c0 01 	bfextu	r8,r8,0x0,0x1
 800021c8:	5f 08       	sreq	r8
-                             bitfield->lovrs << AVR32_TC_LOVRS_OFFSET |
-                             bitfield->covfs << AVR32_TC_COVFS_OFFSET;
-
-  // Disable the appropriate interrupts.
-  if (global_interrupt_enabled) Disable_global_interrupt();
-  tc->channel[channel].idr = (~bitfield->etrgs & 1) << AVR32_TC_ETRGS_OFFSET |
 800021ca:	f3 e8 10 08 	or	r8,r9,r8
 800021ce:	10 99       	mov	r9,r8
 800021d0:	ee fa ff f8 	ld.w	r10,r7[-8]
@@ -296,12 +229,6 @@ int tc_configure_interrupts(volatile avr32_tc_t *tc, unsigned int channel, const
 800021d8:	f4 08 00 08 	add	r8,r10,r8
 800021dc:	2d 88       	sub	r8,-40
 800021de:	91 09       	st.w	r8[0x0],r9
-                             (~bitfield->cpcs & 1) << AVR32_TC_CPCS_OFFSET |
-                             (~bitfield->cpbs & 1) << AVR32_TC_CPBS_OFFSET |
-                             (~bitfield->cpas & 1) << AVR32_TC_CPAS_OFFSET |
-                             (~bitfield->lovrs & 1) << AVR32_TC_LOVRS_OFFSET |
-                             (~bitfield->covfs & 1) << AVR32_TC_COVFS_OFFSET;
-  tc->channel[channel].sr;
 800021e0:	ee f8 ff f4 	ld.w	r8,r7[-12]
 800021e4:	ee f9 ff f8 	ld.w	r9,r7[-8]
 800021e8:	a1 78       	lsl	r8,0x1
@@ -309,16 +236,12 @@ int tc_configure_interrupts(volatile avr32_tc_t *tc, unsigned int channel, const
 800021ec:	a5 78       	lsl	r8,0x5
 800021ee:	f2 08 00 08 	add	r8,r9,r8
 800021f2:	70 08       	ld.w	r8,r8[0x0]
-  if (global_interrupt_enabled) Enable_global_interrupt();
 800021f4:	ef 39 ff ff 	ld.ub	r9,r7[-1]
 800021f8:	30 08       	mov	r8,0
 800021fa:	f0 09 18 00 	cp.b	r9,r8
 800021fe:	c0 20       	breq	80002202 <tc_configure_interrupts+0x1da>
 80002200:	d5 03       	csrf	0x10
-
-  return 0;
 80002202:	30 08       	mov	r8,0
-}
 80002204:	10 9c       	mov	r12,r8
 80002206:	2f cd       	sub	sp,-16
 80002208:	e3 cd 80 80 	ldm	sp++,r7,pc
@@ -326,29 +249,17 @@ int tc_configure_interrupts(volatile avr32_tc_t *tc, unsigned int channel, const
 8000220e:	20 08       	sub	r8,0
 
 80002210 <tc_init_waveform>:
-  return 0;
-}
-
-
-int tc_init_waveform(volatile avr32_tc_t *tc, const tc_waveform_opt_t *opt)
-{
 80002210:	eb cd 40 80 	pushm	r7,lr
 80002214:	1a 97       	mov	r7,sp
 80002216:	20 2d       	sub	sp,8
 80002218:	ef 4c ff fc 	st.w	r7[-4],r12
 8000221c:	ef 4b ff f8 	st.w	r7[-8],r11
-  // Check for valid input.
-  if (opt->channel >= TC_NUMBER_OF_CHANNELS)
 80002220:	ee f8 ff f8 	ld.w	r8,r7[-8]
 80002224:	70 08       	ld.w	r8,r8[0x0]
 80002226:	58 28       	cp.w	r8,2
 80002228:	e0 88 00 04 	brls	80002230 <tc_init_waveform+0x20>
-    return TC_INVALID_ARGUMENT;
 8000222c:	3f f8       	mov	r8,-1
 8000222e:	c9 78       	rjmp	8000235c <tc_init_waveform+0x14c>
-
-  // GENERATE SIGNALS: Waveform operating mode.
-  tc->channel[opt->channel].cmr = opt->bswtrg << AVR32_TC_BSWTRG_OFFSET |
 80002230:	ee f8 ff f8 	ld.w	r8,r7[-8]
 80002234:	70 09       	ld.w	r9,r8[0x0]
 80002236:	ee f8 ff f8 	ld.w	r8,r7[-8]
@@ -356,200 +267,146 @@ int tc_init_waveform(volatile avr32_tc_t *tc, const tc_waveform_opt_t *opt)
 8000223c:	f1 d8 c3 c2 	bfextu	r8,r8,0x1e,0x2
 80002240:	5c 58       	castu.b	r8
 80002242:	f0 0a 15 1e 	lsl	r10,r8,0x1e
-                                  opt->beevt << AVR32_TC_BEEVT_OFFSET |
 80002246:	ee f8 ff f8 	ld.w	r8,r7[-8]
 8000224a:	70 18       	ld.w	r8,r8[0x4]
 8000224c:	f1 d8 c3 82 	bfextu	r8,r8,0x1c,0x2
 80002250:	5c 58       	castu.b	r8
 80002252:	bd 68       	lsl	r8,0x1c
 80002254:	10 4a       	or	r10,r8
-                                  opt->bcpc << AVR32_TC_BCPC_OFFSET |
 80002256:	ee f8 ff f8 	ld.w	r8,r7[-8]
 8000225a:	70 18       	ld.w	r8,r8[0x4]
 8000225c:	f1 d8 c3 42 	bfextu	r8,r8,0x1a,0x2
 80002260:	5c 58       	castu.b	r8
 80002262:	bb 68       	lsl	r8,0x1a
 80002264:	10 4a       	or	r10,r8
-                                  opt->bcpb << AVR32_TC_BCPB_OFFSET |
 80002266:	ee f8 ff f8 	ld.w	r8,r7[-8]
 8000226a:	70 18       	ld.w	r8,r8[0x4]
 8000226c:	f1 d8 c3 02 	bfextu	r8,r8,0x18,0x2
 80002270:	5c 58       	castu.b	r8
 80002272:	b9 68       	lsl	r8,0x18
 80002274:	10 4a       	or	r10,r8
-                                  opt->aswtrg << AVR32_TC_ASWTRG_OFFSET |
 80002276:	ee f8 ff f8 	ld.w	r8,r7[-8]
 8000227a:	70 18       	ld.w	r8,r8[0x4]
 8000227c:	f1 d8 c2 c2 	bfextu	r8,r8,0x16,0x2
 80002280:	5c 58       	castu.b	r8
 80002282:	b7 68       	lsl	r8,0x16
 80002284:	10 4a       	or	r10,r8
-                                  opt->aeevt << AVR32_TC_AEEVT_OFFSET |
 80002286:	ee f8 ff f8 	ld.w	r8,r7[-8]
 8000228a:	70 18       	ld.w	r8,r8[0x4]
 8000228c:	f1 d8 c2 82 	bfextu	r8,r8,0x14,0x2
 80002290:	5c 58       	castu.b	r8
 80002292:	b5 68       	lsl	r8,0x14
 80002294:	10 4a       	or	r10,r8
-                                  opt->acpc << AVR32_TC_ACPC_OFFSET |
 80002296:	ee f8 ff f8 	ld.w	r8,r7[-8]
 8000229a:	70 18       	ld.w	r8,r8[0x4]
 8000229c:	f1 d8 c2 42 	bfextu	r8,r8,0x12,0x2
 800022a0:	5c 58       	castu.b	r8
 800022a2:	b3 68       	lsl	r8,0x12
 800022a4:	10 4a       	or	r10,r8
-                                  opt->acpa << AVR32_TC_ACPA_OFFSET |
 800022a6:	ee f8 ff f8 	ld.w	r8,r7[-8]
 800022aa:	70 18       	ld.w	r8,r8[0x4]
 800022ac:	f1 d8 c2 02 	bfextu	r8,r8,0x10,0x2
 800022b0:	5c 58       	castu.b	r8
 800022b2:	b1 68       	lsl	r8,0x10
 800022b4:	f5 e8 10 08 	or	r8,r10,r8
-                                  1 << AVR32_TC_WAVE_OFFSET |
 800022b8:	10 9a       	mov	r10,r8
 800022ba:	af ba       	sbr	r10,0xf
-                                  opt->wavsel << AVR32_TC_WAVSEL_OFFSET |
 800022bc:	ee f8 ff f8 	ld.w	r8,r7[-8]
 800022c0:	70 18       	ld.w	r8,r8[0x4]
 800022c2:	f1 d8 c1 a2 	bfextu	r8,r8,0xd,0x2
 800022c6:	5c 58       	castu.b	r8
 800022c8:	ad 78       	lsl	r8,0xd
 800022ca:	10 4a       	or	r10,r8
-                                  opt->enetrg << AVR32_TC_ENETRG_OFFSET |
 800022cc:	ee f8 ff f8 	ld.w	r8,r7[-8]
 800022d0:	70 18       	ld.w	r8,r8[0x4]
 800022d2:	f1 d8 c1 81 	bfextu	r8,r8,0xc,0x1
 800022d6:	5c 58       	castu.b	r8
 800022d8:	ad 68       	lsl	r8,0xc
 800022da:	10 4a       	or	r10,r8
-                                  opt->eevt << AVR32_TC_EEVT_OFFSET |
 800022dc:	ee f8 ff f8 	ld.w	r8,r7[-8]
 800022e0:	70 18       	ld.w	r8,r8[0x4]
 800022e2:	f1 d8 c1 42 	bfextu	r8,r8,0xa,0x2
 800022e6:	5c 58       	castu.b	r8
 800022e8:	ab 68       	lsl	r8,0xa
 800022ea:	10 4a       	or	r10,r8
-                                  opt->eevtedg << AVR32_TC_EEVTEDG_OFFSET |
 800022ec:	ee f8 ff f8 	ld.w	r8,r7[-8]
 800022f0:	70 18       	ld.w	r8,r8[0x4]
 800022f2:	f1 d8 c1 02 	bfextu	r8,r8,0x8,0x2
 800022f6:	5c 58       	castu.b	r8
 800022f8:	a9 68       	lsl	r8,0x8
 800022fa:	10 4a       	or	r10,r8
-                                  opt->cpcdis << AVR32_TC_CPCDIS_OFFSET |
 800022fc:	ee f8 ff f8 	ld.w	r8,r7[-8]
 80002300:	70 18       	ld.w	r8,r8[0x4]
 80002302:	f1 d8 c0 e1 	bfextu	r8,r8,0x7,0x1
 80002306:	5c 58       	castu.b	r8
 80002308:	a7 78       	lsl	r8,0x7
 8000230a:	10 4a       	or	r10,r8
-                                  opt->cpcstop << AVR32_TC_CPCSTOP_OFFSET |
 8000230c:	ee f8 ff f8 	ld.w	r8,r7[-8]
 80002310:	70 18       	ld.w	r8,r8[0x4]
 80002312:	f1 d8 c0 c1 	bfextu	r8,r8,0x6,0x1
 80002316:	5c 58       	castu.b	r8
 80002318:	a7 68       	lsl	r8,0x6
 8000231a:	10 4a       	or	r10,r8
-                                  opt->burst << AVR32_TC_BURST_OFFSET |
 8000231c:	ee f8 ff f8 	ld.w	r8,r7[-8]
 80002320:	70 18       	ld.w	r8,r8[0x4]
 80002322:	f1 d8 c0 82 	bfextu	r8,r8,0x4,0x2
 80002326:	5c 58       	castu.b	r8
 80002328:	a5 68       	lsl	r8,0x4
 8000232a:	10 4a       	or	r10,r8
-                                  opt->clki << AVR32_TC_CLKI_OFFSET |
 8000232c:	ee f8 ff f8 	ld.w	r8,r7[-8]
 80002330:	70 18       	ld.w	r8,r8[0x4]
 80002332:	f1 d8 c0 61 	bfextu	r8,r8,0x3,0x1
 80002336:	5c 58       	castu.b	r8
 80002338:	a3 78       	lsl	r8,0x3
 8000233a:	10 4a       	or	r10,r8
-                                  opt->tcclks << AVR32_TC_TCCLKS_OFFSET;
 8000233c:	ee f8 ff f8 	ld.w	r8,r7[-8]
 80002340:	70 18       	ld.w	r8,r8[0x4]
 80002342:	f1 d8 c0 03 	bfextu	r8,r8,0x0,0x3
 80002346:	5c 58       	castu.b	r8
-  // Check for valid input.
-  if (opt->channel >= TC_NUMBER_OF_CHANNELS)
-    return TC_INVALID_ARGUMENT;
-
-  // GENERATE SIGNALS: Waveform operating mode.
-  tc->channel[opt->channel].cmr = opt->bswtrg << AVR32_TC_BSWTRG_OFFSET |
 80002348:	f5 e8 10 08 	or	r8,r10,r8
 8000234c:	10 9a       	mov	r10,r8
 8000234e:	ee f8 ff fc 	ld.w	r8,r7[-4]
 80002352:	a5 69       	lsl	r9,0x4
 80002354:	2f f9       	sub	r9,-1
 80002356:	f0 09 09 2a 	st.w	r8[r9<<0x2],r10
-                                  opt->cpcstop << AVR32_TC_CPCSTOP_OFFSET |
-                                  opt->burst << AVR32_TC_BURST_OFFSET |
-                                  opt->clki << AVR32_TC_CLKI_OFFSET |
-                                  opt->tcclks << AVR32_TC_TCCLKS_OFFSET;
-
-  return 0;
 8000235a:	30 08       	mov	r8,0
-}
 8000235c:	10 9c       	mov	r12,r8
 8000235e:	2f ed       	sub	sp,-8
 80002360:	e3 cd 80 80 	ldm	sp++,r7,pc
 
 80002364 <tc_start>:
-
-
-int tc_start(volatile avr32_tc_t *tc, unsigned int channel)
-{
 80002364:	eb cd 40 80 	pushm	r7,lr
 80002368:	1a 97       	mov	r7,sp
 8000236a:	20 2d       	sub	sp,8
 8000236c:	ef 4c ff fc 	st.w	r7[-4],r12
 80002370:	ef 4b ff f8 	st.w	r7[-8],r11
-  // Check for valid input.
-  if (channel >= TC_NUMBER_OF_CHANNELS)
 80002374:	ee f8 ff f8 	ld.w	r8,r7[-8]
 80002378:	58 28       	cp.w	r8,2
 8000237a:	e0 88 00 04 	brls	80002382 <tc_start+0x1e>
-    return TC_INVALID_ARGUMENT;
 8000237e:	3f f8       	mov	r8,-1
 80002380:	c0 b8       	rjmp	80002396 <tc_start+0x32>
-
-  // Enable, reset and start the selected timer/counter channel.
-  tc->channel[channel].ccr = AVR32_TC_SWTRG_MASK | AVR32_TC_CLKEN_MASK;
 80002382:	ee f8 ff f8 	ld.w	r8,r7[-8]
 80002386:	ee f9 ff fc 	ld.w	r9,r7[-4]
 8000238a:	a7 68       	lsl	r8,0x6
 8000238c:	f2 08 00 08 	add	r8,r9,r8
 80002390:	30 59       	mov	r9,5
 80002392:	91 09       	st.w	r8[0x0],r9
-
-  return 0;
 80002394:	30 08       	mov	r8,0
-}
 80002396:	10 9c       	mov	r12,r8
 80002398:	2f ed       	sub	sp,-8
 8000239a:	e3 cd 80 80 	ldm	sp++,r7,pc
 
 8000239e <tc_read_sr>:
-  tc->bcr = AVR32_TC_BCR_SYNC_MASK;
-}
-
-
-int tc_read_sr(volatile avr32_tc_t *tc, unsigned int channel)
-{
 8000239e:	eb cd 40 80 	pushm	r7,lr
 800023a2:	1a 97       	mov	r7,sp
 800023a4:	20 2d       	sub	sp,8
 800023a6:	ef 4c ff fc 	st.w	r7[-4],r12
 800023aa:	ef 4b ff f8 	st.w	r7[-8],r11
-  // Check for valid input.
-  if (channel >= TC_NUMBER_OF_CHANNELS)
 800023ae:	ee f8 ff f8 	ld.w	r8,r7[-8]
 800023b2:	58 28       	cp.w	r8,2
 800023b4:	e0 88 00 04 	brls	800023bc <tc_read_sr+0x1e>
-    return TC_INVALID_ARGUMENT;
 800023b8:	3f f8       	mov	r8,-1
 800023ba:	c0 b8       	rjmp	800023d0 <tc_read_sr+0x32>
-
-  return tc->channel[channel].sr;
 800023bc:	ee f8 ff f8 	ld.w	r8,r7[-8]
 800023c0:	ee f9 ff fc 	ld.w	r9,r7[-4]
 800023c4:	a1 78       	lsl	r8,0x1
@@ -557,18 +414,11 @@ int tc_read_sr(volatile avr32_tc_t *tc, unsigned int channel)
 800023c8:	a5 78       	lsl	r8,0x5
 800023ca:	f2 08 00 08 	add	r8,r9,r8
 800023ce:	70 08       	ld.w	r8,r8[0x0]
-}
 800023d0:	10 9c       	mov	r12,r8
 800023d2:	2f ed       	sub	sp,-8
 800023d4:	e3 cd 80 80 	ldm	sp++,r7,pc
 
 800023d8 <tc_write_rc>:
-  return value;
-}
-
-
-int tc_write_rc(volatile avr32_tc_t *tc, unsigned int channel, unsigned short value)
-{
 800023d8:	eb cd 40 80 	pushm	r7,lr
 800023dc:	1a 97       	mov	r7,sp
 800023de:	20 3d       	sub	sp,12
@@ -576,17 +426,11 @@ int tc_write_rc(volatile avr32_tc_t *tc, unsigned int channel, unsigned short va
 800023e4:	ef 4b ff f8 	st.w	r7[-8],r11
 800023e8:	14 98       	mov	r8,r10
 800023ea:	ef 58 ff f4 	st.h	r7[-12],r8
-  // Check for valid input.
-  if (channel >= TC_NUMBER_OF_CHANNELS)
 800023ee:	ee f8 ff f8 	ld.w	r8,r7[-8]
 800023f2:	58 28       	cp.w	r8,2
 800023f4:	e0 88 00 04 	brls	800023fc <tc_write_rc+0x24>
-    return TC_INVALID_ARGUMENT;
 800023f8:	3f f8       	mov	r8,-1
 800023fa:	c2 78       	rjmp	80002448 <tc_write_rc+0x70>
-
-  // This function is only available in WAVEFORM mode.
-  if (Tst_bits(tc->channel[channel].cmr, AVR32_TC_WAVE_MASK))
 800023fc:	ee f9 ff f8 	ld.w	r9,r7[-8]
 80002400:	ee f8 ff fc 	ld.w	r8,r7[-4]
 80002404:	a5 69       	lsl	r9,0x4
@@ -594,7 +438,6 @@ int tc_write_rc(volatile avr32_tc_t *tc, unsigned int channel, unsigned short va
 80002408:	f0 09 03 28 	ld.w	r8,r8[r9<<0x2]
 8000240c:	e2 18 80 00 	andl	r8,0x8000,COH
 80002410:	c1 a0       	breq	80002444 <tc_write_rc+0x6c>
-    Wr_bitfield(tc->channel[channel].rc, AVR32_TC_RC_MASK, value);
 80002412:	ee f8 ff f8 	ld.w	r8,r7[-8]
 80002416:	ee f9 ff f8 	ld.w	r9,r7[-8]
 8000241a:	ee fa ff fc 	ld.w	r10,r7[-4]
@@ -611,10 +454,7 @@ int tc_write_rc(volatile avr32_tc_t *tc, unsigned int channel, unsigned short va
 8000243c:	f4 08 00 08 	add	r8,r10,r8
 80002440:	2e 48       	sub	r8,-28
 80002442:	91 09       	st.w	r8[0x0],r9
-
-  return value;
 80002444:	ef 18 ff f4 	ld.uh	r8,r7[-12]
-}
 80002448:	10 9c       	mov	r12,r8
 8000244a:	2f dd       	sub	sp,-12
 8000244c:	e3 cd 80 80 	ldm	sp++,r7,pc
@@ -767,7 +607,7 @@ void checkInput(void)
 8000255a:	c1 51       	brne	80002584 <checkInput+0x64>
 		{
 			case 'a':
-			startTimer();
+				startTimer();
 8000255c:	f0 1f 00 0d 	mcall	80002590 <checkInput+0x70>
 			break;
 80002560:	c1 28       	rjmp	80002584 <checkInput+0x64>
@@ -791,7 +631,7 @@ void checkInput(void)
 				resetTimer();
 8000257c:	f0 1f 00 08 	mcall	8000259c <checkInput+0x7c>
 80002580:	c0 28       	rjmp	80002584 <checkInput+0x64>
-			startTimer();
+				startTimer();
 			break;
 			case 's':
 			if (timer_running == true) // Stop only if timer is running
@@ -1079,11 +919,7 @@ void tc_init(volatile avr32_tc_t *tc)
 800027d8:	49 2b       	lddpc	r11,80002820 <tc_init+0x54>
 800027da:	ee fc ff fc 	ld.w	r12,r7[-4]
 800027de:	f0 1f 00 12 	mcall	80002824 <tc_init+0x58>
-	 * Set the compare triggers.
-	 * We configure it to count every 1 milliseconds.
-	 * We want: (1 / (fPBA / 8)) * RC = 1 ms, hence RC = (fPBA / 8) / 1000
-	 * to get an interrupt every 10 ms.
-	 */
+	// Set trigger to every 10ms, Rc = (115200/8) / 100 = 144
 	tc_write_rc(tc, TC_CHANNEL, (115200 / 8 / 100));
 800027e2:	e0 6a 00 90 	mov	r10,144
 800027e6:	30 0b       	mov	r11,0
@@ -1134,331 +970,252 @@ void tc_init(volatile avr32_tc_t *tc)
 80002842:	2d 64       	sub	r4,-42
 
 80002844 <USART_init>:
-#include "USART_driver.h"
-
-void USART_init(volatile avr32_usart_t * usart)
-{
 80002844:	eb cd 40 80 	pushm	r7,lr
 80002848:	1a 97       	mov	r7,sp
 8000284a:	20 2d       	sub	sp,8
 8000284c:	ef 4c ff f8 	st.w	r7[-8],r12
-	USART_reset(); //Resets the mode register and the Control register.
 80002850:	f0 1f 00 92 	mcall	80002a98 <USART_init+0x254>
-	// Mode register init
-	usart->MR.onebit		= 0; //Start Frame Delimiter Selector - Start Frame delimiter is COMMAND or DATA SYNC.
 80002854:	ee f9 ff f8 	ld.w	r9,r7[-8]
 80002858:	72 18       	ld.w	r8,r9[0x4]
 8000285a:	30 0a       	mov	r10,0
 8000285c:	f1 da d3 e1 	bfins	r8,r10,0x1f,0x1
 80002860:	93 18       	st.w	r9[0x4],r8
-	usart->MR.modsync		= 0; //Manchester Synchronization Mod - The Manchester Start bit is a 0 to 1 transition.
 80002862:	ee f9 ff f8 	ld.w	r9,r7[-8]
 80002866:	72 18       	ld.w	r8,r9[0x4]
 80002868:	30 0a       	mov	r10,0
 8000286a:	f1 da d3 c1 	bfins	r8,r10,0x1e,0x1
 8000286e:	93 18       	st.w	r9[0x4],r8
-	usart->MR.man			= 0; //Manchester Encoder/Decoder Enable - Manchester Encoder/Decoder are disabled.
 80002870:	ee f9 ff f8 	ld.w	r9,r7[-8]
 80002874:	72 18       	ld.w	r8,r9[0x4]
 80002876:	30 0a       	mov	r10,0
 80002878:	f1 da d3 a1 	bfins	r8,r10,0x1d,0x1
 8000287c:	93 18       	st.w	r9[0x4],r8
-	usart->MR.filter		= 0; //Infrared Receive Line Filter - The USART does not filter the receive line.
 8000287e:	ee f9 ff f8 	ld.w	r9,r7[-8]
 80002882:	72 18       	ld.w	r8,r9[0x4]
 80002884:	30 0a       	mov	r10,0
 80002886:	f1 da d3 81 	bfins	r8,r10,0x1c,0x1
 8000288a:	93 18       	st.w	r9[0x4],r8
-	usart->MR.max_iteration = 0; //MAX_ITERATION - Defines the maximum number of iterations in mode ISO7816, protocol T= 0.
 8000288c:	ee f9 ff f8 	ld.w	r9,r7[-8]
 80002890:	72 18       	ld.w	r8,r9[0x4]
 80002892:	30 0a       	mov	r10,0
 80002894:	f1 da d3 03 	bfins	r8,r10,0x18,0x3
 80002898:	93 18       	st.w	r9[0x4],r8
-	usart->MR.var_sync		= 0; //Variable Synchronization of Command/Data Sync Start Frame Delimiter - User defined configuration of command or data sync field depending on SYNC value.
 8000289a:	ee f9 ff f8 	ld.w	r9,r7[-8]
 8000289e:	72 18       	ld.w	r8,r9[0x4]
 800028a0:	30 0a       	mov	r10,0
 800028a2:	f1 da d2 c1 	bfins	r8,r10,0x16,0x1
 800028a6:	93 18       	st.w	r9[0x4],r8
-	usart->MR.dsnack		= 0; //Disable Successive NACK -  NACK is sent on the ISO line as soon as a parity error occurs in the received character (unless INACK is set).
 800028a8:	ee f9 ff f8 	ld.w	r9,r7[-8]
 800028ac:	72 18       	ld.w	r8,r9[0x4]
 800028ae:	30 0a       	mov	r10,0
 800028b0:	f1 da d2 a1 	bfins	r8,r10,0x15,0x1
 800028b4:	93 18       	st.w	r9[0x4],r8
-	usart->MR.inack			= 0; //Inhibit Non Acknowledge - The NACK is generated.
 800028b6:	ee f9 ff f8 	ld.w	r9,r7[-8]
 800028ba:	72 18       	ld.w	r8,r9[0x4]
 800028bc:	30 0a       	mov	r10,0
 800028be:	f1 da d2 81 	bfins	r8,r10,0x14,0x1
 800028c2:	93 18       	st.w	r9[0x4],r8
-	usart->MR.over          = 1; //Oversampling Mode - 8x Oversampling.
 800028c4:	ee f9 ff f8 	ld.w	r9,r7[-8]
 800028c8:	72 18       	ld.w	r8,r9[0x4]
 800028ca:	30 1a       	mov	r10,1
 800028cc:	f1 da d2 61 	bfins	r8,r10,0x13,0x1
 800028d0:	93 18       	st.w	r9[0x4],r8
-	usart->MR.clko          = 0; //Clock Output Select - The USART does not drive the CLK pin.
 800028d2:	ee f9 ff f8 	ld.w	r9,r7[-8]
 800028d6:	72 18       	ld.w	r8,r9[0x4]
 800028d8:	30 0a       	mov	r10,0
 800028da:	f1 da d2 41 	bfins	r8,r10,0x12,0x1
 800028de:	93 18       	st.w	r9[0x4],r8
-	usart->MR.mode9         = 0; //9-bit Character Length - CTRL defines the character length.
 800028e0:	ee f9 ff f8 	ld.w	r9,r7[-8]
 800028e4:	72 18       	ld.w	r8,r9[0x4]
 800028e6:	30 0a       	mov	r10,0
 800028e8:	f1 da d2 21 	bfins	r8,r10,0x11,0x1
 800028ec:	93 18       	st.w	r9[0x4],r8
-	usart->MR.msbf          = 0; //Bit Order or SPI Clock Polarity - Least Significant Bit is sent/received first.
 800028ee:	ee f9 ff f8 	ld.w	r9,r7[-8]
 800028f2:	72 18       	ld.w	r8,r9[0x4]
 800028f4:	30 0a       	mov	r10,0
 800028f6:	f1 da d2 01 	bfins	r8,r10,0x10,0x1
 800028fa:	93 18       	st.w	r9[0x4],r8
-	usart->MR.chmode        = 0; //Channel Mode - Normal Mode (0 0).
 800028fc:	ee f9 ff f8 	ld.w	r9,r7[-8]
 80002900:	72 18       	ld.w	r8,r9[0x4]
 80002902:	30 0a       	mov	r10,0
 80002904:	f1 da d1 c2 	bfins	r8,r10,0xe,0x2
 80002908:	93 18       	st.w	r9[0x4],r8
-	usart->MR.nbstop        = 0; //Number of Stop Bits - 1 stop bit (0 0).
 8000290a:	ee f9 ff f8 	ld.w	r9,r7[-8]
 8000290e:	72 18       	ld.w	r8,r9[0x4]
 80002910:	30 0a       	mov	r10,0
 80002912:	f1 da d1 82 	bfins	r8,r10,0xc,0x2
 80002916:	93 18       	st.w	r9[0x4],r8
-	usart->MR.par           = 4; //Parity Type - No parity (1 0).
 80002918:	ee f9 ff f8 	ld.w	r9,r7[-8]
 8000291c:	72 18       	ld.w	r8,r9[0x4]
 8000291e:	30 4a       	mov	r10,4
 80002920:	f1 da d1 23 	bfins	r8,r10,0x9,0x3
 80002924:	93 18       	st.w	r9[0x4],r8
-	usart->MR.sync          = 0; //Synchronous Mode Select or SPI Clock Phase - USART operates in Asynchronous Mode.
 80002926:	ee f9 ff f8 	ld.w	r9,r7[-8]
 8000292a:	72 18       	ld.w	r8,r9[0x4]
 8000292c:	30 0a       	mov	r10,0
 8000292e:	f1 da d1 01 	bfins	r8,r10,0x8,0x1
 80002932:	93 18       	st.w	r9[0x4],r8
-	usart->MR.chrl          = 3; //Character Length - 8 bits (1 1).
 80002934:	ee f9 ff f8 	ld.w	r9,r7[-8]
 80002938:	72 18       	ld.w	r8,r9[0x4]
 8000293a:	30 3a       	mov	r10,3
 8000293c:	f1 da d0 c2 	bfins	r8,r10,0x6,0x2
 80002940:	93 18       	st.w	r9[0x4],r8
-	usart->MR.usclks        = 0; //Clock Selection - CLK_USART (0 0).
 80002942:	ee f9 ff f8 	ld.w	r9,r7[-8]
 80002946:	72 18       	ld.w	r8,r9[0x4]
 80002948:	30 0a       	mov	r10,0
 8000294a:	f1 da d0 82 	bfins	r8,r10,0x4,0x2
 8000294e:	93 18       	st.w	r9[0x4],r8
-	usart->MR.mode          = 0; //Mode - Normal (0 0).
 80002950:	ee f9 ff f8 	ld.w	r9,r7[-8]
 80002954:	72 18       	ld.w	r8,r9[0x4]
 80002956:	30 0a       	mov	r10,0
 80002958:	f1 da d0 04 	bfins	r8,r10,0x0,0x4
 8000295c:	93 18       	st.w	r9[0x4],r8
-	
-	// Control register init
-	usart->CR.rtsdis		= 0; //Request to Send Disable/Release SPI Chip Select - No effect. Does not operate in Master/Slave mode.
 8000295e:	ee f9 ff f8 	ld.w	r9,r7[-8]
 80002962:	72 08       	ld.w	r8,r9[0x0]
 80002964:	30 0a       	mov	r10,0
 80002966:	f1 da d2 61 	bfins	r8,r10,0x13,0x1
 8000296a:	93 08       	st.w	r9[0x0],r8
-	usart->CR.rtsen         = 0; //Request to Send Enable/Force SPI Chip Select - No effect. Does not operate in Master/Slave mode.
 8000296c:	ee f9 ff f8 	ld.w	r9,r7[-8]
 80002970:	72 08       	ld.w	r8,r9[0x0]
 80002972:	30 0a       	mov	r10,0
 80002974:	f1 da d2 41 	bfins	r8,r10,0x12,0x1
 80002978:	93 08       	st.w	r9[0x0],r8
-	usart->CR.retto         = 0; //Rearm Time-out - No effect.
 8000297a:	ee f9 ff f8 	ld.w	r9,r7[-8]
 8000297e:	72 08       	ld.w	r8,r9[0x0]
 80002980:	30 0a       	mov	r10,0
 80002982:	f1 da d1 e1 	bfins	r8,r10,0xf,0x1
 80002986:	93 08       	st.w	r9[0x0],r8
-	usart->CR.rstnack       = 0; //Reset Non Acknowledge - No effect.
 80002988:	ee f9 ff f8 	ld.w	r9,r7[-8]
 8000298c:	72 08       	ld.w	r8,r9[0x0]
 8000298e:	30 0a       	mov	r10,0
 80002990:	f1 da d1 c1 	bfins	r8,r10,0xe,0x1
 80002994:	93 08       	st.w	r9[0x0],r8
-	usart->CR.rstit         = 0; //Reset Iterations - No effect.
 80002996:	ee f9 ff f8 	ld.w	r9,r7[-8]
 8000299a:	72 08       	ld.w	r8,r9[0x0]
 8000299c:	30 0a       	mov	r10,0
 8000299e:	f1 da d1 a1 	bfins	r8,r10,0xd,0x1
 800029a2:	93 08       	st.w	r9[0x0],r8
-	usart->CR.senda         = 0; //Send Address - No effect.
 800029a4:	ee f9 ff f8 	ld.w	r9,r7[-8]
 800029a8:	72 08       	ld.w	r8,r9[0x0]
 800029aa:	30 0a       	mov	r10,0
 800029ac:	f1 da d1 81 	bfins	r8,r10,0xc,0x1
 800029b0:	93 08       	st.w	r9[0x0],r8
-	usart->CR.sttto         = 0; //Start Time-out - No effect.
 800029b2:	ee f9 ff f8 	ld.w	r9,r7[-8]
 800029b6:	72 08       	ld.w	r8,r9[0x0]
 800029b8:	30 0a       	mov	r10,0
 800029ba:	f1 da d1 61 	bfins	r8,r10,0xb,0x1
 800029be:	93 08       	st.w	r9[0x0],r8
-	usart->CR.stpbrk        = 0; //Stop Break - No effect.
 800029c0:	ee f9 ff f8 	ld.w	r9,r7[-8]
 800029c4:	72 08       	ld.w	r8,r9[0x0]
 800029c6:	30 0a       	mov	r10,0
 800029c8:	f1 da d1 41 	bfins	r8,r10,0xa,0x1
 800029cc:	93 08       	st.w	r9[0x0],r8
-	usart->CR.sttbrk        = 0; //Start Break - No effect.
 800029ce:	ee f9 ff f8 	ld.w	r9,r7[-8]
 800029d2:	72 08       	ld.w	r8,r9[0x0]
 800029d4:	30 0a       	mov	r10,0
 800029d6:	f1 da d1 21 	bfins	r8,r10,0x9,0x1
 800029da:	93 08       	st.w	r9[0x0],r8
-	usart->CR.rststa        = 0; //Reset Status Bits - No effect.
 800029dc:	ee f9 ff f8 	ld.w	r9,r7[-8]
 800029e0:	72 08       	ld.w	r8,r9[0x0]
 800029e2:	30 0a       	mov	r10,0
 800029e4:	f1 da d1 01 	bfins	r8,r10,0x8,0x1
 800029e8:	93 08       	st.w	r9[0x0],r8
-	usart->CR.txdis         = 0; //Transmitter Disable - No effect.
 800029ea:	ee f9 ff f8 	ld.w	r9,r7[-8]
 800029ee:	72 08       	ld.w	r8,r9[0x0]
 800029f0:	30 0a       	mov	r10,0
 800029f2:	f1 da d0 e1 	bfins	r8,r10,0x7,0x1
 800029f6:	93 08       	st.w	r9[0x0],r8
-	usart->CR.txen          = 1; //Transmitter Enable. Enables the transmitter if TXDIS is 0.
 800029f8:	ee f9 ff f8 	ld.w	r9,r7[-8]
 800029fc:	72 08       	ld.w	r8,r9[0x0]
 800029fe:	30 1a       	mov	r10,1
 80002a00:	f1 da d0 c1 	bfins	r8,r10,0x6,0x1
 80002a04:	93 08       	st.w	r9[0x0],r8
-	usart->CR.rxdis         = 0; //Receiver Disable - No effect.
 80002a06:	ee f9 ff f8 	ld.w	r9,r7[-8]
 80002a0a:	72 08       	ld.w	r8,r9[0x0]
 80002a0c:	30 0a       	mov	r10,0
 80002a0e:	f1 da d0 a1 	bfins	r8,r10,0x5,0x1
 80002a12:	93 08       	st.w	r9[0x0],r8
-	usart->CR.rxen          = 1; //Receiver Enable. Enables the receiver, if RXDIS is 0.
 80002a14:	ee f9 ff f8 	ld.w	r9,r7[-8]
 80002a18:	72 08       	ld.w	r8,r9[0x0]
 80002a1a:	30 1a       	mov	r10,1
 80002a1c:	f1 da d0 81 	bfins	r8,r10,0x4,0x1
 80002a20:	93 08       	st.w	r9[0x0],r8
-	usart->CR.rsttx         = 0; //Reset Transmitter - No effect.
 80002a22:	ee f9 ff f8 	ld.w	r9,r7[-8]
 80002a26:	72 08       	ld.w	r8,r9[0x0]
 80002a28:	30 0a       	mov	r10,0
 80002a2a:	f1 da d0 61 	bfins	r8,r10,0x3,0x1
 80002a2e:	93 08       	st.w	r9[0x0],r8
-	usart->CR.rstrx         = 0; //Reset Receiver - No effect.
 80002a30:	ee f9 ff f8 	ld.w	r9,r7[-8]
 80002a34:	72 08       	ld.w	r8,r9[0x0]
 80002a36:	30 0a       	mov	r10,0
 80002a38:	f1 da d0 41 	bfins	r8,r10,0x2,0x1
 80002a3c:	93 08       	st.w	r9[0x0],r8
-	
-	//BaudRateGeneratorRegister
-	//Clock frequency = 115200 Hz
-	//Baud Rate = 9600
-	//CD + (FP/8) = Selected clock / (8 * Baudrate)
-	usart->BRGR.fp			= 4; //Fractional Part.
 80002a3e:	ee f9 ff f8 	ld.w	r9,r7[-8]
 80002a42:	72 88       	ld.w	r8,r9[0x20]
 80002a44:	30 4a       	mov	r10,4
 80002a46:	f1 da d2 03 	bfins	r8,r10,0x10,0x3
 80002a4a:	93 88       	st.w	r9[0x20],r8
-	usart->BRGR.cd          = 1; //Clock Divider.
 80002a4c:	ee f9 ff f8 	ld.w	r9,r7[-8]
 80002a50:	72 88       	ld.w	r8,r9[0x20]
 80002a52:	30 1a       	mov	r10,1
 80002a54:	f1 da d0 10 	bfins	r8,r10,0x0,0x10
 80002a58:	93 88       	st.w	r9[0x20],r8
-	
-	volatile avr32_gpio_port_t * usart_gpio;
-	//Set as peripheral ports instead of GPIO ports.
-	usart_gpio = &AVR32_GPIO.port[USART_RXD_PIN/GPIO_MAX_PIN_NUMBER];
 80002a5a:	fe 78 10 00 	mov	r8,-61440
 80002a5e:	ef 48 ff fc 	st.w	r7[-4],r8
-	usart_gpio->pmr0c = 1 << (USART_RXD_PIN & 0x1F); //Peripheral MUX register
 80002a62:	ee f8 ff fc 	ld.w	r8,r7[-4]
 80002a66:	32 09       	mov	r9,32
 80002a68:	91 69       	st.w	r8[0x18],r9
-	usart_gpio->pmr1c = 1 << (USART_RXD_PIN & 0x1F); //1 << (5 & 31)
 80002a6a:	ee f8 ff fc 	ld.w	r8,r7[-4]
 80002a6e:	32 09       	mov	r9,32
 80002a70:	91 a9       	st.w	r8[0x28],r9
-	usart_gpio->gperc = 1 << (USART_RXD_PIN & 0x1F); //Disables GPIO on receiver pin.
 80002a72:	ee f8 ff fc 	ld.w	r8,r7[-4]
 80002a76:	32 09       	mov	r9,32
 80002a78:	91 29       	st.w	r8[0x8],r9
-	
-	usart_gpio->pmr0c = 1 << (USART_TXD_PIN & 0x1F); //1 << (6 & 31)
 80002a7a:	ee f8 ff fc 	ld.w	r8,r7[-4]
 80002a7e:	34 09       	mov	r9,64
 80002a80:	91 69       	st.w	r8[0x18],r9
-	usart_gpio->pmr1c = 1 << (USART_TXD_PIN & 0x1F);
 80002a82:	ee f8 ff fc 	ld.w	r8,r7[-4]
 80002a86:	34 09       	mov	r9,64
 80002a88:	91 a9       	st.w	r8[0x28],r9
-	usart_gpio->gperc = 1 << (USART_TXD_PIN & 0x1F); //Disables GPIO on transmitter pin.
 80002a8a:	ee f8 ff fc 	ld.w	r8,r7[-4]
 80002a8e:	34 09       	mov	r9,64
 80002a90:	91 29       	st.w	r8[0x8],r9
-}
 80002a92:	2f ed       	sub	sp,-8
 80002a94:	e3 cd 80 80 	ldm	sp++,r7,pc
 80002a98:	80 00       	ld.sh	r0,r0[0x0]
 80002a9a:	2c 18       	sub	r8,-63
 
 80002a9c <USART_getChar>:
-
-char USART_getChar()
-{
 80002a9c:	eb cd 40 80 	pushm	r7,lr
 80002aa0:	1a 97       	mov	r7,sp
 80002aa2:	20 1d       	sub	sp,4
-	volatile avr32_usart_t * usart = USART;
 80002aa4:	fe 78 18 00 	mov	r8,-59392
 80002aa8:	ef 48 ff fc 	st.w	r7[-4],r8
-	while(usart->CSR.rxrdy == 0) //Checks the Control Status Register if there is a character received ready to be read.
 80002aac:	ee f8 ff fc 	ld.w	r8,r7[-4]
 80002ab0:	70 58       	ld.w	r8,r8[0x14]
 80002ab2:	f1 d8 c0 01 	bfextu	r8,r8,0x0,0x1
 80002ab6:	cf b0       	breq	80002aac <USART_getChar+0x10>
-	{}
-	return usart->RHR.rxchr; // Returns the character in the Receive Holding Register.
 80002ab8:	ee f8 ff fc 	ld.w	r8,r7[-4]
 80002abc:	70 68       	ld.w	r8,r8[0x18]
 80002abe:	f1 d8 c0 09 	bfextu	r8,r8,0x0,0x9
 80002ac2:	5c 88       	casts.h	r8
 80002ac4:	5c 58       	castu.b	r8
-}
 80002ac6:	10 9c       	mov	r12,r8
 80002ac8:	2f fd       	sub	sp,-4
 80002aca:	e3 cd 80 80 	ldm	sp++,r7,pc
 
 80002ace <USART_putChar>:
-
-void USART_putChar(char c)
-{
 80002ace:	eb cd 40 80 	pushm	r7,lr
 80002ad2:	1a 97       	mov	r7,sp
 80002ad4:	20 2d       	sub	sp,8
 80002ad6:	18 98       	mov	r8,r12
 80002ad8:	ef 68 ff f8 	st.b	r7[-8],r8
-	volatile avr32_usart_t * usart = USART;
 80002adc:	fe 78 18 00 	mov	r8,-59392
 80002ae0:	ef 48 ff fc 	st.w	r7[-4],r8
-
-	while(usart->CSR.txrdy == 0) //Checks the Control Status Register if ready to transmit.
 80002ae4:	ee f8 ff fc 	ld.w	r8,r7[-4]
 80002ae8:	70 58       	ld.w	r8,r8[0x14]
 80002aea:	e2 18 00 02 	andl	r8,0x2,COH
 80002aee:	cf b0       	breq	80002ae4 <USART_putChar+0x16>
-	{		
-	}
-	USART->THR.txchr = c; //Sends a character to the transmit holding register ( c << AVR32_USART_THR_TXCHR_OFFSET) & AVR32_USART_THR_TXCHR_MASK;
 80002af0:	fe 79 18 00 	mov	r9,-59392
 80002af4:	ef 38 ff f8 	ld.ub	r8,r7[-8]
 80002af8:	f1 d8 c0 09 	bfextu	r8,r8,0x0,0x9
@@ -1466,66 +1223,39 @@ void USART_putChar(char c)
 80002b00:	72 78       	ld.w	r8,r9[0x1c]
 80002b02:	f1 da d0 09 	bfins	r8,r10,0x0,0x9
 80002b06:	93 78       	st.w	r9[0x1c],r8
-}
 80002b08:	2f ed       	sub	sp,-8
 80002b0a:	e3 cd 80 80 	ldm	sp++,r7,pc
 80002b0e:	d7 03       	nop
 
 80002b10 <USART_putString>:
-		}
-	}
-}
-
-void USART_putString(char output_string[])
-{
 80002b10:	eb cd 40 80 	pushm	r7,lr
 80002b14:	1a 97       	mov	r7,sp
 80002b16:	20 3d       	sub	sp,12
 80002b18:	ef 4c ff f4 	st.w	r7[-12],r12
-	volatile avr32_usart_t * usart = USART;
 80002b1c:	fe 78 18 00 	mov	r8,-59392
 80002b20:	ef 48 ff f8 	st.w	r7[-8],r8
-	int i = 0;
 80002b24:	30 08       	mov	r8,0
 80002b26:	ef 48 ff fc 	st.w	r7[-4],r8
-	while (output_string[i] != '\0') // Loop till end of string
 80002b2a:	c1 68       	rjmp	80002b56 <USART_putString+0x46>
-	{
-		if (usart->CSR.txrdy != 0) // If ready to write
 80002b2c:	ee f8 ff f8 	ld.w	r8,r7[-8]
 80002b30:	70 58       	ld.w	r8,r8[0x14]
 80002b32:	e2 18 00 02 	andl	r8,0x2,COH
 80002b36:	c1 00       	breq	80002b56 <USART_putString+0x46>
-		{
-			USART_putChar(output_string[i]); // Write the next char in line
 80002b38:	ee f8 ff fc 	ld.w	r8,r7[-4]
 80002b3c:	ee f9 ff f4 	ld.w	r9,r7[-12]
 80002b40:	f2 08 00 08 	add	r8,r9,r8
 80002b44:	11 88       	ld.ub	r8,r8[0x0]
 80002b46:	10 9c       	mov	r12,r8
 80002b48:	f0 1f 00 0a 	mcall	80002b70 <USART_putString+0x60>
-			i++;
 80002b4c:	ee f8 ff fc 	ld.w	r8,r7[-4]
 80002b50:	2f f8       	sub	r8,-1
 80002b52:	ef 48 ff fc 	st.w	r7[-4],r8
-
-void USART_putString(char output_string[])
-{
-	volatile avr32_usart_t * usart = USART;
-	int i = 0;
-	while (output_string[i] != '\0') // Loop till end of string
 80002b56:	ee f8 ff fc 	ld.w	r8,r7[-4]
 80002b5a:	ee f9 ff f4 	ld.w	r9,r7[-12]
 80002b5e:	f2 08 00 08 	add	r8,r9,r8
 80002b62:	11 88       	ld.ub	r8,r8[0x0]
 80002b64:	58 08       	cp.w	r8,0
 80002b66:	ce 31       	brne	80002b2c <USART_putString+0x1c>
-		{
-			USART_putChar(output_string[i]); // Write the next char in line
-			i++;
-		}
-	}
-}
 80002b68:	2f dd       	sub	sp,-12
 80002b6a:	e3 cd 80 80 	ldm	sp++,r7,pc
 80002b6e:	00 00       	add	r0,r0
@@ -1533,35 +1263,21 @@ void USART_putString(char output_string[])
 80002b72:	2a ce       	sub	lr,-84
 
 80002b74 <USART_put2Int>:
-	
-	USART_putString(temp); // Write the int
-}
-
-void USART_put2Int(int number)
-{
 80002b74:	eb cd 40 80 	pushm	r7,lr
 80002b78:	1a 97       	mov	r7,sp
 80002b7a:	20 4d       	sub	sp,16
 80002b7c:	ef 4c ff f0 	st.w	r7[-16],r12
-	volatile avr32_usart_t * usart = USART;
 80002b80:	fe 78 18 00 	mov	r8,-59392
 80002b84:	ef 48 ff f8 	st.w	r7[-8],r8
-	char temp[3];
-	int i = sizeof(temp) - 1;
 80002b88:	30 28       	mov	r8,2
 80002b8a:	ef 48 ff fc 	st.w	r7[-4],r8
-	temp [i] = '\0';
 80002b8e:	ee f8 ff fc 	ld.w	r8,r7[-4]
 80002b92:	ee 08 00 09 	add	r9,r7,r8
 80002b96:	30 08       	mov	r8,0
 80002b98:	f3 68 ff f4 	st.b	r9[-12],r8
-	do
-	{
-		i--;
 80002b9c:	ee f8 ff fc 	ld.w	r8,r7[-4]
 80002ba0:	20 18       	sub	r8,1
 80002ba2:	ef 48 ff fc 	st.w	r7[-4],r8
-		temp[i] = '0' + number % 10;
 80002ba6:	ee fb ff fc 	ld.w	r11,r7[-4]
 80002baa:	ee fa ff f0 	ld.w	r10,r7[-16]
 80002bae:	e0 68 66 67 	mov	r8,26215
@@ -1580,7 +1296,6 @@ void USART_put2Int(int number)
 80002bd4:	5c 58       	castu.b	r8
 80002bd6:	ee 0b 00 09 	add	r9,r7,r11
 80002bda:	f3 68 ff f4 	st.b	r9[-12],r8
-		number /= 10;
 80002bde:	ee fa ff f0 	ld.w	r10,r7[-16]
 80002be2:	e0 68 66 67 	mov	r8,26215
 80002be6:	ea 18 66 66 	orh	r8,0x6666
@@ -1589,99 +1304,56 @@ void USART_put2Int(int number)
 80002bf0:	f4 08 14 1f 	asr	r8,r10,0x1f
 80002bf4:	f2 08 01 08 	sub	r8,r9,r8
 80002bf8:	ef 48 ff f0 	st.w	r7[-16],r8
-	} while(i); // Loop till end of int
 80002bfc:	ee f8 ff fc 	ld.w	r8,r7[-4]
 80002c00:	58 08       	cp.w	r8,0
 80002c02:	cc d1       	brne	80002b9c <USART_put2Int+0x28>
-	
-	USART_putString(temp); // Write the int
 80002c04:	ee c8 00 0c 	sub	r8,r7,12
 80002c08:	10 9c       	mov	r12,r8
 80002c0a:	f0 1f 00 03 	mcall	80002c14 <USART_put2Int+0xa0>
-}
 80002c0e:	2f cd       	sub	sp,-16
 80002c10:	e3 cd 80 80 	ldm	sp++,r7,pc
 80002c14:	80 00       	ld.sh	r0,r0[0x0]
 80002c16:	2b 10       	sub	r0,-79
 
 80002c18 <USART_reset>:
-
-void USART_reset()
-{
 80002c18:	eb cd 40 80 	pushm	r7,lr
 80002c1c:	1a 97       	mov	r7,sp
 80002c1e:	20 1d       	sub	sp,4
-	volatile avr32_usart_t * usart = USART;
 80002c20:	fe 78 18 00 	mov	r8,-59392
 80002c24:	ef 48 ff fc 	st.w	r7[-4],r8
-	usart->mr = 0;	 //Reset Mode register
 80002c28:	ee f8 ff fc 	ld.w	r8,r7[-4]
 80002c2c:	30 09       	mov	r9,0
 80002c2e:	91 19       	st.w	r8[0x4],r9
-	
-	//Reset Control register
-	usart->cr = AVR32_USART_CR_RSTRX_MASK   |	// Resets receiver
 80002c30:	ee f8 ff fc 	ld.w	r8,r7[-4]
 80002c34:	e8 69 61 0c 	mov	r9,549132
 80002c38:	91 09       	st.w	r8[0x0],r9
-	AVR32_USART_CR_RSTTX_MASK   |				// Resets transmitter
-	AVR32_USART_CR_RSTSTA_MASK  |				// Resets status bit in CSR
-	AVR32_USART_CR_RSTIT_MASK   |				// Reset iterations
-	AVR32_USART_CR_RSTNACK_MASK |				// Reset NACK
-	AVR32_USART_CR_RTSDIS_MASK;					// Disable Request to send
 80002c3a:	2f fd       	sub	sp,-4
 80002c3c:	e3 cd 80 80 	ldm	sp++,r7,pc
 
 80002c40 <_unhandled_interrupt>:
-__attribute__((__interrupt__))
-#elif (defined __ICCAVR32__)
-__interrupt
-#endif
-static void _unhandled_interrupt(void)
-{
 80002c40:	eb cd 40 80 	pushm	r7,lr
 80002c44:	1a 97       	mov	r7,sp
-	// Catch unregistered interrupts.
-	while (true);
 80002c46:	c0 08       	rjmp	80002c46 <_unhandled_interrupt+0x6>
 
 80002c48 <_get_interrupt_handler>:
- *
- * \return Interrupt handler to execute.
- */
-__int_handler _get_interrupt_handler(uint32_t int_level);
-__int_handler _get_interrupt_handler(uint32_t int_level)
-{
 80002c48:	eb cd 40 80 	pushm	r7,lr
 80002c4c:	1a 97       	mov	r7,sp
 80002c4e:	20 3d       	sub	sp,12
 80002c50:	ef 4c ff f4 	st.w	r7[-12],r12
-	/* ICR3 is mapped first, ICR0 last.
-	Code in exception.S puts int_level in R12 which is used by the compiler
-	to pass a single argument to a function. */
-	uint32_t int_grp = AVR32_INTC.icr[AVR32_INTC_INT3 - int_level];
 80002c54:	fe 78 08 00 	mov	r8,-63488
 80002c58:	ee f9 ff f4 	ld.w	r9,r7[-12]
 80002c5c:	f2 09 11 03 	rsub	r9,r9,3
 80002c60:	28 09       	sub	r9,-128
 80002c62:	f0 09 03 28 	ld.w	r8,r8[r9<<0x2]
 80002c66:	ef 48 ff f8 	st.w	r7[-8],r8
-	uint32_t int_req = AVR32_INTC.irr[int_grp];
 80002c6a:	fe 78 08 00 	mov	r8,-63488
 80002c6e:	ee f9 ff f8 	ld.w	r9,r7[-8]
 80002c72:	2c 09       	sub	r9,-64
 80002c74:	f0 09 03 28 	ld.w	r8,r8[r9<<0x2]
 80002c78:	ef 48 ff fc 	st.w	r7[-4],r8
-	exception.S will provide the interrupt handler with a clean interrupt
-	stack frame, with nothing more pushed onto the stack. The interrupt
-	handler must manage the `rete' instruction, which can be done using
-	pure assembly, inline assembly or the `__attribute__((__interrupt__))'
-	C function attribute.*/
-	return (int_req)
 80002c7c:	ee f8 ff fc 	ld.w	r8,r7[-4]
 80002c80:	58 08       	cp.w	r8,0
 80002c82:	c1 30       	breq	80002ca8 <_get_interrupt_handler+0x60>
-		? _int_handler_table[int_grp]._int_line_handler_table[32
 80002c84:	ee f9 ff f8 	ld.w	r9,r7[-8]
 80002c88:	48 b8       	lddpc	r8,80002cb4 <_get_interrupt_handler+0x6c>
 80002c8a:	a1 79       	lsl	r9,0x1
@@ -1690,28 +1362,11 @@ __int_handler _get_interrupt_handler(uint32_t int_level)
 80002c92:	ee f8 ff fc 	ld.w	r8,r7[-4]
 80002c96:	f0 08 12 00 	clz	r8,r8
 80002c9a:	f0 08 11 1f 	rsub	r8,r8,31
-			- clz(int_req) - 1]
 80002c9e:	a3 68       	lsl	r8,0x2
-	stack frame, with nothing more pushed onto the stack. The interrupt
-	handler must manage the `rete' instruction, which can be done using
-	pure assembly, inline assembly or the `__attribute__((__interrupt__))'
-	C function attribute.*/
-	return (int_req)
-		? _int_handler_table[int_grp]._int_line_handler_table[32
 80002ca0:	f2 08 00 08 	add	r8,r9,r8
-	exception.S will provide the interrupt handler with a clean interrupt
-	stack frame, with nothing more pushed onto the stack. The interrupt
-	handler must manage the `rete' instruction, which can be done using
-	pure assembly, inline assembly or the `__attribute__((__interrupt__))'
-	C function attribute.*/
-	return (int_req)
 80002ca4:	70 08       	ld.w	r8,r8[0x0]
 80002ca6:	c0 28       	rjmp	80002caa <_get_interrupt_handler+0x62>
 80002ca8:	30 08       	mov	r8,0
-		? _int_handler_table[int_grp]._int_line_handler_table[32
-			- clz(int_req) - 1]
-		: NULL;
-}
 80002caa:	10 9c       	mov	r12,r8
 80002cac:	2f dd       	sub	sp,-12
 80002cae:	e3 cd 80 80 	ldm	sp++,r7,pc
@@ -1720,54 +1375,25 @@ __int_handler _get_interrupt_handler(uint32_t int_level)
 80002cb6:	32 0c       	mov	r12,32
 
 80002cb8 <INTC_init_evba>:
- * \internal
- * \brief Init EVBA address. This operation may or may not have been done by the
- * C startup process.
- */
-static __inline__ void INTC_init_evba(void)
-{
 80002cb8:	eb cd 40 80 	pushm	r7,lr
 80002cbc:	1a 97       	mov	r7,sp
-  Set_system_register(AVR32_EVBA, (int32_t)&_evba );
 80002cbe:	48 38       	lddpc	r8,80002cc8 <INTC_init_evba+0x10>
 80002cc0:	e3 b8 00 01 	mtsr	0x4,r8
-}
 80002cc4:	e3 cd 80 80 	ldm	sp++,r7,pc
 80002cc8:	80 00       	ld.sh	r0,r0[0x0]
 80002cca:	30 00       	mov	r0,0
 
 80002ccc <INTC_init_interrupts>:
-/**
- * \brief Initializes the hardware interrupt controller driver.
- *
- */
-void INTC_init_interrupts(void)
-{
 80002ccc:	eb cd 40 80 	pushm	r7,lr
 80002cd0:	1a 97       	mov	r7,sp
 80002cd2:	20 2d       	sub	sp,8
-	uint32_t int_grp, int_req;
-
-	INTC_init_evba();
 80002cd4:	f0 1f 00 1f 	mcall	80002d50 <INTC_init_interrupts+0x84>
-
-	// For all interrupt groups,
-	for (int_grp = 0; int_grp < AVR32_INTC_NUM_INT_GRPS; int_grp++)
 80002cd8:	30 08       	mov	r8,0
 80002cda:	ef 48 ff f8 	st.w	r7[-8],r8
 80002cde:	c3 18       	rjmp	80002d40 <INTC_init_interrupts+0x74>
-	{
-		// For all interrupt request lines of each group,
-		for (int_req = 0;
 80002ce0:	30 08       	mov	r8,0
 80002ce2:	ef 48 ff fc 	st.w	r7[-4],r8
 80002ce6:	c1 48       	rjmp	80002d0e <INTC_init_interrupts+0x42>
-			int_req++)
-		{
-			/* Assign _unhandled_interrupt as the default interrupt
-			handler. */
-			_int_handler_table[int_grp]
-				._int_line_handler_table[int_req]
 80002ce8:	ee f9 ff f8 	ld.w	r9,r7[-8]
 80002cec:	49 a8       	lddpc	r8,80002d54 <INTC_init_interrupts+0x88>
 80002cee:	a1 79       	lsl	r9,0x1
@@ -1776,71 +1402,29 @@ void INTC_init_interrupts(void)
 80002cf6:	ee f8 ff fc 	ld.w	r8,r7[-4]
 80002cfa:	a3 68       	lsl	r8,0x2
 80002cfc:	f2 08 00 08 	add	r8,r9,r8
-			int_req < _int_handler_table[int_grp].num_irqs;
-			int_req++)
-		{
-			/* Assign _unhandled_interrupt as the default interrupt
-			handler. */
-			_int_handler_table[int_grp]
 80002d00:	49 69       	lddpc	r9,80002d58 <INTC_init_interrupts+0x8c>
 80002d02:	91 09       	st.w	r8[0x0],r9
-	for (int_grp = 0; int_grp < AVR32_INTC_NUM_INT_GRPS; int_grp++)
-	{
-		// For all interrupt request lines of each group,
-		for (int_req = 0;
-			int_req < _int_handler_table[int_grp].num_irqs;
-			int_req++)
 80002d04:	ee f8 ff fc 	ld.w	r8,r7[-4]
 80002d08:	2f f8       	sub	r8,-1
 80002d0a:	ef 48 ff fc 	st.w	r7[-4],r8
-	// For all interrupt groups,
-	for (int_grp = 0; int_grp < AVR32_INTC_NUM_INT_GRPS; int_grp++)
-	{
-		// For all interrupt request lines of each group,
-		for (int_req = 0;
-			int_req < _int_handler_table[int_grp].num_irqs;
 80002d0e:	ee f9 ff f8 	ld.w	r9,r7[-8]
 80002d12:	49 18       	lddpc	r8,80002d54 <INTC_init_interrupts+0x88>
 80002d14:	f0 09 03 39 	ld.w	r9,r8[r9<<0x3]
-
-	// For all interrupt groups,
-	for (int_grp = 0; int_grp < AVR32_INTC_NUM_INT_GRPS; int_grp++)
-	{
-		// For all interrupt request lines of each group,
-		for (int_req = 0;
 80002d18:	ee f8 ff fc 	ld.w	r8,r7[-4]
 80002d1c:	10 39       	cp.w	r9,r8
 80002d1e:	fe 9b ff e5 	brhi	80002ce8 <INTC_init_interrupts+0x1c>
-
-		/* Set the interrupt group priority register to its default
-		value.
-		By default, all interrupt groups are linked to the interrupt
-		priority level 0 and to the interrupt vector _int0. */
-		AVR32_INTC.ipr[int_grp] = IPR_INT0;
 80002d22:	fe 78 08 00 	mov	r8,-63488
 80002d26:	ee f9 ff f8 	ld.w	r9,r7[-8]
 80002d2a:	48 db       	lddpc	r11,80002d5c <INTC_init_interrupts+0x90>
 80002d2c:	48 da       	lddpc	r10,80002d60 <INTC_init_interrupts+0x94>
 80002d2e:	f6 0a 01 0a 	sub	r10,r11,r10
 80002d32:	f0 09 09 2a 	st.w	r8[r9<<0x2],r10
-	uint32_t int_grp, int_req;
-
-	INTC_init_evba();
-
-	// For all interrupt groups,
-	for (int_grp = 0; int_grp < AVR32_INTC_NUM_INT_GRPS; int_grp++)
 80002d36:	ee f8 ff f8 	ld.w	r8,r7[-8]
 80002d3a:	2f f8       	sub	r8,-1
 80002d3c:	ef 48 ff f8 	st.w	r7[-8],r8
 80002d40:	ee f8 ff f8 	ld.w	r8,r7[-8]
 80002d44:	59 38       	cp.w	r8,19
 80002d46:	fe 98 ff cd 	brls	80002ce0 <INTC_init_interrupts+0x14>
-		value.
-		By default, all interrupt groups are linked to the interrupt
-		priority level 0 and to the interrupt vector _int0. */
-		AVR32_INTC.ipr[int_grp] = IPR_INT0;
-	}
-}
 80002d4a:	2f ed       	sub	sp,-8
 80002d4c:	e3 cd 80 80 	ldm	sp++,r7,pc
 80002d50:	80 00       	ld.sh	r0,r0[0x0]
@@ -1855,29 +1439,15 @@ void INTC_init_interrupts(void)
 80002d62:	30 00       	mov	r0,0
 
 80002d64 <INTC_register_interrupt>:
- *          be effective.
- *
- */
-void INTC_register_interrupt(__int_handler handler, uint32_t irq,
-	uint32_t int_level)
-{
 80002d64:	eb cd 40 80 	pushm	r7,lr
 80002d68:	1a 97       	mov	r7,sp
 80002d6a:	20 4d       	sub	sp,16
 80002d6c:	ef 4c ff f8 	st.w	r7[-8],r12
 80002d70:	ef 4b ff f4 	st.w	r7[-12],r11
 80002d74:	ef 4a ff f0 	st.w	r7[-16],r10
-	// Determine the group of the IRQ.
-	uint32_t int_grp = irq / AVR32_INTC_MAX_NUM_IRQS_PER_GRP;
 80002d78:	ee f8 ff f4 	ld.w	r8,r7[-12]
 80002d7c:	a5 98       	lsr	r8,0x5
 80002d7e:	ef 48 ff fc 	st.w	r7[-4],r8
-
-	/* Store in _int_line_handler_table_x the pointer to the interrupt
-	handler, so that _get_interrupt_handler can retrieve it when the
-	interrupt is vectored. */
-	_int_handler_table[int_grp]
-		._int_line_handler_table[irq % AVR32_INTC_MAX_NUM_IRQS_PER_GRP]
 80002d82:	ee f9 ff fc 	ld.w	r9,r7[-4]
 80002d86:	4a 78       	lddpc	r8,80002e20 <INTC_register_interrupt+0xbc>
 80002d88:	a1 79       	lsl	r9,0x1
@@ -1887,24 +1457,11 @@ void INTC_register_interrupt(__int_handler handler, uint32_t irq,
 80002d94:	f1 d8 c0 05 	bfextu	r8,r8,0x0,0x5
 80002d98:	a3 68       	lsl	r8,0x2
 80002d9a:	f2 08 00 08 	add	r8,r9,r8
-	uint32_t int_grp = irq / AVR32_INTC_MAX_NUM_IRQS_PER_GRP;
-
-	/* Store in _int_line_handler_table_x the pointer to the interrupt
-	handler, so that _get_interrupt_handler can retrieve it when the
-	interrupt is vectored. */
-	_int_handler_table[int_grp]
 80002d9e:	ee f9 ff f8 	ld.w	r9,r7[-8]
 80002da2:	91 09       	st.w	r8[0x0],r9
-	/* Program the corresponding IPRX register to set the interrupt priority
-	level and the interrupt vector offset that will be fetched by the core
-	interrupt system.
-	NOTE: The _intx functions are intermediate assembly functions between
-	the core interrupt system and the user interrupt handler. */
-	if (int_level == AVR32_INTC_INT0) {
 80002da4:	ee f8 ff f0 	ld.w	r8,r7[-16]
 80002da8:	58 08       	cp.w	r8,0
 80002daa:	c0 c1       	brne	80002dc2 <INTC_register_interrupt+0x5e>
-		AVR32_INTC.ipr[int_grp] = IPR_INT0;
 80002dac:	fe 78 08 00 	mov	r8,-63488
 80002db0:	ee f9 ff fc 	ld.w	r9,r7[-4]
 80002db4:	49 cb       	lddpc	r11,80002e24 <INTC_register_interrupt+0xc0>
@@ -1912,11 +1469,9 @@ void INTC_register_interrupt(__int_handler handler, uint32_t irq,
 80002db8:	f6 0a 01 0a 	sub	r10,r11,r10
 80002dbc:	f0 09 09 2a 	st.w	r8[r9<<0x2],r10
 80002dc0:	c2 d8       	rjmp	80002e1a <INTC_register_interrupt+0xb6>
-	} else if (int_level == AVR32_INTC_INT1) {
 80002dc2:	ee f8 ff f0 	ld.w	r8,r7[-16]
 80002dc6:	58 18       	cp.w	r8,1
 80002dc8:	c0 d1       	brne	80002de2 <INTC_register_interrupt+0x7e>
-		AVR32_INTC.ipr[int_grp] = IPR_INT1;
 80002dca:	fe 78 08 00 	mov	r8,-63488
 80002dce:	ee f9 ff fc 	ld.w	r9,r7[-4]
 80002dd2:	49 7b       	lddpc	r11,80002e2c <INTC_register_interrupt+0xc8>
@@ -1925,11 +1480,9 @@ void INTC_register_interrupt(__int_handler handler, uint32_t irq,
 80002dda:	bf aa       	sbr	r10,0x1e
 80002ddc:	f0 09 09 2a 	st.w	r8[r9<<0x2],r10
 80002de0:	c1 d8       	rjmp	80002e1a <INTC_register_interrupt+0xb6>
-	} else if (int_level == AVR32_INTC_INT2) {
 80002de2:	ee f8 ff f0 	ld.w	r8,r7[-16]
 80002de6:	58 28       	cp.w	r8,2
 80002de8:	c0 d1       	brne	80002e02 <INTC_register_interrupt+0x9e>
-		AVR32_INTC.ipr[int_grp] = IPR_INT2;
 80002dea:	fe 78 08 00 	mov	r8,-63488
 80002dee:	ee f9 ff fc 	ld.w	r9,r7[-4]
 80002df2:	49 0b       	lddpc	r11,80002e30 <INTC_register_interrupt+0xcc>
@@ -1938,8 +1491,6 @@ void INTC_register_interrupt(__int_handler handler, uint32_t irq,
 80002dfa:	bf ba       	sbr	r10,0x1f
 80002dfc:	f0 09 09 2a 	st.w	r8[r9<<0x2],r10
 80002e00:	c0 d8       	rjmp	80002e1a <INTC_register_interrupt+0xb6>
-	} else {
-		AVR32_INTC.ipr[int_grp] = IPR_INT3;
 80002e02:	fe 78 08 00 	mov	r8,-63488
 80002e06:	ee f9 ff fc 	ld.w	r9,r7[-4]
 80002e0a:	48 bb       	lddpc	r11,80002e34 <INTC_register_interrupt+0xd0>
@@ -1947,8 +1498,6 @@ void INTC_register_interrupt(__int_handler handler, uint32_t irq,
 80002e0e:	f6 0a 01 0a 	sub	r10,r11,r10
 80002e12:	ea 1a c0 00 	orh	r10,0xc000
 80002e16:	f0 09 09 2a 	st.w	r8[r9<<0x2],r10
-	}
-}
 80002e1a:	2f cd       	sub	sp,-16
 80002e1c:	e3 cd 80 80 	ldm	sp++,r7,pc
 80002e20:	80 00       	ld.sh	r0,r0[0x0]
@@ -1965,72 +1514,28 @@ void INTC_register_interrupt(__int_handler handler, uint32_t irq,
 80002e36:	31 2e       	mov	lr,18
 
 80002e38 <_stext>:
-
-  .global _stext
-  .type _stext, @function
-_stext:
-  // Set initial stack pointer.
-  lda.w   sp, _estack
 80002e38:	e0 7d 00 00 	mov	sp,65536
-
-  // Set up EVBA so interrupts can be enabled.
-  lda.w   r0, _evba
-  mtsr    AVR32_EVBA, r0
 80002e3c:	fe c0 fe 3c 	sub	r0,pc,-452
-
-  // Enable the exception processing.
-  csrf    AVR32_SR_EM_OFFSET
 80002e40:	e3 b0 00 01 	mtsr	0x4,r0
-
-  // Load initialized data having a global lifetime from the data LMA.
-  lda.w   r0, _data
-  lda.w   r1, _edata
 80002e44:	d5 53       	csrf	0x15
-  cp      r0, r1
 80002e46:	30 80       	mov	r0,8
-  brhs    idata_load_loop_end
 80002e48:	30 81       	mov	r1,8
-  lda.w   r2, _data_lma
 80002e4a:	02 30       	cp.w	r0,r1
-idata_load_loop:
-  ld.d    r4, r2++
 80002e4c:	c0 72       	brcc	80002e5a <idata_load_loop_end>
-  st.d    r0++, r4
 80002e4e:	fe c2 fb 9e 	sub	r2,pc,-1122
 
 80002e52 <idata_load_loop>:
-  cp      r0, r1
-  brlo    idata_load_loop
 80002e52:	a5 05       	ld.d	r4,r2++
-idata_load_loop_end:
-
-  // Clear uninitialized data having a global lifetime in the blank static storage section.
-  lda.w   r0, __bss_start
 80002e54:	a1 24       	st.d	r0++,r4
-  lda.w   r1, _end
 80002e56:	02 30       	cp.w	r0,r1
-  cp      r0, r1
 80002e58:	cf d3       	brcs	80002e52 <idata_load_loop>
 
 80002e5a <idata_load_loop_end>:
-  brhs    udata_clear_loop_end
 80002e5a:	30 80       	mov	r0,8
-  mov     r2, 0
 80002e5c:	e0 61 01 00 	mov	r1,256
-  mov     r3, 0
-udata_clear_loop:
-  st.d    r0++, r2
 80002e60:	02 30       	cp.w	r0,r1
-  cp      r0, r1
 80002e62:	c0 62       	brcc	80002e6e <udata_clear_loop_end>
-  brlo    udata_clear_loop
 80002e64:	30 02       	mov	r2,0
-  // Safety: Set the default "return" @ to the exit routine address.
-  lda.w   lr, exit
-#endif
-
-  // Start the show.
-  lda.w   pc, main
 80002e66:	30 03       	mov	r3,0
 
 80002e68 <udata_clear_loop>:
@@ -2043,9 +1548,9 @@ udata_clear_loop:
 80002e72:	d7 03       	nop
 
 80002e74 <main>:
-		milliseconds--;
-	}
-}
+#include "gpio.h"
+#include "USART_driver.h"
+#include "stopwatch.h"
 
 int main(void)
 {
@@ -2058,16 +1563,16 @@ int main(void)
 	volatile avr32_tc_t *tc = &AVR32_TC;
 80002e84:	fe 78 38 00 	mov	r8,-51200
 80002e88:	ef 48 ff fc 	st.w	r7[-4],r8
-	USART_init(usart);
+	USART_init(usart);						// Init USART
 80002e8c:	ee fc ff f8 	ld.w	r12,r7[-8]
 80002e90:	f0 1f 00 18 	mcall	80002ef0 <main+0x7c>
-	tc_init(tc);
+	tc_init(tc);							// Init Timer/Counter
 80002e94:	ee fc ff fc 	ld.w	r12,r7[-4]
 80002e98:	f0 1f 00 17 	mcall	80002ef4 <main+0x80>
-	stopwatch_init();
+	stopwatch_init();						// Init Stopwatch
 80002e9c:	f0 1f 00 17 	mcall	80002ef8 <main+0x84>
 	
-	
+	// Struct containing the time in hour, minute, seconds, hundredths
 	struct time_struct ts;
 	ts.hour = 0;
 80002ea0:	30 08       	mov	r8,0
@@ -2084,14 +1589,14 @@ int main(void)
 	
 	while(1)
 	{
-		ts = update_time(centa_s);
+		ts = update_time(centa_s);	// Updates the time struct with the current timer count
 80002eb8:	49 18       	lddpc	r8,80002efc <main+0x88>
 80002eba:	70 09       	ld.w	r9,r8[0x0]
 80002ebc:	ee c8 00 18 	sub	r8,r7,24
 80002ec0:	12 9b       	mov	r11,r9
 80002ec2:	10 9c       	mov	r12,r8
 80002ec4:	f0 1f 00 0f 	mcall	80002f00 <main+0x8c>
-		displayTime(ts);
+		displayTime(ts);			// Displays the time on the serial port
 80002ec8:	20 4d       	sub	sp,16
 80002eca:	1a 98       	mov	r8,sp
 80002ecc:	10 9a       	mov	r10,r8
@@ -2102,7 +1607,7 @@ int main(void)
 80002ede:	f4 e9 00 08 	st.d	r10[8],r8
 80002ee2:	f0 1f 00 09 	mcall	80002f04 <main+0x90>
 80002ee6:	2f cd       	sub	sp,-16
-		checkInput();
+		checkInput();				// Checks input from serial port
 80002ee8:	f0 1f 00 08 	mcall	80002f08 <main+0x94>
 	}
 80002eec:	ce 6b       	rjmp	80002eb8 <main+0x44>
@@ -2125,278 +1630,119 @@ int main(void)
 Disassembly of section .exception:
 
 80003000 <_evba>:
-_evba:
-
-	.org  0x000
-	// Unrecoverable Exception.
-_handle_Unrecoverable_Exception:
-	rjmp $
 80003000:	c0 08       	rjmp	80003000 <_evba>
 	...
 
 80003004 <_handle_TLB_Multiple_Hit>:
-
-	.org  0x004
-	// TLB Multiple Hit.
-_handle_TLB_Multiple_Hit:
-	rjmp $
 80003004:	c0 08       	rjmp	80003004 <_handle_TLB_Multiple_Hit>
 	...
 
 80003008 <_handle_Bus_Error_Data_Fetch>:
-
-	.org  0x008
-	// Bus Error Data Fetch.
-_handle_Bus_Error_Data_Fetch:
-	rjmp $
 80003008:	c0 08       	rjmp	80003008 <_handle_Bus_Error_Data_Fetch>
 	...
 
 8000300c <_handle_Bus_Error_Instruction_Fetch>:
-
-	.org  0x00C
-	// Bus Error Instruction Fetch.
-_handle_Bus_Error_Instruction_Fetch:
-	rjmp $
 8000300c:	c0 08       	rjmp	8000300c <_handle_Bus_Error_Instruction_Fetch>
 	...
 
 80003010 <_handle_NMI>:
-
-	.org  0x010
-	// NMI.
-_handle_NMI:
-	rjmp $
 80003010:	c0 08       	rjmp	80003010 <_handle_NMI>
 	...
 
 80003014 <_handle_Instruction_Address>:
-
-	.org  0x014
-	// Instruction Address.
-_handle_Instruction_Address:
-	rjmp $
 80003014:	c0 08       	rjmp	80003014 <_handle_Instruction_Address>
 	...
 
 80003018 <_handle_ITLB_Protection>:
-
-	.org  0x018
-	// ITLB Protection.
-_handle_ITLB_Protection:
-	rjmp $
 80003018:	c0 08       	rjmp	80003018 <_handle_ITLB_Protection>
 	...
 
 8000301c <_handle_Breakpoint>:
-
-	.org  0x01C
-	// Breakpoint.
-_handle_Breakpoint:
-	rjmp $
 8000301c:	c0 08       	rjmp	8000301c <_handle_Breakpoint>
 	...
 
 80003020 <_handle_Illegal_Opcode>:
-
-	.org  0x020
-	// Illegal Opcode.
-_handle_Illegal_Opcode:
-	rjmp $
 80003020:	c0 08       	rjmp	80003020 <_handle_Illegal_Opcode>
 	...
 
 80003024 <_handle_Unimplemented_Instruction>:
-
-	.org  0x024
-	// Unimplemented Instruction.
-_handle_Unimplemented_Instruction:
-	rjmp $
 80003024:	c0 08       	rjmp	80003024 <_handle_Unimplemented_Instruction>
 	...
 
 80003028 <_handle_Privilege_Violation>:
-
-	.org  0x028
-	// Privilege Violation.
-_handle_Privilege_Violation:
-	rjmp $
 80003028:	c0 08       	rjmp	80003028 <_handle_Privilege_Violation>
 	...
 
 8000302c <_handle_Floating_Point>:
-
-	.org  0x02C
-	// Floating-Point: UNUSED IN AVR32UC and AVR32AP.
-_handle_Floating_Point:
-	rjmp $
 8000302c:	c0 08       	rjmp	8000302c <_handle_Floating_Point>
 	...
 
 80003030 <_handle_Coprocessor_Absent>:
-
-	.org  0x030
-	// Coprocessor Absent: UNUSED IN AVR32UC.
-_handle_Coprocessor_Absent:
-	rjmp $
 80003030:	c0 08       	rjmp	80003030 <_handle_Coprocessor_Absent>
 	...
 
 80003034 <_handle_Data_Address_Read>:
-
-	.org  0x034
-	// Data Address (Read).
-_handle_Data_Address_Read:
-	rjmp $
 80003034:	c0 08       	rjmp	80003034 <_handle_Data_Address_Read>
 	...
 
 80003038 <_handle_Data_Address_Write>:
-
-	.org  0x038
-	// Data Address (Write).
-_handle_Data_Address_Write:
-	rjmp $
 80003038:	c0 08       	rjmp	80003038 <_handle_Data_Address_Write>
 	...
 
 8000303c <_handle_DTLB_Protection_Read>:
-
-	.org  0x03C
-	// DTLB Protection (Read).
-_handle_DTLB_Protection_Read:
-	rjmp $
 8000303c:	c0 08       	rjmp	8000303c <_handle_DTLB_Protection_Read>
 	...
 
 80003040 <_handle_DTLB_Protection_Write>:
-
-	.org  0x040
-	// DTLB Protection (Write).
-_handle_DTLB_Protection_Write:
-	rjmp $
 80003040:	c0 08       	rjmp	80003040 <_handle_DTLB_Protection_Write>
 	...
 
 80003044 <_handle_DTLB_Modified>:
-
-	.org  0x044
-	// DTLB Modified: UNUSED IN AVR32UC.
-_handle_DTLB_Modified:
-	rjmp $
 80003044:	c0 08       	rjmp	80003044 <_handle_DTLB_Modified>
 	...
 
 80003050 <_handle_ITLB_Miss>:
-
-	.org  0x050
-	// ITLB Miss.
-_handle_ITLB_Miss:
-	rjmp $
 80003050:	c0 08       	rjmp	80003050 <_handle_ITLB_Miss>
 	...
 
 80003060 <_handle_DTLB_Miss_Read>:
-
-	.org  0x060
-	// DTLB Miss (Read).
-_handle_DTLB_Miss_Read:
-	rjmp $
 80003060:	c0 08       	rjmp	80003060 <_handle_DTLB_Miss_Read>
 	...
 
 80003070 <_handle_DTLB_Miss_Write>:
-
-	.org  0x070
-	// DTLB Miss (Write).
-_handle_DTLB_Miss_Write:
-	rjmp $
 80003070:	c0 08       	rjmp	80003070 <_handle_DTLB_Miss_Write>
 	...
 
 80003100 <_handle_Supervisor_Call>:
-
-	.org  0x100
-	// Supervisor Call.
-_handle_Supervisor_Call:
-	rjmp $
 80003100:	c0 08       	rjmp	80003100 <_handle_Supervisor_Call>
 80003102:	d7 03       	nop
 
 80003104 <_int0>:
-	 * RSR_INTx by the CPU upon interrupt entry. No other register is saved
-	 * by hardware.
-	 */
-	pushm   r8-r12, lr
-#endif
-	// Pass the int_level parameter to the _get_interrupt_handler function.
 80003104:	30 0c       	mov	r12,0
 80003106:	fe b0 fd a1 	rcall	80002c48 <_get_interrupt_handler>
 8000310a:	58 0c       	cp.w	r12,0
 8000310c:	f8 0f 17 10 	movne	pc,r12
-	popm    r8-r12, lr
-#endif
-	/*
-	 * If this was a spurious interrupt (R12 == NULL), return from event
-	 * handler.
-	 */
 80003110:	d6 03       	rete
 
 80003112 <_int1>:
-	 * RSR_INTx by the CPU upon interrupt entry. No other register is saved
-	 * by hardware.
-	 */
-	pushm   r8-r12, lr
-#endif
-	// Pass the int_level parameter to the _get_interrupt_handler function.
 80003112:	30 1c       	mov	r12,1
 80003114:	fe b0 fd 9a 	rcall	80002c48 <_get_interrupt_handler>
 80003118:	58 0c       	cp.w	r12,0
 8000311a:	f8 0f 17 10 	movne	pc,r12
-	popm    r8-r12, lr
-#endif
-	/*
-	 * If this was a spurious interrupt (R12 == NULL), return from event
-	 * handler.
-	 */
 8000311e:	d6 03       	rete
 
 80003120 <_int2>:
-	 * RSR_INTx by the CPU upon interrupt entry. No other register is saved
-	 * by hardware.
-	 */
-	pushm   r8-r12, lr
-#endif
-	// Pass the int_level parameter to the _get_interrupt_handler function.
 80003120:	30 2c       	mov	r12,2
 80003122:	fe b0 fd 93 	rcall	80002c48 <_get_interrupt_handler>
 80003126:	58 0c       	cp.w	r12,0
 80003128:	f8 0f 17 10 	movne	pc,r12
-	popm    r8-r12, lr
-#endif
-	/*
-	 * If this was a spurious interrupt (R12 == NULL), return from event
-	 * handler.
-	 */
 8000312c:	d6 03       	rete
 
 8000312e <_int3>:
-	 * RSR_INTx by the CPU upon interrupt entry. No other register is saved
-	 * by hardware.
-	 */
-	pushm   r8-r12, lr
-#endif
-	// Pass the int_level parameter to the _get_interrupt_handler function.
 8000312e:	30 3c       	mov	r12,3
 80003130:	fe b0 fd 8c 	rcall	80002c48 <_get_interrupt_handler>
 80003134:	58 0c       	cp.w	r12,0
 80003136:	f8 0f 17 10 	movne	pc,r12
-	popm    r8-r12, lr
-#endif
-	/*
-	 * If this was a spurious interrupt (R12 == NULL), return from event
-	 * handler.
-	 */
 8000313a:	d6 03       	rete
 8000313c:	d7 03       	nop
 8000313e:	d7 03       	nop

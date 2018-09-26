@@ -4,6 +4,8 @@
 
 src\LED.c
 
+src\timer.c
+
 src\ASF\avr32\boards\evk1100\init.c
 
 src\ASF\avr32\boards\evk1100\led.c

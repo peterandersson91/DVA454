@@ -2,39 +2,40 @@
 
 bool timer_running = false; // Global variable to see if the timer is running
 
+// Initializing the stopwatch
 void stopwatch_init(void)
 {
-	initLED();
-	resetTimer();
+	initLED();		// Init LED
+	resetTimer();	// Resets the timer
 }
 
 // Enable interrupts to start the clock
 void startTimer(void) 
 {
 	volatile avr32_gpio_port_t * led_port = &AVR32_GPIO.port[LED_PORT];
-	led_port->ovrc = LED5_BIT_VALUE;
-	led_port->ovrs = LED4_BIT_VALUE;
-	Enable_global_interrupt(); 
-	timer_running = true;
+	led_port->ovrc = LED5_BIT_VALUE;	// Lights the green led when the clock starts
+	led_port->ovrs = LED4_BIT_VALUE;	// Turns red led off
+	Enable_global_interrupt();			// Enables global interrupts to start the timer count
+	timer_running = true;				// Timer is running
 }
 
 // Disable interrupts to stop the clock
 void stopTimer(void)
 {
 	volatile avr32_gpio_port_t * led_port = &AVR32_GPIO.port[LED_PORT];
-	led_port->ovrc = LED4_BIT_VALUE;
-	led_port->ovrs = LED5_BIT_VALUE;
-	Disable_global_interrupt();
-	timer_running = false;
+	led_port->ovrc = LED4_BIT_VALUE;	// Green led off
+	led_port->ovrs = LED5_BIT_VALUE;	// Red led on
+	Disable_global_interrupt();			// Disables global interrupts to stop the timer count
+	timer_running = false;				// Timer is stopped
 }
 
 // Resets global counting variable
 void resetTimer(void)
 {
 	volatile avr32_gpio_port_t * led_port = &AVR32_GPIO.port[LED_PORT];
-	led_port->ovrs = LED4_BIT_VALUE;
+	led_port->ovrs = LED4_BIT_VALUE;	// Turn all leds off
 	led_port->ovrs = LED5_BIT_VALUE;
-	centa_s = 0;
+	centa_s = 0;						// Resets counter
 }
 
 // Checks if there is something to read
@@ -44,17 +45,17 @@ void checkInput(void)
 	char input;
 	if(usart->CSR.rxrdy != 0) // If there is something to read
 	{
-		input = USART_getChar();
+		input = USART_getChar(); // gets the input
 		switch(input)
 		{
-			case 'a':
-			startTimer();
+			case 'a':	// 'a' starts the timer
+				startTimer();
 			break;
-			case 's':
+			case 's':	// 's' stops the timer
 			if (timer_running == true) // Stop only if timer is running
 				stopTimer();
 			break;
-			case 'd':
+			case 'd':	// 'd' resets the timer
 			if (timer_running == false) // Reset only if timer is stopped
 				resetTimer();
 			break;

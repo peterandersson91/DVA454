@@ -6,8 +6,9 @@
 #include "intc.h"
 #include "USART_driver.h"
 
-#define TC_CHANNEL 0
+#define TC_CHANNEL 0		// Selects Timer/Counter Channel
 
+// Struct containing the time in hour, minute, seconds, hundredths
 struct time_struct
 {
 	int hour;
@@ -16,11 +17,10 @@ struct time_struct
 	int centa;
 };
 
-extern int centa_s;
+extern int centa_s;			// Global variable containing the time in hundredths
 
-static void tc_irq(void);
-__attribute__((__interrupt__))static void tc_irq_handler(void);
-void tc_init(volatile avr32_tc_t *tc);
-struct time_struct update_time(int current_centa_s);
+__attribute__((__interrupt__))static void tc_irq_handler(void); // Handle function for the RC interrupt
+void tc_init(volatile avr32_tc_t *tc);							// Init the Timer/Counter
+struct time_struct update_time(int current_centa_s);			// Updates the time to hours, minutes, seconds, hundredths from hundredths
 
 #endif /* TC_DRIVER_H_ */
