@@ -5,7 +5,7 @@ Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
   0 .reset        00002008  80000000  80000000  00000400  2**2
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  1 .text         00000566  80002008  80002008  00002408  2**2
+  1 .text         0000054e  80002008  80002008  00002408  2**2
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
   2 .exception    00000200  80002600  80002600  00002a00  2**9
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
@@ -27,116 +27,81 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING
  11 .debug_abbrev 000002f8  00000000  00000000  000037ec  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_line   00000d00  00000000  00000000  00003ae4  2**0
+ 12 .debug_line   00000cfd  00000000  00000000  00003ae4  2**0
                   CONTENTS, READONLY, DEBUGGING
  13 .debug_frame  0000017c  00000000  00000000  000047e4  2**2
                   CONTENTS, READONLY, DEBUGGING
- 14 .debug_str    000004f2  00000000  00000000  00004960  2**0
+ 14 .debug_str    00000530  00000000  00000000  00004960  2**0
                   CONTENTS, READONLY, DEBUGGING
- 15 .debug_loc    000001d9  00000000  00000000  00004e52  2**0
+ 15 .debug_loc    000001d9  00000000  00000000  00004e90  2**0
                   CONTENTS, READONLY, DEBUGGING
- 16 .debug_macinfo 000f2027  00000000  00000000  0000502b  2**0
+ 16 .debug_macinfo 000f2027  00000000  00000000  00005069  2**0
                   CONTENTS, READONLY, DEBUGGING
  17 .stack        00001000  0000f000  0000f000  00000000  2**0
                   ALLOC
- 18 .debug_ranges 000000b8  00000000  00000000  000f7058  2**3
+ 18 .debug_ranges 000000b8  00000000  00000000  000f7090  2**3
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .reset:
 
 80000000 <_start>:
-
-  .global _start
-  .type _start, @function
-_start:
-  // Jump to the C runtime startup routine.
-  lda.w   pc, _stext
-80000000:	fe cf de 98 	sub	pc,pc,-8552
+80000000:	fe cf de b0 	sub	pc,pc,-8528
 
 80000004 <_trampoline>:
 80000004:	e0 8f 10 00 	bral	80002004 <program_start>
 	...
 
 80002004 <program_start>:
-  rjmp    program_start
-
-  .org  PROGRAM_START_OFFSET
-program_start:
-  // Jump to the C runtime startup routine.
-  lda.w   pc, _stext
-80002004:	fe cf fe 9c 	sub	pc,pc,-356
+80002004:	fe cf fe b4 	sub	pc,pc,-332
 
 Disassembly of section .text:
 
 80002008 <LED0_init>:
 80002008:	eb cd 40 80 	pushm	r7,lr
-#include "LED.h"
-
-void LED0_init(void)
-{
 8000200c:	1a 97       	mov	r7,sp
-	/* Select the pin we are going to use as GPIO */
-	GPIO_PORT1_GPER |= (0x01 << 27);
 8000200e:	fe 78 11 00 	mov	r8,-61184
 80002012:	fe 79 11 00 	mov	r9,-61184
 80002016:	72 09       	ld.w	r9,r9[0x0]
 80002018:	bb b9       	sbr	r9,0x1b
 8000201a:	91 09       	st.w	r8[0x0],r9
-	/* Enable the corresponding diver for that pin */
-	GPIO_PORT1_ODER |= (0x01 << 27);
 8000201c:	fe 78 11 40 	mov	r8,-61120
 80002020:	fe 79 11 40 	mov	r9,-61120
 80002024:	72 09       	ld.w	r9,r9[0x0]
 80002026:	bb b9       	sbr	r9,0x1b
 80002028:	91 09       	st.w	r8[0x0],r9
-	/* Set the value of that pin to HIGH */
-	GPIO_PORT1_OVR |= (0x01 << 27);
 8000202a:	fe 78 11 50 	mov	r8,-61104
 8000202e:	fe 79 11 50 	mov	r9,-61104
 80002032:	72 09       	ld.w	r9,r9[0x0]
 80002034:	bb b9       	sbr	r9,0x1b
 80002036:	91 09       	st.w	r8[0x0],r9
-}
 80002038:	e3 cd 80 80 	ldm	sp++,r7,pc
 
 8000203c <LED0_output>:
-
-void LED0_output(int value)
-{
 8000203c:	eb cd 40 80 	pushm	r7,lr
 80002040:	1a 97       	mov	r7,sp
 80002042:	20 1d       	sub	sp,4
 80002044:	ef 4c ff fc 	st.w	r7[-4],r12
-	if(value != 0)
 80002048:	ee f8 ff fc 	ld.w	r8,r7[-4]
 8000204c:	58 08       	cp.w	r8,0
 8000204e:	c0 90       	breq	80002060 <LED0_output+0x24>
-	{
-		/* Set the value on the LED0 pin to HIGH */
-		GPIO_PORT1_OVR |= (0x01 << 27);
 80002050:	fe 78 11 50 	mov	r8,-61104
 80002054:	fe 79 11 50 	mov	r9,-61104
 80002058:	72 09       	ld.w	r9,r9[0x0]
 8000205a:	bb b9       	sbr	r9,0x1b
 8000205c:	91 09       	st.w	r8[0x0],r9
 8000205e:	c0 88       	rjmp	8000206e <LED0_output+0x32>
-	}
-	else
-	{
-		/* Set the value on the LED0 pin to LOW */
-		GPIO_PORT1_OVR &= ~(0x01 << 27);
 80002060:	fe 78 11 50 	mov	r8,-61104
 80002064:	fe 79 11 50 	mov	r9,-61104
 80002068:	72 09       	ld.w	r9,r9[0x0]
 8000206a:	bb d9       	cbr	r9,0x1b
 8000206c:	91 09       	st.w	r8[0x0],r9
-	}
 8000206e:	2f fd       	sub	sp,-4
 80002070:	e3 cd 80 80 	ldm	sp++,r7,pc
 
 80002074 <TC_init>:
 #include "timer.h"
 
+// Init the timer
 void TC_init()
 {
 80002074:	eb cd 40 80 	pushm	r7,lr
@@ -147,7 +112,7 @@ void TC_init()
 80002082:	72 09       	ld.w	r9,r9[0x0]
 80002084:	a1 b9       	sbr	r9,0x1
 80002086:	91 09       	st.w	r8[0x0],r9
-	TC0_REG_CMR |= (0x01 << 14); // WAVESEL 10
+	TC0_REG_CMR |= (0x01 << 14); // RC compare trigger enable
 80002088:	fe 78 38 04 	mov	r8,-51196
 8000208c:	fe 79 38 04 	mov	r9,-51196
 80002090:	72 09       	ld.w	r9,r9[0x0]
@@ -159,894 +124,644 @@ void TC_init()
 8000209e:	72 09       	ld.w	r9,r9[0x0]
 800020a0:	af b9       	sbr	r9,0xf
 800020a2:	91 09       	st.w	r8[0x0],r9
-	
-	// configure enabled interrupts
-	TC0_REG_IER = 0xFF;
-800020a4:	fe 78 38 28 	mov	r8,-51160
-800020a8:	e0 69 00 ff 	mov	r9,255
-800020ac:	91 09       	st.w	r8[0x0],r9
-	TC0_REG_IDR = 0x00;
-800020ae:	fe 78 38 2c 	mov	r8,-51156
-800020b2:	30 09       	mov	r9,0
-800020b4:	91 09       	st.w	r8[0x0],r9
-	
-	TC0_REG_SR; // Clears all flags
-800020b6:	fe 78 38 20 	mov	r8,-51168
-800020ba:	70 08       	ld.w	r8,r8[0x0]
 }
-800020bc:	e3 cd 80 80 	ldm	sp++,r7,pc
+800020a4:	e3 cd 80 80 	ldm	sp++,r7,pc
 
-800020c0 <TC_start>:
+800020a8 <TC_start>:
 
+// Starts the timer
 void TC_start()
 {
-800020c0:	eb cd 40 80 	pushm	r7,lr
-800020c4:	1a 97       	mov	r7,sp
+800020a8:	eb cd 40 80 	pushm	r7,lr
+800020ac:	1a 97       	mov	r7,sp
 	TC0_REG_CCR |= (0x01 << 0); // Enable clock 
-800020c6:	fe 78 38 00 	mov	r8,-51200
-800020ca:	fe 79 38 00 	mov	r9,-51200
-800020ce:	72 09       	ld.w	r9,r9[0x0]
-800020d0:	a1 a9       	sbr	r9,0x0
-800020d2:	91 09       	st.w	r8[0x0],r9
+800020ae:	fe 78 38 00 	mov	r8,-51200
+800020b2:	fe 79 38 00 	mov	r9,-51200
+800020b6:	72 09       	ld.w	r9,r9[0x0]
+800020b8:	a1 a9       	sbr	r9,0x0
+800020ba:	91 09       	st.w	r8[0x0],r9
 	TC0_REG_CCR |= (0x01 << 2); // Reset counter and the clock starts
-800020d4:	fe 78 38 00 	mov	r8,-51200
-800020d8:	fe 79 38 00 	mov	r9,-51200
-800020dc:	72 09       	ld.w	r9,r9[0x0]
-800020de:	a3 a9       	sbr	r9,0x2
-800020e0:	91 09       	st.w	r8[0x0],r9
+800020bc:	fe 78 38 00 	mov	r8,-51200
+800020c0:	fe 79 38 00 	mov	r9,-51200
+800020c4:	72 09       	ld.w	r9,r9[0x0]
+800020c6:	a3 a9       	sbr	r9,0x2
+800020c8:	91 09       	st.w	r8[0x0],r9
 }
-800020e2:	e3 cd 80 80 	ldm	sp++,r7,pc
+800020ca:	e3 cd 80 80 	ldm	sp++,r7,pc
 
-800020e6 <get_tc_cv>:
+800020ce <get_tc_cv>:
 
+// Returns the counter value
 int get_tc_cv()
 {
-800020e6:	eb cd 40 80 	pushm	r7,lr
-800020ea:	1a 97       	mov	r7,sp
+800020ce:	eb cd 40 80 	pushm	r7,lr
+800020d2:	1a 97       	mov	r7,sp
 	return TC0_REG_CV;
-800020ec:	fe 78 38 10 	mov	r8,-51184
-800020f0:	70 08       	ld.w	r8,r8[0x0]
+800020d4:	fe 78 38 10 	mov	r8,-51184
+800020d8:	70 08       	ld.w	r8,r8[0x0]
 }
-800020f2:	10 9c       	mov	r12,r8
-800020f4:	e3 cd 80 80 	ldm	sp++,r7,pc
+800020da:	10 9c       	mov	r12,r8
+800020dc:	e3 cd 80 80 	ldm	sp++,r7,pc
 
-800020f8 <_get_interrupt_handler>:
- *
- * \return Interrupt handler to execute.
- */
-__int_handler _get_interrupt_handler(uint32_t int_level);
-__int_handler _get_interrupt_handler(uint32_t int_level)
-{
-800020f8:	eb cd 40 80 	pushm	r7,lr
-800020fc:	1a 97       	mov	r7,sp
-800020fe:	20 3d       	sub	sp,12
-80002100:	ef 4c ff f4 	st.w	r7[-12],r12
-	/* ICR3 is mapped first, ICR0 last.
-	Code in exception.S puts int_level in R12 which is used by the compiler
-	to pass a single argument to a function. */
-	uint32_t int_grp = AVR32_INTC.icr[AVR32_INTC_INT3 - int_level];
-80002104:	fe 78 08 00 	mov	r8,-63488
-80002108:	ee f9 ff f4 	ld.w	r9,r7[-12]
-8000210c:	f2 09 11 03 	rsub	r9,r9,3
-80002110:	28 09       	sub	r9,-128
-80002112:	f0 09 03 28 	ld.w	r8,r8[r9<<0x2]
-80002116:	ef 48 ff f8 	st.w	r7[-8],r8
-	uint32_t int_req = AVR32_INTC.irr[int_grp];
-8000211a:	fe 78 08 00 	mov	r8,-63488
-8000211e:	ee f9 ff f8 	ld.w	r9,r7[-8]
-80002122:	2c 09       	sub	r9,-64
-80002124:	f0 09 03 28 	ld.w	r8,r8[r9<<0x2]
-80002128:	ef 48 ff fc 	st.w	r7[-4],r8
-	exception.S will provide the interrupt handler with a clean interrupt
-	stack frame, with nothing more pushed onto the stack. The interrupt
-	handler must manage the `rete' instruction, which can be done using
-	pure assembly, inline assembly or the `__attribute__((__interrupt__))'
-	C function attribute.*/
-	return (int_req)
-8000212c:	ee f8 ff fc 	ld.w	r8,r7[-4]
-80002130:	58 08       	cp.w	r8,0
-80002132:	c1 30       	breq	80002158 <_get_interrupt_handler+0x60>
-		? _int_handler_table[int_grp]._int_line_handler_table[32
-80002134:	ee f9 ff f8 	ld.w	r9,r7[-8]
-80002138:	48 b8       	lddpc	r8,80002164 <_get_interrupt_handler+0x6c>
-8000213a:	a1 79       	lsl	r9,0x1
-8000213c:	2f f9       	sub	r9,-1
-8000213e:	f0 09 03 29 	ld.w	r9,r8[r9<<0x2]
-80002142:	ee f8 ff fc 	ld.w	r8,r7[-4]
-80002146:	f0 08 12 00 	clz	r8,r8
-8000214a:	f0 08 11 1f 	rsub	r8,r8,31
-			- clz(int_req) - 1]
-8000214e:	a3 68       	lsl	r8,0x2
-	stack frame, with nothing more pushed onto the stack. The interrupt
-	handler must manage the `rete' instruction, which can be done using
-	pure assembly, inline assembly or the `__attribute__((__interrupt__))'
-	C function attribute.*/
-	return (int_req)
-		? _int_handler_table[int_grp]._int_line_handler_table[32
-80002150:	f2 08 00 08 	add	r8,r9,r8
-	exception.S will provide the interrupt handler with a clean interrupt
-	stack frame, with nothing more pushed onto the stack. The interrupt
-	handler must manage the `rete' instruction, which can be done using
-	pure assembly, inline assembly or the `__attribute__((__interrupt__))'
-	C function attribute.*/
-	return (int_req)
-80002154:	70 08       	ld.w	r8,r8[0x0]
-80002156:	c0 28       	rjmp	8000215a <_get_interrupt_handler+0x62>
-80002158:	30 08       	mov	r8,0
-		? _int_handler_table[int_grp]._int_line_handler_table[32
-			- clz(int_req) - 1]
-		: NULL;
-}
-8000215a:	10 9c       	mov	r12,r8
-8000215c:	2f dd       	sub	sp,-12
-8000215e:	e3 cd 80 80 	ldm	sp++,r7,pc
-80002162:	00 00       	add	r0,r0
-80002164:	80 00       	ld.sh	r0,r0[0x0]
-80002166:	28 00       	sub	r0,-128
+800020e0 <_get_interrupt_handler>:
+800020e0:	eb cd 40 80 	pushm	r7,lr
+800020e4:	1a 97       	mov	r7,sp
+800020e6:	20 3d       	sub	sp,12
+800020e8:	ef 4c ff f4 	st.w	r7[-12],r12
+800020ec:	fe 78 08 00 	mov	r8,-63488
+800020f0:	ee f9 ff f4 	ld.w	r9,r7[-12]
+800020f4:	f2 09 11 03 	rsub	r9,r9,3
+800020f8:	28 09       	sub	r9,-128
+800020fa:	f0 09 03 28 	ld.w	r8,r8[r9<<0x2]
+800020fe:	ef 48 ff f8 	st.w	r7[-8],r8
+80002102:	fe 78 08 00 	mov	r8,-63488
+80002106:	ee f9 ff f8 	ld.w	r9,r7[-8]
+8000210a:	2c 09       	sub	r9,-64
+8000210c:	f0 09 03 28 	ld.w	r8,r8[r9<<0x2]
+80002110:	ef 48 ff fc 	st.w	r7[-4],r8
+80002114:	ee f8 ff fc 	ld.w	r8,r7[-4]
+80002118:	58 08       	cp.w	r8,0
+8000211a:	c1 30       	breq	80002140 <_get_interrupt_handler+0x60>
+8000211c:	ee f9 ff f8 	ld.w	r9,r7[-8]
+80002120:	48 b8       	lddpc	r8,8000214c <_get_interrupt_handler+0x6c>
+80002122:	a1 79       	lsl	r9,0x1
+80002124:	2f f9       	sub	r9,-1
+80002126:	f0 09 03 29 	ld.w	r9,r8[r9<<0x2]
+8000212a:	ee f8 ff fc 	ld.w	r8,r7[-4]
+8000212e:	f0 08 12 00 	clz	r8,r8
+80002132:	f0 08 11 1f 	rsub	r8,r8,31
+80002136:	a3 68       	lsl	r8,0x2
+80002138:	f2 08 00 08 	add	r8,r9,r8
+8000213c:	70 08       	ld.w	r8,r8[0x0]
+8000213e:	c0 28       	rjmp	80002142 <_get_interrupt_handler+0x62>
+80002140:	30 08       	mov	r8,0
+80002142:	10 9c       	mov	r12,r8
+80002144:	2f dd       	sub	sp,-12
+80002146:	e3 cd 80 80 	ldm	sp++,r7,pc
+8000214a:	00 00       	add	r0,r0
+8000214c:	80 00       	ld.sh	r0,r0[0x0]
+8000214e:	28 00       	sub	r0,-128
 
-80002168 <_stext>:
+80002150 <_stext>:
+80002150:	e0 7d 00 00 	mov	sp,65536
+80002154:	fe c0 fb 54 	sub	r0,pc,-1196
+80002158:	e3 b0 00 01 	mtsr	0x4,r0
+8000215c:	d5 53       	csrf	0x15
+8000215e:	30 80       	mov	r0,8
+80002160:	30 81       	mov	r1,8
+80002162:	02 30       	cp.w	r0,r1
+80002164:	c0 72       	brcc	80002172 <idata_load_loop_end>
+80002166:	fe c2 f8 c6 	sub	r2,pc,-1850
 
-  .global _stext
-  .type _stext, @function
-_stext:
-  // Set initial stack pointer.
-  lda.w   sp, _estack
-80002168:	e0 7d 00 00 	mov	sp,65536
+8000216a <idata_load_loop>:
+8000216a:	a5 05       	ld.d	r4,r2++
+8000216c:	a1 24       	st.d	r0++,r4
+8000216e:	02 30       	cp.w	r0,r1
+80002170:	cf d3       	brcs	8000216a <idata_load_loop>
 
-  // Set up EVBA so interrupts can be enabled.
-  lda.w   r0, _evba
-  mtsr    AVR32_EVBA, r0
-8000216c:	fe c0 fb 6c 	sub	r0,pc,-1172
+80002172 <idata_load_loop_end>:
+80002172:	30 80       	mov	r0,8
+80002174:	e0 61 00 f8 	mov	r1,248
+80002178:	02 30       	cp.w	r0,r1
+8000217a:	c0 62       	brcc	80002186 <udata_clear_loop_end>
+8000217c:	30 02       	mov	r2,0
+8000217e:	30 03       	mov	r3,0
 
-  // Enable the exception processing.
-  csrf    AVR32_SR_EM_OFFSET
-80002170:	e3 b0 00 01 	mtsr	0x4,r0
+80002180 <udata_clear_loop>:
+80002180:	a1 22       	st.d	r0++,r2
+80002182:	02 30       	cp.w	r0,r1
+80002184:	cf e3       	brcs	80002180 <udata_clear_loop>
 
-  // Load initialized data having a global lifetime from the data LMA.
-  lda.w   r0, _data
-  lda.w   r1, _edata
-80002174:	d5 53       	csrf	0x15
-  cp      r0, r1
-80002176:	30 80       	mov	r0,8
-  brhs    idata_load_loop_end
-80002178:	30 81       	mov	r1,8
-  lda.w   r2, _data_lma
-8000217a:	02 30       	cp.w	r0,r1
-idata_load_loop:
-  ld.d    r4, r2++
-8000217c:	c0 72       	brcc	8000218a <idata_load_loop_end>
-  st.d    r0++, r4
-8000217e:	fe c2 f8 de 	sub	r2,pc,-1826
+80002186 <udata_clear_loop_end>:
+80002186:	fe cf ff fa 	sub	pc,pc,-6
+8000218a:	d7 03       	nop
 
-80002182 <idata_load_loop>:
-  cp      r0, r1
-  brlo    idata_load_loop
-80002182:	a5 05       	ld.d	r4,r2++
-idata_load_loop_end:
-
-  // Clear uninitialized data having a global lifetime in the blank static storage section.
-  lda.w   r0, __bss_start
-80002184:	a1 24       	st.d	r0++,r4
-  lda.w   r1, _end
-80002186:	02 30       	cp.w	r0,r1
-  cp      r0, r1
-80002188:	cf d3       	brcs	80002182 <idata_load_loop>
-
-8000218a <idata_load_loop_end>:
-  brhs    udata_clear_loop_end
-8000218a:	30 80       	mov	r0,8
-  mov     r2, 0
-8000218c:	e0 61 00 f8 	mov	r1,248
-  mov     r3, 0
-udata_clear_loop:
-  st.d    r0++, r2
-80002190:	02 30       	cp.w	r0,r1
-  cp      r0, r1
-80002192:	c0 62       	brcc	8000219e <udata_clear_loop_end>
-  brlo    udata_clear_loop
-80002194:	30 02       	mov	r2,0
-  // Safety: Set the default "return" @ to the exit routine address.
-  lda.w   lr, exit
-#endif
-
-  // Start the show.
-  lda.w   pc, main
-80002196:	30 03       	mov	r3,0
-
-80002198 <udata_clear_loop>:
-80002198:	a1 22       	st.d	r0++,r2
-8000219a:	02 30       	cp.w	r0,r1
-8000219c:	cf e3       	brcs	80002198 <udata_clear_loop>
-
-8000219e <udata_clear_loop_end>:
-8000219e:	fe cf ff fa 	sub	pc,pc,-6
-800021a2:	d7 03       	nop
-
-800021a4 <main>:
-800021a4:	eb cd 40 e0 	pushm	r5-r7,lr
-800021a8:	1a 97       	mov	r7,sp
-800021aa:	20 2d       	sub	sp,8
-800021ac:	f0 1f 00 25 	mcall	80002240 <main+0x9c>
-800021b0:	f0 1f 00 25 	mcall	80002244 <main+0xa0>
-800021b4:	f0 1f 00 25 	mcall	80002248 <main+0xa4>
+8000218c <main>:
+8000218c:	eb cd 40 e0 	pushm	r5-r7,lr
+80002190:	1a 97       	mov	r7,sp
+80002192:	20 2d       	sub	sp,8
+80002194:	f0 1f 00 25 	mcall	80002228 <main+0x9c>
+80002198:	f0 1f 00 25 	mcall	8000222c <main+0xa0>
+8000219c:	f0 1f 00 25 	mcall	80002230 <main+0xa4>
 {
 	// Init everything
 	LED0_init();
 	TC_init();
 	TC_start();
-	TC0_REG_RC = 10000;	// Set RC
-800021b8:	fe 78 38 1c 	mov	r8,-51172
-800021bc:	e0 69 27 10 	mov	r9,10000
-800021c0:	91 09       	st.w	r8[0x0],r9
+	TC0_REG_RC = 200;	// Set RC
+800021a0:	fe 78 38 1c 	mov	r8,-51172
+800021a4:	e0 69 00 c8 	mov	r9,200
+800021a8:	91 09       	st.w	r8[0x0],r9
 	
 	int pwm_low = 1;	// PWM status
-800021c2:	30 18       	mov	r8,1
-800021c4:	ef 48 ff f8 	st.w	r7[-8],r8
+800021aa:	30 18       	mov	r8,1
+800021ac:	ef 48 ff f8 	st.w	r7[-8],r8
 	
-	float dutyCycle = 0.9; //Sets the duty cycle
-800021c8:	e0 68 66 66 	mov	r8,26214
-800021cc:	ea 18 3f 66 	orh	r8,0x3f66
-800021d0:	ef 48 ff fc 	st.w	r7[-4],r8
+	float dutyCycle = 0.1; //Sets the duty cycle
+800021b0:	e0 68 cc cd 	mov	r8,52429
+800021b4:	ea 18 3d cc 	orh	r8,0x3dcc
+800021b8:	ef 48 ff fc 	st.w	r7[-4],r8
 	
 	while(1)
 	{
 		// When timer exceeds the duty threshold the PWM gets high
 		if(get_tc_cv() > TC0_REG_RC*(1-dutyCycle))
-800021d4:	f0 1f 00 1e 	mcall	8000224c <main+0xa8>
-800021d8:	18 98       	mov	r8,r12
-800021da:	10 9c       	mov	r12,r8
-800021dc:	f0 1f 00 1d 	mcall	80002250 <main+0xac>
-800021e0:	18 95       	mov	r5,r12
-800021e2:	fe 78 38 1c 	mov	r8,-51172
-800021e6:	70 08       	ld.w	r8,r8[0x0]
-800021e8:	10 9c       	mov	r12,r8
-800021ea:	f0 1f 00 1a 	mcall	80002250 <main+0xac>
-800021ee:	18 96       	mov	r6,r12
-800021f0:	ee fb ff fc 	ld.w	r11,r7[-4]
-800021f4:	fc 1c 3f 80 	movh	r12,0x3f80
-800021f8:	f0 1f 00 17 	mcall	80002254 <main+0xb0>
-800021fc:	18 98       	mov	r8,r12
-800021fe:	10 9b       	mov	r11,r8
-80002200:	0c 9c       	mov	r12,r6
-80002202:	f0 1f 00 16 	mcall	80002258 <main+0xb4>
-80002206:	18 98       	mov	r8,r12
-80002208:	30 06       	mov	r6,0
-8000220a:	0a 9b       	mov	r11,r5
-8000220c:	10 9c       	mov	r12,r8
-8000220e:	f0 1f 00 14 	mcall	8000225c <main+0xb8>
-80002212:	18 98       	mov	r8,r12
-80002214:	58 08       	cp.w	r8,0
-80002216:	c0 20       	breq	8000221a <main+0x76>
-80002218:	30 16       	mov	r6,1
-8000221a:	f1 d6 c0 08 	bfextu	r8,r6,0x0,0x8
-8000221e:	c0 90       	breq	80002230 <main+0x8c>
+800021bc:	f0 1f 00 1e 	mcall	80002234 <main+0xa8>
+800021c0:	18 98       	mov	r8,r12
+800021c2:	10 9c       	mov	r12,r8
+800021c4:	f0 1f 00 1d 	mcall	80002238 <main+0xac>
+800021c8:	18 95       	mov	r5,r12
+800021ca:	fe 78 38 1c 	mov	r8,-51172
+800021ce:	70 08       	ld.w	r8,r8[0x0]
+800021d0:	10 9c       	mov	r12,r8
+800021d2:	f0 1f 00 1a 	mcall	80002238 <main+0xac>
+800021d6:	18 96       	mov	r6,r12
+800021d8:	ee fb ff fc 	ld.w	r11,r7[-4]
+800021dc:	fc 1c 3f 80 	movh	r12,0x3f80
+800021e0:	f0 1f 00 17 	mcall	8000223c <main+0xb0>
+800021e4:	18 98       	mov	r8,r12
+800021e6:	10 9b       	mov	r11,r8
+800021e8:	0c 9c       	mov	r12,r6
+800021ea:	f0 1f 00 16 	mcall	80002240 <main+0xb4>
+800021ee:	18 98       	mov	r8,r12
+800021f0:	30 06       	mov	r6,0
+800021f2:	0a 9b       	mov	r11,r5
+800021f4:	10 9c       	mov	r12,r8
+800021f6:	f0 1f 00 14 	mcall	80002244 <main+0xb8>
+800021fa:	18 98       	mov	r8,r12
+800021fc:	58 08       	cp.w	r8,0
+800021fe:	c0 20       	breq	80002202 <main+0x76>
+80002200:	30 16       	mov	r6,1
+80002202:	f1 d6 c0 08 	bfextu	r8,r6,0x0,0x8
+80002206:	c0 90       	breq	80002218 <main+0x8c>
 		{
-			pwm_low = 0;
-80002220:	30 08       	mov	r8,0
-80002222:	ef 48 ff f8 	st.w	r7[-8],r8
+			pwm_low = 0;			// PWM is not low
+80002208:	30 08       	mov	r8,0
+8000220a:	ef 48 ff f8 	st.w	r7[-8],r8
 			LED0_output(pwm_low);
-80002226:	ee fc ff f8 	ld.w	r12,r7[-8]
-8000222a:	f0 1f 00 0e 	mcall	80002260 <main+0xbc>
+8000220e:	ee fc ff f8 	ld.w	r12,r7[-8]
+80002212:	f0 1f 00 0e 	mcall	80002248 <main+0xbc>
 		else // When the timer is lower than the threshold the PWM is low
 		{
-			pwm_low = 1;
+			pwm_low = 1;			// PWM is low
 			LED0_output(pwm_low);
 		}
 	}
-8000222e:	cd 3b       	rjmp	800021d4 <main+0x30>
-			pwm_low = 0;
+80002216:	cd 3b       	rjmp	800021bc <main+0x30>
+			pwm_low = 0;			// PWM is not low
 			LED0_output(pwm_low);
 		}
 		else // When the timer is lower than the threshold the PWM is low
 		{
-			pwm_low = 1;
-80002230:	30 18       	mov	r8,1
-80002232:	ef 48 ff f8 	st.w	r7[-8],r8
+			pwm_low = 1;			// PWM is low
+80002218:	30 18       	mov	r8,1
+8000221a:	ef 48 ff f8 	st.w	r7[-8],r8
 			LED0_output(pwm_low);
-80002236:	ee fc ff f8 	ld.w	r12,r7[-8]
-8000223a:	f0 1f 00 0a 	mcall	80002260 <main+0xbc>
+8000221e:	ee fc ff f8 	ld.w	r12,r7[-8]
+80002222:	f0 1f 00 0a 	mcall	80002248 <main+0xbc>
 		}
 	}
-8000223e:	cc bb       	rjmp	800021d4 <main+0x30>
+80002226:	cc bb       	rjmp	800021bc <main+0x30>
+80002228:	80 00       	ld.sh	r0,r0[0x0]
+8000222a:	20 08       	sub	r8,0
+8000222c:	80 00       	ld.sh	r0,r0[0x0]
+8000222e:	20 74       	sub	r4,7
+80002230:	80 00       	ld.sh	r0,r0[0x0]
+80002232:	20 a8       	sub	r8,10
+80002234:	80 00       	ld.sh	r0,r0[0x0]
+80002236:	20 ce       	sub	lr,12
+80002238:	80 00       	ld.sh	r0,r0[0x0]
+8000223a:	24 e2       	sub	r2,78
+8000223c:	80 00       	ld.sh	r0,r0[0x0]
+8000223e:	22 84       	sub	r4,40
 80002240:	80 00       	ld.sh	r0,r0[0x0]
-80002242:	20 08       	sub	r8,0
+80002242:	24 00       	sub	r0,64
 80002244:	80 00       	ld.sh	r0,r0[0x0]
-80002246:	20 74       	sub	r4,7
+80002246:	22 4c       	sub	r12,36
 80002248:	80 00       	ld.sh	r0,r0[0x0]
-8000224a:	20 c0       	sub	r0,12
-8000224c:	80 00       	ld.sh	r0,r0[0x0]
-8000224e:	20 e6       	sub	r6,14
-80002250:	80 00       	ld.sh	r0,r0[0x0]
-80002252:	24 fa       	sub	r10,79
-80002254:	80 00       	ld.sh	r0,r0[0x0]
-80002256:	22 9c       	sub	r12,41
-80002258:	80 00       	ld.sh	r0,r0[0x0]
-8000225a:	24 18       	sub	r8,65
-8000225c:	80 00       	ld.sh	r0,r0[0x0]
-8000225e:	22 64       	sub	r4,38
-80002260:	80 00       	ld.sh	r0,r0[0x0]
-80002262:	20 3c       	sub	r12,3
+8000224a:	20 3c       	sub	r12,3
 
-80002264 <__avr32_f32_cmp_lt>:
-80002264:	f8 0a 15 01 	lsl	r10,r12,0x1
-80002268:	f6 09 15 01 	lsl	r9,r11,0x1
-8000226c:	f5 ba 00 00 	subfeq	r10,0
-80002270:	5e 0d       	reteq	0
-80002272:	fc 18 ff 00 	movh	r8,0xff00
-80002276:	10 3a       	cp.w	r10,r8
-80002278:	5e bd       	rethi	0
-8000227a:	10 39       	cp.w	r9,r8
-8000227c:	5e bd       	rethi	0
-8000227e:	f7 ec 20 08 	eor	r8,r11,r12
-80002282:	ed bc 00 1f 	bld	r12,0x1f
-80002286:	5f 38       	srlo	r8
-80002288:	5e 68       	retmi	r8
-8000228a:	c0 43       	brcs	80002292 <__avr32_f32_cmp_lt+0x2e>
-8000228c:	16 3c       	cp.w	r12,r11
-8000228e:	5e 2d       	reths	0
-80002290:	5e 3f       	retlo	1
-80002292:	18 3b       	cp.w	r11,r12
-80002294:	5e 2d       	reths	0
-80002296:	5e 3f       	retlo	1
+8000224c <__avr32_f32_cmp_lt>:
+8000224c:	f8 0a 15 01 	lsl	r10,r12,0x1
+80002250:	f6 09 15 01 	lsl	r9,r11,0x1
+80002254:	f5 ba 00 00 	subfeq	r10,0
+80002258:	5e 0d       	reteq	0
+8000225a:	fc 18 ff 00 	movh	r8,0xff00
+8000225e:	10 3a       	cp.w	r10,r8
+80002260:	5e bd       	rethi	0
+80002262:	10 39       	cp.w	r9,r8
+80002264:	5e bd       	rethi	0
+80002266:	f7 ec 20 08 	eor	r8,r11,r12
+8000226a:	ed bc 00 1f 	bld	r12,0x1f
+8000226e:	5f 38       	srlo	r8
+80002270:	5e 68       	retmi	r8
+80002272:	c0 43       	brcs	8000227a <__avr32_f32_cmp_lt+0x2e>
+80002274:	16 3c       	cp.w	r12,r11
+80002276:	5e 2d       	reths	0
+80002278:	5e 3f       	retlo	1
+8000227a:	18 3b       	cp.w	r11,r12
+8000227c:	5e 2d       	reths	0
+8000227e:	5e 3f       	retlo	1
 
-80002298 <__avr32_f32_sub_from_add>:
-80002298:	ee 1b 80 00 	eorh	r11,0x8000
+80002280 <__avr32_f32_sub_from_add>:
+80002280:	ee 1b 80 00 	eorh	r11,0x8000
 
-8000229c <__avr32_f32_sub>:
-8000229c:	f7 ec 20 08 	eor	r8,r11,r12
-800022a0:	c6 46       	brmi	80002368 <__avr32_f32_add_from_sub>
-800022a2:	18 98       	mov	r8,r12
-800022a4:	e6 1c 80 00 	andh	r12,0x8000,COH
-800022a8:	bf db       	cbr	r11,0x1f
-800022aa:	bf d8       	cbr	r8,0x1f
-800022ac:	f0 0b 0c 4a 	max	r10,r8,r11
-800022b0:	f0 0b 0d 49 	min	r9,r8,r11
-800022b4:	10 3a       	cp.w	r10,r8
-800022b6:	f7 bc 01 01 	subne	r12,1
-800022ba:	e6 1c 80 00 	andh	r12,0x8000,COH
-800022be:	f4 08 15 08 	lsl	r8,r10,0x8
-800022c2:	bf b8       	sbr	r8,0x1f
-800022c4:	b7 9a       	lsr	r10,0x17
-800022c6:	e0 4a 00 ff 	cp.w	r10,255
-800022ca:	c3 80       	breq	8000233a <__avr32_f32_sub_op1_nan_or_inf>
-800022cc:	f2 0b 15 08 	lsl	r11,r9,0x8
-800022d0:	bf bb       	sbr	r11,0x1f
-800022d2:	b7 99       	lsr	r9,0x17
-800022d4:	1a dc       	st.w	--sp,r12
-800022d6:	c2 90       	breq	80002328 <__avr32_f32_sub_op2_subnormal>
-800022d8:	f4 09 01 0c 	sub	r12,r10,r9
-800022dc:	c0 c0       	breq	800022f4 <__avr32_f32_sub_shift_done>
-800022de:	f1 bc 04 a0 	satu	r12,0x5
-800022e2:	f8 09 11 20 	rsub	r9,r12,32
-800022e6:	f6 09 09 49 	lsl	r9,r11,r9
-800022ea:	f7 b8 01 01 	subne	r8,1
-800022ee:	5f 19       	srne	r9
-800022f0:	f6 0c 0a 4b 	lsr	r11,r11,r12
+80002284 <__avr32_f32_sub>:
+80002284:	f7 ec 20 08 	eor	r8,r11,r12
+80002288:	c6 46       	brmi	80002350 <__avr32_f32_add_from_sub>
+8000228a:	18 98       	mov	r8,r12
+8000228c:	e6 1c 80 00 	andh	r12,0x8000,COH
+80002290:	bf db       	cbr	r11,0x1f
+80002292:	bf d8       	cbr	r8,0x1f
+80002294:	f0 0b 0c 4a 	max	r10,r8,r11
+80002298:	f0 0b 0d 49 	min	r9,r8,r11
+8000229c:	10 3a       	cp.w	r10,r8
+8000229e:	f7 bc 01 01 	subne	r12,1
+800022a2:	e6 1c 80 00 	andh	r12,0x8000,COH
+800022a6:	f4 08 15 08 	lsl	r8,r10,0x8
+800022aa:	bf b8       	sbr	r8,0x1f
+800022ac:	b7 9a       	lsr	r10,0x17
+800022ae:	e0 4a 00 ff 	cp.w	r10,255
+800022b2:	c3 80       	breq	80002322 <__avr32_f32_sub_op1_nan_or_inf>
+800022b4:	f2 0b 15 08 	lsl	r11,r9,0x8
+800022b8:	bf bb       	sbr	r11,0x1f
+800022ba:	b7 99       	lsr	r9,0x17
+800022bc:	1a dc       	st.w	--sp,r12
+800022be:	c2 90       	breq	80002310 <__avr32_f32_sub_op2_subnormal>
+800022c0:	f4 09 01 0c 	sub	r12,r10,r9
+800022c4:	c0 c0       	breq	800022dc <__avr32_f32_sub_shift_done>
+800022c6:	f1 bc 04 a0 	satu	r12,0x5
+800022ca:	f8 09 11 20 	rsub	r9,r12,32
+800022ce:	f6 09 09 49 	lsl	r9,r11,r9
+800022d2:	f7 b8 01 01 	subne	r8,1
+800022d6:	5f 19       	srne	r9
+800022d8:	f6 0c 0a 4b 	lsr	r11,r11,r12
 
-800022f4 <__avr32_f32_sub_shift_done>:
-800022f4:	16 18       	sub	r8,r11
-800022f6:	1b 0c       	ld.w	r12,sp++
-800022f8:	f0 0b 12 00 	clz	r11,r8
-800022fc:	5e 3d       	retlo	0
-800022fe:	f0 0b 09 48 	lsl	r8,r8,r11
-80002302:	16 1a       	sub	r10,r11
-80002304:	e0 8a 00 26 	brle	80002350 <__avr32_f32_sub_subnormal_result>
-80002308:	f3 e8 11 89 	or	r9,r9,r8<<0x18
-8000230c:	f9 e8 12 8c 	or	r12,r12,r8>>0x8
-80002310:	f9 da d2 e8 	bfins	r12,r10,0x17,0x8
+800022dc <__avr32_f32_sub_shift_done>:
+800022dc:	16 18       	sub	r8,r11
+800022de:	1b 0c       	ld.w	r12,sp++
+800022e0:	f0 0b 12 00 	clz	r11,r8
+800022e4:	5e 3d       	retlo	0
+800022e6:	f0 0b 09 48 	lsl	r8,r8,r11
+800022ea:	16 1a       	sub	r10,r11
+800022ec:	e0 8a 00 26 	brle	80002338 <__avr32_f32_sub_subnormal_result>
+800022f0:	f3 e8 11 89 	or	r9,r9,r8<<0x18
+800022f4:	f9 e8 12 8c 	or	r12,r12,r8>>0x8
+800022f8:	f9 da d2 e8 	bfins	r12,r10,0x17,0x8
 
-80002314 <__avr32_f32_sub_round>:
-80002314:	fc 1a 80 00 	movh	r10,0x8000
-80002318:	ed bc 00 00 	bld	r12,0x0
-8000231c:	f7 ba 01 ff 	subne	r10,-1
-80002320:	14 39       	cp.w	r9,r10
-80002322:	f7 bc 02 ff 	subhs	r12,-1
-80002326:	5e fc       	retal	r12
+800022fc <__avr32_f32_sub_round>:
+800022fc:	fc 1a 80 00 	movh	r10,0x8000
+80002300:	ed bc 00 00 	bld	r12,0x0
+80002304:	f7 ba 01 ff 	subne	r10,-1
+80002308:	14 39       	cp.w	r9,r10
+8000230a:	f7 bc 02 ff 	subhs	r12,-1
+8000230e:	5e fc       	retal	r12
 
-80002328 <__avr32_f32_sub_op2_subnormal>:
-80002328:	bf db       	cbr	r11,0x1f
-8000232a:	f9 b9 01 01 	movne	r9,1
-8000232e:	58 0a       	cp.w	r10,0
-80002330:	cd 41       	brne	800022d8 <__avr32_f32_sub+0x3c>
-80002332:	bf d8       	cbr	r8,0x1f
-80002334:	f9 ba 01 01 	movne	r10,1
-80002338:	cd 0b       	rjmp	800022d8 <__avr32_f32_sub+0x3c>
+80002310 <__avr32_f32_sub_op2_subnormal>:
+80002310:	bf db       	cbr	r11,0x1f
+80002312:	f9 b9 01 01 	movne	r9,1
+80002316:	58 0a       	cp.w	r10,0
+80002318:	cd 41       	brne	800022c0 <__avr32_f32_sub+0x3c>
+8000231a:	bf d8       	cbr	r8,0x1f
+8000231c:	f9 ba 01 01 	movne	r10,1
+80002320:	cd 0b       	rjmp	800022c0 <__avr32_f32_sub+0x3c>
 
-8000233a <__avr32_f32_sub_op1_nan_or_inf>:
-8000233a:	f0 0b 15 01 	lsl	r11,r8,0x1
-8000233e:	5e 1e       	retne	-1
-80002340:	f9 da d2 e8 	bfins	r12,r10,0x17,0x8
-80002344:	f2 0b 16 17 	lsr	r11,r9,0x17
-80002348:	e0 4b 00 ff 	cp.w	r11,255
-8000234c:	5e 1c       	retne	r12
-8000234e:	5e fe       	retal	-1
+80002322 <__avr32_f32_sub_op1_nan_or_inf>:
+80002322:	f0 0b 15 01 	lsl	r11,r8,0x1
+80002326:	5e 1e       	retne	-1
+80002328:	f9 da d2 e8 	bfins	r12,r10,0x17,0x8
+8000232c:	f2 0b 16 17 	lsr	r11,r9,0x17
+80002330:	e0 4b 00 ff 	cp.w	r11,255
+80002334:	5e 1c       	retne	r12
+80002336:	5e fe       	retal	-1
 
-80002350 <__avr32_f32_sub_subnormal_result>:
-80002350:	f4 0a 11 09 	rsub	r10,r10,9
-80002354:	f4 0b 11 20 	rsub	r11,r10,32
-80002358:	5e 3d       	retlo	0
-8000235a:	f0 0a 0a 4a 	lsr	r10,r8,r10
-8000235e:	14 4c       	or	r12,r10
-80002360:	f0 0b 09 48 	lsl	r8,r8,r11
-80002364:	10 49       	or	r9,r8
-80002366:	cd 7b       	rjmp	80002314 <__avr32_f32_sub_round>
+80002338 <__avr32_f32_sub_subnormal_result>:
+80002338:	f4 0a 11 09 	rsub	r10,r10,9
+8000233c:	f4 0b 11 20 	rsub	r11,r10,32
+80002340:	5e 3d       	retlo	0
+80002342:	f0 0a 0a 4a 	lsr	r10,r8,r10
+80002346:	14 4c       	or	r12,r10
+80002348:	f0 0b 09 48 	lsl	r8,r8,r11
+8000234c:	10 49       	or	r9,r8
+8000234e:	cd 7b       	rjmp	800022fc <__avr32_f32_sub_round>
 
-80002368 <__avr32_f32_add_from_sub>:
-80002368:	ee 1b 80 00 	eorh	r11,0x8000
+80002350 <__avr32_f32_add_from_sub>:
+80002350:	ee 1b 80 00 	eorh	r11,0x8000
 
-8000236c <__avr32_f32_add>:
-8000236c:	f7 ec 20 08 	eor	r8,r11,r12
-80002370:	c9 46       	brmi	80002298 <__avr32_f32_sub_from_add>
-80002372:	18 98       	mov	r8,r12
-80002374:	e6 1c 80 00 	andh	r12,0x8000,COH
-80002378:	bf db       	cbr	r11,0x1f
-8000237a:	bf d8       	cbr	r8,0x1f
-8000237c:	f0 0b 0c 4a 	max	r10,r8,r11
-80002380:	f0 0b 0d 49 	min	r9,r8,r11
-80002384:	f4 08 15 08 	lsl	r8,r10,0x8
-80002388:	bf b8       	sbr	r8,0x1f
-8000238a:	b7 9a       	lsr	r10,0x17
-8000238c:	e0 4a 00 ff 	cp.w	r10,255
-80002390:	c2 d0       	breq	800023ea <__avr32_f32_add_op1_nan_or_inf>
-80002392:	f2 0b 15 08 	lsl	r11,r9,0x8
-80002396:	bf bb       	sbr	r11,0x1f
-80002398:	b7 99       	lsr	r9,0x17
-8000239a:	c1 e0       	breq	800023d6 <__avr32_f32_add_op2_subnormal>
-8000239c:	1a dc       	st.w	--sp,r12
-8000239e:	14 29       	rsub	r9,r10
-800023a0:	f1 b9 04 a0 	satu	r9,0x5
-800023a4:	f6 09 0a 4c 	lsr	r12,r11,r9
-800023a8:	f2 09 11 18 	rsub	r9,r9,24
-800023ac:	f6 09 09 4b 	lsl	r11,r11,r9
-800023b0:	f7 dc d3 08 	bfins	r11,r12,0x18,0x8
-800023b4:	18 08       	add	r8,r12
-800023b6:	1b 0c       	ld.w	r12,sp++
-800023b8:	c2 63       	brcs	80002404 <__avr32_f32_add_res_of>
-800023ba:	f9 e8 12 8c 	or	r12,r12,r8>>0x8
-800023be:	f9 da d2 e8 	bfins	r12,r10,0x17,0x8
-800023c2:	fc 1a 80 00 	movh	r10,0x8000
-800023c6:	ed bc 00 00 	bld	r12,0x0
-800023ca:	f7 ba 01 ff 	subne	r10,-1
-800023ce:	14 3b       	cp.w	r11,r10
-800023d0:	f7 bc 02 ff 	subhs	r12,-1
-800023d4:	5e fc       	retal	r12
+80002354 <__avr32_f32_add>:
+80002354:	f7 ec 20 08 	eor	r8,r11,r12
+80002358:	c9 46       	brmi	80002280 <__avr32_f32_sub_from_add>
+8000235a:	18 98       	mov	r8,r12
+8000235c:	e6 1c 80 00 	andh	r12,0x8000,COH
+80002360:	bf db       	cbr	r11,0x1f
+80002362:	bf d8       	cbr	r8,0x1f
+80002364:	f0 0b 0c 4a 	max	r10,r8,r11
+80002368:	f0 0b 0d 49 	min	r9,r8,r11
+8000236c:	f4 08 15 08 	lsl	r8,r10,0x8
+80002370:	bf b8       	sbr	r8,0x1f
+80002372:	b7 9a       	lsr	r10,0x17
+80002374:	e0 4a 00 ff 	cp.w	r10,255
+80002378:	c2 d0       	breq	800023d2 <__avr32_f32_add_op1_nan_or_inf>
+8000237a:	f2 0b 15 08 	lsl	r11,r9,0x8
+8000237e:	bf bb       	sbr	r11,0x1f
+80002380:	b7 99       	lsr	r9,0x17
+80002382:	c1 e0       	breq	800023be <__avr32_f32_add_op2_subnormal>
+80002384:	1a dc       	st.w	--sp,r12
+80002386:	14 29       	rsub	r9,r10
+80002388:	f1 b9 04 a0 	satu	r9,0x5
+8000238c:	f6 09 0a 4c 	lsr	r12,r11,r9
+80002390:	f2 09 11 18 	rsub	r9,r9,24
+80002394:	f6 09 09 4b 	lsl	r11,r11,r9
+80002398:	f7 dc d3 08 	bfins	r11,r12,0x18,0x8
+8000239c:	18 08       	add	r8,r12
+8000239e:	1b 0c       	ld.w	r12,sp++
+800023a0:	c2 63       	brcs	800023ec <__avr32_f32_add_res_of>
+800023a2:	f9 e8 12 8c 	or	r12,r12,r8>>0x8
+800023a6:	f9 da d2 e8 	bfins	r12,r10,0x17,0x8
+800023aa:	fc 1a 80 00 	movh	r10,0x8000
+800023ae:	ed bc 00 00 	bld	r12,0x0
+800023b2:	f7 ba 01 ff 	subne	r10,-1
+800023b6:	14 3b       	cp.w	r11,r10
+800023b8:	f7 bc 02 ff 	subhs	r12,-1
+800023bc:	5e fc       	retal	r12
 
-800023d6 <__avr32_f32_add_op2_subnormal>:
-800023d6:	bf db       	cbr	r11,0x1f
-800023d8:	f9 b9 01 01 	movne	r9,1
-800023dc:	58 0a       	cp.w	r10,0
-800023de:	cd f1       	brne	8000239c <__avr32_f32_add+0x30>
-800023e0:	bf d8       	cbr	r8,0x1f
-800023e2:	10 0b       	add	r11,r8
-800023e4:	f9 eb 12 8c 	or	r12,r12,r11>>0x8
-800023e8:	5e fc       	retal	r12
+800023be <__avr32_f32_add_op2_subnormal>:
+800023be:	bf db       	cbr	r11,0x1f
+800023c0:	f9 b9 01 01 	movne	r9,1
+800023c4:	58 0a       	cp.w	r10,0
+800023c6:	cd f1       	brne	80002384 <__avr32_f32_add+0x30>
+800023c8:	bf d8       	cbr	r8,0x1f
+800023ca:	10 0b       	add	r11,r8
+800023cc:	f9 eb 12 8c 	or	r12,r12,r11>>0x8
+800023d0:	5e fc       	retal	r12
 
-800023ea <__avr32_f32_add_op1_nan_or_inf>:
-800023ea:	f0 0b 15 01 	lsl	r11,r8,0x1
-800023ee:	5e 1e       	retne	-1
-800023f0:	f9 da d2 e8 	bfins	r12,r10,0x17,0x8
-800023f4:	f2 0b 16 17 	lsr	r11,r9,0x17
-800023f8:	e0 4b 00 ff 	cp.w	r11,255
-800023fc:	5e 1c       	retne	r12
-800023fe:	a9 79       	lsl	r9,0x9
-80002400:	5e 0c       	reteq	r12
-80002402:	5e fe       	retal	-1
+800023d2 <__avr32_f32_add_op1_nan_or_inf>:
+800023d2:	f0 0b 15 01 	lsl	r11,r8,0x1
+800023d6:	5e 1e       	retne	-1
+800023d8:	f9 da d2 e8 	bfins	r12,r10,0x17,0x8
+800023dc:	f2 0b 16 17 	lsr	r11,r9,0x17
+800023e0:	e0 4b 00 ff 	cp.w	r11,255
+800023e4:	5e 1c       	retne	r12
+800023e6:	a9 79       	lsl	r9,0x9
+800023e8:	5e 0c       	reteq	r12
+800023ea:	5e fe       	retal	-1
 
-80002404 <__avr32_f32_add_res_of>:
-80002404:	a1 98       	lsr	r8,0x1
-80002406:	2f fa       	sub	r10,-1
-80002408:	e0 4a 00 ff 	cp.w	r10,255
-8000240c:	f9 b8 00 00 	moveq	r8,0
-80002410:	f9 bb 00 00 	moveq	r11,0
-80002414:	cd 3b       	rjmp	800023ba <__avr32_f32_add+0x4e>
-80002416:	d7 03       	nop
+800023ec <__avr32_f32_add_res_of>:
+800023ec:	a1 98       	lsr	r8,0x1
+800023ee:	2f fa       	sub	r10,-1
+800023f0:	e0 4a 00 ff 	cp.w	r10,255
+800023f4:	f9 b8 00 00 	moveq	r8,0
+800023f8:	f9 bb 00 00 	moveq	r11,0
+800023fc:	cd 3b       	rjmp	800023a2 <__avr32_f32_add+0x4e>
+800023fe:	d7 03       	nop
 
-80002418 <__avr32_f32_mul>:
-80002418:	18 98       	mov	r8,r12
-8000241a:	16 5c       	eor	r12,r11
-8000241c:	e6 1c 80 00 	andh	r12,0x8000,COH
-80002420:	bf d8       	cbr	r8,0x1f
-80002422:	c6 60       	breq	800024ee <__avr32_f32_mul_op1_zero>
-80002424:	bf db       	cbr	r11,0x1f
-80002426:	f0 0b 0c 4a 	max	r10,r8,r11
-8000242a:	f0 0b 0d 49 	min	r9,r8,r11
-8000242e:	f4 08 15 08 	lsl	r8,r10,0x8
-80002432:	bf b8       	sbr	r8,0x1f
-80002434:	b7 9a       	lsr	r10,0x17
-80002436:	e0 4a 00 ff 	cp.w	r10,255
-8000243a:	c3 d0       	breq	800024b4 <__avr32_f32_mul_op1_nan_or_inf>
-8000243c:	f2 0b 15 08 	lsl	r11,r9,0x8
-80002440:	bf bb       	sbr	r11,0x1f
-80002442:	b7 99       	lsr	r9,0x17
-80002444:	c2 40       	breq	8000248c <__avr32_f32_mul_op2_subnormal>
-80002446:	14 09       	add	r9,r10
-80002448:	f0 0b 06 4a 	mulu.d	r10,r8,r11
-8000244c:	f6 08 15 01 	lsl	r8,r11,0x1
-80002450:	f0 0b 17 20 	movhs	r11,r8
-80002454:	f7 b9 02 01 	subhs	r9,1
-80002458:	a9 8a       	lsr	r10,0x8
-8000245a:	f5 db d3 08 	bfins	r10,r11,0x18,0x8
-8000245e:	27 e9       	sub	r9,126
-80002460:	e0 8a 00 39 	brle	800024d2 <__avr32_f32_mul_res_subnormal>
-80002464:	e0 49 00 ff 	cp.w	r9,255
-80002468:	c0 f4       	brge	80002486 <__avr32_f32_mul_round+0x14>
-8000246a:	f9 eb 12 8c 	or	r12,r12,r11>>0x8
-8000246e:	f9 d9 d2 e8 	bfins	r12,r9,0x17,0x8
+80002400 <__avr32_f32_mul>:
+80002400:	18 98       	mov	r8,r12
+80002402:	16 5c       	eor	r12,r11
+80002404:	e6 1c 80 00 	andh	r12,0x8000,COH
+80002408:	bf d8       	cbr	r8,0x1f
+8000240a:	c6 60       	breq	800024d6 <__avr32_f32_mul_op1_zero>
+8000240c:	bf db       	cbr	r11,0x1f
+8000240e:	f0 0b 0c 4a 	max	r10,r8,r11
+80002412:	f0 0b 0d 49 	min	r9,r8,r11
+80002416:	f4 08 15 08 	lsl	r8,r10,0x8
+8000241a:	bf b8       	sbr	r8,0x1f
+8000241c:	b7 9a       	lsr	r10,0x17
+8000241e:	e0 4a 00 ff 	cp.w	r10,255
+80002422:	c3 d0       	breq	8000249c <__avr32_f32_mul_op1_nan_or_inf>
+80002424:	f2 0b 15 08 	lsl	r11,r9,0x8
+80002428:	bf bb       	sbr	r11,0x1f
+8000242a:	b7 99       	lsr	r9,0x17
+8000242c:	c2 40       	breq	80002474 <__avr32_f32_mul_op2_subnormal>
+8000242e:	14 09       	add	r9,r10
+80002430:	f0 0b 06 4a 	mulu.d	r10,r8,r11
+80002434:	f6 08 15 01 	lsl	r8,r11,0x1
+80002438:	f0 0b 17 20 	movhs	r11,r8
+8000243c:	f7 b9 02 01 	subhs	r9,1
+80002440:	a9 8a       	lsr	r10,0x8
+80002442:	f5 db d3 08 	bfins	r10,r11,0x18,0x8
+80002446:	27 e9       	sub	r9,126
+80002448:	e0 8a 00 39 	brle	800024ba <__avr32_f32_mul_res_subnormal>
+8000244c:	e0 49 00 ff 	cp.w	r9,255
+80002450:	c0 f4       	brge	8000246e <__avr32_f32_mul_round+0x14>
+80002452:	f9 eb 12 8c 	or	r12,r12,r11>>0x8
+80002456:	f9 d9 d2 e8 	bfins	r12,r9,0x17,0x8
 
-80002472 <__avr32_f32_mul_round>:
-80002472:	fc 18 80 00 	movh	r8,0x8000
-80002476:	ed bc 00 00 	bld	r12,0x0
-8000247a:	f7 b8 01 ff 	subne	r8,-1
-8000247e:	10 3a       	cp.w	r10,r8
-80002480:	f7 bc 02 ff 	subhs	r12,-1
-80002484:	5e fc       	retal	r12
-80002486:	ea 1c 7f 80 	orh	r12,0x7f80
-8000248a:	5e fc       	retal	r12
+8000245a <__avr32_f32_mul_round>:
+8000245a:	fc 18 80 00 	movh	r8,0x8000
+8000245e:	ed bc 00 00 	bld	r12,0x0
+80002462:	f7 b8 01 ff 	subne	r8,-1
+80002466:	10 3a       	cp.w	r10,r8
+80002468:	f7 bc 02 ff 	subhs	r12,-1
+8000246c:	5e fc       	retal	r12
+8000246e:	ea 1c 7f 80 	orh	r12,0x7f80
+80002472:	5e fc       	retal	r12
 
-8000248c <__avr32_f32_mul_op2_subnormal>:
-8000248c:	bf db       	cbr	r11,0x1f
-8000248e:	f6 09 12 00 	clz	r9,r11
-80002492:	5e 3d       	retlo	0
-80002494:	20 89       	sub	r9,8
-80002496:	f6 09 09 4b 	lsl	r11,r11,r9
-8000249a:	f2 09 11 01 	rsub	r9,r9,1
-8000249e:	14 7a       	tst	r10,r10
-800024a0:	cd 31       	brne	80002446 <__avr32_f32_mul+0x2e>
-800024a2:	bf d8       	cbr	r8,0x1f
-800024a4:	f6 0a 12 00 	clz	r10,r11
-800024a8:	5e 3d       	retlo	0
-800024aa:	f0 0a 09 48 	lsl	r8,r8,r10
-800024ae:	f4 0a 11 01 	rsub	r10,r10,1
-800024b2:	cc ab       	rjmp	80002446 <__avr32_f32_mul+0x2e>
+80002474 <__avr32_f32_mul_op2_subnormal>:
+80002474:	bf db       	cbr	r11,0x1f
+80002476:	f6 09 12 00 	clz	r9,r11
+8000247a:	5e 3d       	retlo	0
+8000247c:	20 89       	sub	r9,8
+8000247e:	f6 09 09 4b 	lsl	r11,r11,r9
+80002482:	f2 09 11 01 	rsub	r9,r9,1
+80002486:	14 7a       	tst	r10,r10
+80002488:	cd 31       	brne	8000242e <__avr32_f32_mul+0x2e>
+8000248a:	bf d8       	cbr	r8,0x1f
+8000248c:	f6 0a 12 00 	clz	r10,r11
+80002490:	5e 3d       	retlo	0
+80002492:	f0 0a 09 48 	lsl	r8,r8,r10
+80002496:	f4 0a 11 01 	rsub	r10,r10,1
+8000249a:	cc ab       	rjmp	8000242e <__avr32_f32_mul+0x2e>
 
-800024b4 <__avr32_f32_mul_op1_nan_or_inf>:
-800024b4:	f0 0b 15 01 	lsl	r11,r8,0x1
-800024b8:	5e 1e       	retne	-1
-800024ba:	12 79       	tst	r9,r9
-800024bc:	5e 0e       	reteq	-1
-800024be:	f9 da d2 e8 	bfins	r12,r10,0x17,0x8
-800024c2:	f2 0b 16 17 	lsr	r11,r9,0x17
-800024c6:	e0 4b 00 ff 	cp.w	r11,255
-800024ca:	5e 1c       	retne	r12
-800024cc:	a9 79       	lsl	r9,0x9
-800024ce:	5e 0c       	reteq	r12
-800024d0:	5e fe       	retal	-1
+8000249c <__avr32_f32_mul_op1_nan_or_inf>:
+8000249c:	f0 0b 15 01 	lsl	r11,r8,0x1
+800024a0:	5e 1e       	retne	-1
+800024a2:	12 79       	tst	r9,r9
+800024a4:	5e 0e       	reteq	-1
+800024a6:	f9 da d2 e8 	bfins	r12,r10,0x17,0x8
+800024aa:	f2 0b 16 17 	lsr	r11,r9,0x17
+800024ae:	e0 4b 00 ff 	cp.w	r11,255
+800024b2:	5e 1c       	retne	r12
+800024b4:	a9 79       	lsl	r9,0x9
+800024b6:	5e 0c       	reteq	r12
+800024b8:	5e fe       	retal	-1
 
-800024d2 <__avr32_f32_mul_res_subnormal>:
-800024d2:	f2 09 11 09 	rsub	r9,r9,9
-800024d6:	f2 08 11 20 	rsub	r8,r9,32
-800024da:	5e 3d       	retlo	0
-800024dc:	f6 09 0a 49 	lsr	r9,r11,r9
-800024e0:	12 4c       	or	r12,r9
-800024e2:	f6 08 09 4b 	lsl	r11,r11,r8
-800024e6:	e4 1a 00 ff 	andh	r10,0xff
-800024ea:	16 4a       	or	r10,r11
-800024ec:	cc 3b       	rjmp	80002472 <__avr32_f32_mul_round>
+800024ba <__avr32_f32_mul_res_subnormal>:
+800024ba:	f2 09 11 09 	rsub	r9,r9,9
+800024be:	f2 08 11 20 	rsub	r8,r9,32
+800024c2:	5e 3d       	retlo	0
+800024c4:	f6 09 0a 49 	lsr	r9,r11,r9
+800024c8:	12 4c       	or	r12,r9
+800024ca:	f6 08 09 4b 	lsl	r11,r11,r8
+800024ce:	e4 1a 00 ff 	andh	r10,0xff
+800024d2:	16 4a       	or	r10,r11
+800024d4:	cc 3b       	rjmp	8000245a <__avr32_f32_mul_round>
 
-800024ee <__avr32_f32_mul_op1_zero>:
-800024ee:	f5 db c2 e8 	bfextu	r10,r11,0x17,0x8
-800024f2:	e0 4a 00 ff 	cp.w	r10,255
-800024f6:	5e 1c       	retne	r12
-800024f8:	5e 0e       	reteq	-1
+800024d6 <__avr32_f32_mul_op1_zero>:
+800024d6:	f5 db c2 e8 	bfextu	r10,r11,0x17,0x8
+800024da:	e0 4a 00 ff 	cp.w	r10,255
+800024de:	5e 1c       	retne	r12
+800024e0:	5e 0e       	reteq	-1
 
-800024fa <__avr32_s32_to_f32>:
-800024fa:	58 0c       	cp.w	r12,0
-800024fc:	5e 0c       	reteq	r12
-800024fe:	18 9b       	mov	r11,r12
-80002500:	5c 4c       	abs	r12
-80002502:	e0 6a 00 9e 	mov	r10,158
-80002506:	f8 09 12 00 	clz	r9,r12
-8000250a:	12 1a       	sub	r10,r9
-8000250c:	f8 09 09 4c 	lsl	r12,r12,r9
-80002510:	58 0a       	cp.w	r10,0
-80002512:	e0 8a 00 15 	brle	8000253c <__avr32_s32_to_f32_subnormal>
-80002516:	37 f9       	mov	r9,127
-80002518:	ed bc 00 08 	bld	r12,0x8
-8000251c:	f7 b9 00 ff 	subeq	r9,-1
-80002520:	12 0c       	add	r12,r9
-80002522:	f7 ba 03 fe 	sublo	r10,-2
-80002526:	ed bc 00 1f 	bld	r12,0x1f
-8000252a:	f7 ba 01 01 	subne	r10,1
-8000252e:	f8 0c 16 07 	lsr	r12,r12,0x7
-80002532:	f9 da d3 08 	bfins	r12,r10,0x18,0x8
-80002536:	a1 7b       	lsl	r11,0x1
-80002538:	5d 0c       	ror	r12
-8000253a:	5e fc       	retal	r12
+800024e2 <__avr32_s32_to_f32>:
+800024e2:	58 0c       	cp.w	r12,0
+800024e4:	5e 0c       	reteq	r12
+800024e6:	18 9b       	mov	r11,r12
+800024e8:	5c 4c       	abs	r12
+800024ea:	e0 6a 00 9e 	mov	r10,158
+800024ee:	f8 09 12 00 	clz	r9,r12
+800024f2:	12 1a       	sub	r10,r9
+800024f4:	f8 09 09 4c 	lsl	r12,r12,r9
+800024f8:	58 0a       	cp.w	r10,0
+800024fa:	e0 8a 00 15 	brle	80002524 <__avr32_s32_to_f32_subnormal>
+800024fe:	37 f9       	mov	r9,127
+80002500:	ed bc 00 08 	bld	r12,0x8
+80002504:	f7 b9 00 ff 	subeq	r9,-1
+80002508:	12 0c       	add	r12,r9
+8000250a:	f7 ba 03 fe 	sublo	r10,-2
+8000250e:	ed bc 00 1f 	bld	r12,0x1f
+80002512:	f7 ba 01 01 	subne	r10,1
+80002516:	f8 0c 16 07 	lsr	r12,r12,0x7
+8000251a:	f9 da d3 08 	bfins	r12,r10,0x18,0x8
+8000251e:	a1 7b       	lsl	r11,0x1
+80002520:	5d 0c       	ror	r12
+80002522:	5e fc       	retal	r12
 
-8000253c <__avr32_s32_to_f32_subnormal>:
-8000253c:	f4 0a 11 01 	rsub	r10,r10,1
-80002540:	59 9a       	cp.w	r10,25
-80002542:	f9 bc 02 00 	movhs	r12,0
-80002546:	c1 32       	brcc	8000256c <__avr32_s32_to_f32_subnormal+0x30>
-80002548:	f4 09 11 20 	rsub	r9,r10,32
-8000254c:	f8 09 09 49 	lsl	r9,r12,r9
-80002550:	5f 19       	srne	r9
-80002552:	f8 0a 0a 4c 	lsr	r12,r12,r10
-80002556:	12 4c       	or	r12,r9
-80002558:	37 f9       	mov	r9,127
-8000255a:	ed bc 00 08 	bld	r12,0x8
-8000255e:	f7 b9 00 ff 	subeq	r9,-1
-80002562:	12 0c       	add	r12,r9
-80002564:	f8 0c 16 07 	lsr	r12,r12,0x7
-80002568:	a1 7b       	lsl	r11,0x1
-8000256a:	5d 0c       	ror	r12
-8000256c:	5e fc       	retal	r12
+80002524 <__avr32_s32_to_f32_subnormal>:
+80002524:	f4 0a 11 01 	rsub	r10,r10,1
+80002528:	59 9a       	cp.w	r10,25
+8000252a:	f9 bc 02 00 	movhs	r12,0
+8000252e:	c1 32       	brcc	80002554 <__avr32_s32_to_f32_subnormal+0x30>
+80002530:	f4 09 11 20 	rsub	r9,r10,32
+80002534:	f8 09 09 49 	lsl	r9,r12,r9
+80002538:	5f 19       	srne	r9
+8000253a:	f8 0a 0a 4c 	lsr	r12,r12,r10
+8000253e:	12 4c       	or	r12,r9
+80002540:	37 f9       	mov	r9,127
+80002542:	ed bc 00 08 	bld	r12,0x8
+80002546:	f7 b9 00 ff 	subeq	r9,-1
+8000254a:	12 0c       	add	r12,r9
+8000254c:	f8 0c 16 07 	lsr	r12,r12,0x7
+80002550:	a1 7b       	lsl	r11,0x1
+80002552:	5d 0c       	ror	r12
+80002554:	5e fc       	retal	r12
 
 Disassembly of section .exception:
 
 80002600 <_evba>:
-_evba:
-
-	.org  0x000
-	// Unrecoverable Exception.
-_handle_Unrecoverable_Exception:
-	rjmp $
 80002600:	c0 08       	rjmp	80002600 <_evba>
 	...
 
 80002604 <_handle_TLB_Multiple_Hit>:
-
-	.org  0x004
-	// TLB Multiple Hit.
-_handle_TLB_Multiple_Hit:
-	rjmp $
 80002604:	c0 08       	rjmp	80002604 <_handle_TLB_Multiple_Hit>
 	...
 
 80002608 <_handle_Bus_Error_Data_Fetch>:
-
-	.org  0x008
-	// Bus Error Data Fetch.
-_handle_Bus_Error_Data_Fetch:
-	rjmp $
 80002608:	c0 08       	rjmp	80002608 <_handle_Bus_Error_Data_Fetch>
 	...
 
 8000260c <_handle_Bus_Error_Instruction_Fetch>:
-
-	.org  0x00C
-	// Bus Error Instruction Fetch.
-_handle_Bus_Error_Instruction_Fetch:
-	rjmp $
 8000260c:	c0 08       	rjmp	8000260c <_handle_Bus_Error_Instruction_Fetch>
 	...
 
 80002610 <_handle_NMI>:
-
-	.org  0x010
-	// NMI.
-_handle_NMI:
-	rjmp $
 80002610:	c0 08       	rjmp	80002610 <_handle_NMI>
 	...
 
 80002614 <_handle_Instruction_Address>:
-
-	.org  0x014
-	// Instruction Address.
-_handle_Instruction_Address:
-	rjmp $
 80002614:	c0 08       	rjmp	80002614 <_handle_Instruction_Address>
 	...
 
 80002618 <_handle_ITLB_Protection>:
-
-	.org  0x018
-	// ITLB Protection.
-_handle_ITLB_Protection:
-	rjmp $
 80002618:	c0 08       	rjmp	80002618 <_handle_ITLB_Protection>
 	...
 
 8000261c <_handle_Breakpoint>:
-
-	.org  0x01C
-	// Breakpoint.
-_handle_Breakpoint:
-	rjmp $
 8000261c:	c0 08       	rjmp	8000261c <_handle_Breakpoint>
 	...
 
 80002620 <_handle_Illegal_Opcode>:
-
-	.org  0x020
-	// Illegal Opcode.
-_handle_Illegal_Opcode:
-	rjmp $
 80002620:	c0 08       	rjmp	80002620 <_handle_Illegal_Opcode>
 	...
 
 80002624 <_handle_Unimplemented_Instruction>:
-
-	.org  0x024
-	// Unimplemented Instruction.
-_handle_Unimplemented_Instruction:
-	rjmp $
 80002624:	c0 08       	rjmp	80002624 <_handle_Unimplemented_Instruction>
 	...
 
 80002628 <_handle_Privilege_Violation>:
-
-	.org  0x028
-	// Privilege Violation.
-_handle_Privilege_Violation:
-	rjmp $
 80002628:	c0 08       	rjmp	80002628 <_handle_Privilege_Violation>
 	...
 
 8000262c <_handle_Floating_Point>:
-
-	.org  0x02C
-	// Floating-Point: UNUSED IN AVR32UC and AVR32AP.
-_handle_Floating_Point:
-	rjmp $
 8000262c:	c0 08       	rjmp	8000262c <_handle_Floating_Point>
 	...
 
 80002630 <_handle_Coprocessor_Absent>:
-
-	.org  0x030
-	// Coprocessor Absent: UNUSED IN AVR32UC.
-_handle_Coprocessor_Absent:
-	rjmp $
 80002630:	c0 08       	rjmp	80002630 <_handle_Coprocessor_Absent>
 	...
 
 80002634 <_handle_Data_Address_Read>:
-
-	.org  0x034
-	// Data Address (Read).
-_handle_Data_Address_Read:
-	rjmp $
 80002634:	c0 08       	rjmp	80002634 <_handle_Data_Address_Read>
 	...
 
 80002638 <_handle_Data_Address_Write>:
-
-	.org  0x038
-	// Data Address (Write).
-_handle_Data_Address_Write:
-	rjmp $
 80002638:	c0 08       	rjmp	80002638 <_handle_Data_Address_Write>
 	...
 
 8000263c <_handle_DTLB_Protection_Read>:
-
-	.org  0x03C
-	// DTLB Protection (Read).
-_handle_DTLB_Protection_Read:
-	rjmp $
 8000263c:	c0 08       	rjmp	8000263c <_handle_DTLB_Protection_Read>
 	...
 
 80002640 <_handle_DTLB_Protection_Write>:
-
-	.org  0x040
-	// DTLB Protection (Write).
-_handle_DTLB_Protection_Write:
-	rjmp $
 80002640:	c0 08       	rjmp	80002640 <_handle_DTLB_Protection_Write>
 	...
 
 80002644 <_handle_DTLB_Modified>:
-
-	.org  0x044
-	// DTLB Modified: UNUSED IN AVR32UC.
-_handle_DTLB_Modified:
-	rjmp $
 80002644:	c0 08       	rjmp	80002644 <_handle_DTLB_Modified>
 	...
 
 80002650 <_handle_ITLB_Miss>:
-
-	.org  0x050
-	// ITLB Miss.
-_handle_ITLB_Miss:
-	rjmp $
 80002650:	c0 08       	rjmp	80002650 <_handle_ITLB_Miss>
 	...
 
 80002660 <_handle_DTLB_Miss_Read>:
-
-	.org  0x060
-	// DTLB Miss (Read).
-_handle_DTLB_Miss_Read:
-	rjmp $
 80002660:	c0 08       	rjmp	80002660 <_handle_DTLB_Miss_Read>
 	...
 
 80002670 <_handle_DTLB_Miss_Write>:
-
-	.org  0x070
-	// DTLB Miss (Write).
-_handle_DTLB_Miss_Write:
-	rjmp $
 80002670:	c0 08       	rjmp	80002670 <_handle_DTLB_Miss_Write>
 	...
 
 80002700 <_handle_Supervisor_Call>:
-
-	.org  0x100
-	// Supervisor Call.
-_handle_Supervisor_Call:
-	rjmp $
 80002700:	c0 08       	rjmp	80002700 <_handle_Supervisor_Call>
 80002702:	d7 03       	nop
 
 80002704 <_int0>:
-	 * RSR_INTx by the CPU upon interrupt entry. No other register is saved
-	 * by hardware.
-	 */
-	pushm   r8-r12, lr
-#endif
-	// Pass the int_level parameter to the _get_interrupt_handler function.
 80002704:	30 0c       	mov	r12,0
-80002706:	fe b0 fc f9 	rcall	800020f8 <_get_interrupt_handler>
+80002706:	fe b0 fc ed 	rcall	800020e0 <_get_interrupt_handler>
 8000270a:	58 0c       	cp.w	r12,0
 8000270c:	f8 0f 17 10 	movne	pc,r12
-	popm    r8-r12, lr
-#endif
-	/*
-	 * If this was a spurious interrupt (R12 == NULL), return from event
-	 * handler.
-	 */
 80002710:	d6 03       	rete
 
 80002712 <_int1>:
-	 * RSR_INTx by the CPU upon interrupt entry. No other register is saved
-	 * by hardware.
-	 */
-	pushm   r8-r12, lr
-#endif
-	// Pass the int_level parameter to the _get_interrupt_handler function.
 80002712:	30 1c       	mov	r12,1
-80002714:	fe b0 fc f2 	rcall	800020f8 <_get_interrupt_handler>
+80002714:	fe b0 fc e6 	rcall	800020e0 <_get_interrupt_handler>
 80002718:	58 0c       	cp.w	r12,0
 8000271a:	f8 0f 17 10 	movne	pc,r12
-	popm    r8-r12, lr
-#endif
-	/*
-	 * If this was a spurious interrupt (R12 == NULL), return from event
-	 * handler.
-	 */
 8000271e:	d6 03       	rete
 
 80002720 <_int2>:
-	 * RSR_INTx by the CPU upon interrupt entry. No other register is saved
-	 * by hardware.
-	 */
-	pushm   r8-r12, lr
-#endif
-	// Pass the int_level parameter to the _get_interrupt_handler function.
 80002720:	30 2c       	mov	r12,2
-80002722:	fe b0 fc eb 	rcall	800020f8 <_get_interrupt_handler>
+80002722:	fe b0 fc df 	rcall	800020e0 <_get_interrupt_handler>
 80002726:	58 0c       	cp.w	r12,0
 80002728:	f8 0f 17 10 	movne	pc,r12
-	popm    r8-r12, lr
-#endif
-	/*
-	 * If this was a spurious interrupt (R12 == NULL), return from event
-	 * handler.
-	 */
 8000272c:	d6 03       	rete
 
 8000272e <_int3>:
-	 * RSR_INTx by the CPU upon interrupt entry. No other register is saved
-	 * by hardware.
-	 */
-	pushm   r8-r12, lr
-#endif
-	// Pass the int_level parameter to the _get_interrupt_handler function.
 8000272e:	30 3c       	mov	r12,3
-80002730:	fe b0 fc e4 	rcall	800020f8 <_get_interrupt_handler>
+80002730:	fe b0 fc d8 	rcall	800020e0 <_get_interrupt_handler>
 80002734:	58 0c       	cp.w	r12,0
 80002736:	f8 0f 17 10 	movne	pc,r12
-	popm    r8-r12, lr
-#endif
-	/*
-	 * If this was a spurious interrupt (R12 == NULL), return from event
-	 * handler.
-	 */
 8000273a:	d6 03       	rete
 8000273c:	d7 03       	nop
 8000273e:	d7 03       	nop

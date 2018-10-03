@@ -52,13 +52,13 @@ int main(void)
 		dip204_set_cursor_position(column+15, line); //First column and line
 		dip204_printf_string("%03d", potentiometer); //print value
 		// Convert the temperature value to a value btwn 0-255
-		temperature = temp_value * 600 / 1024;
+		temperature = temp_value;// * 600 / 1024;
 		dip204_set_cursor_position(column+13, line+1);	//First column second line
-		dip204_printf_string("%d", temperature); //print value
+		dip204_printf_string("%04d", temperature); //print value
 		//Convert the light value to a value btwn 0-255
-		light = light_value * 255 / 1024;
+		light = light_value;// * 255 / 1024;
 		dip204_set_cursor_position(column+7, line+2);	//First column third line
-		dip204_printf_string("%d", light); //print value
+		dip204_printf_string("%04d", light); //print value
 		int i = 0;
 		
 		// Delay

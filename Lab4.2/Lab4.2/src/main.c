@@ -6,11 +6,11 @@ int main (void)
 	LED0_init();
 	TC_init();
 	TC_start();
-	TC0_REG_RC = 10000;	// Set RC
+	TC0_REG_RC = 200;	// Set RC
 	
 	int pwm_low = 1;	// PWM status
 	
-	float dutyCycle = 0.9; //Sets the duty cycle
+	float dutyCycle = 0.1; //Sets the duty cycle
 	
 	while(1)
 	{

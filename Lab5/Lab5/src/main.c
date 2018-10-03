@@ -46,7 +46,7 @@ void vLED0Task(void *pvParameters)
 		
 		while(xTaskGetTickCount() > xLastWakeTime + xFreq)
 		{
-			usart_write_line (serialPORT_USART, "LED0 DEADLINE MISSED\n");
+			usart_write_line (serialPORT_USART, "Priority inversion detected... LED0 DEADLINE MISSED\n");
 			xLastWakeTime += xFreq;
 		}
 		//vTaskDelay(TASK_DELAY_MS(1000));
@@ -68,7 +68,7 @@ void vLED1Task( void *pvParameters )
 		
 		while(xTaskGetTickCount() > xLastWakeTime + xFreq)
 		{
-			usart_write_line (serialPORT_USART, "LED1 DEADLINE MISSED\n");
+			usart_write_line (serialPORT_USART, "Priority inversion detected... LED1 DEADLINE MISSED\n");
 			xLastWakeTime += xFreq;
 		}
 		//vTaskDelay(TASK_DELAY_MS(2000));
@@ -90,7 +90,7 @@ void vLED2Task( void *pvParameters )
 		
 		while(xTaskGetTickCount() > xLastWakeTime + xFreq)
 		{
-			usart_write_line (serialPORT_USART, "LED2 DEADLINE MISSED\n");
+			usart_write_line (serialPORT_USART, "Priority inversion detected... LED2 DEADLINE MISSED\n");
 			xLastWakeTime += xFreq;
 		}
 		//vTaskDelay(TASK_DELAY_MS(3000));
@@ -178,12 +178,12 @@ int main(void)
 					"vLED0Task",
 					configMINIMAL_STACK_SIZE,
 					NULL,
-					1,
+					2,
 					&xHandle1);
 					
-	xTaskCreate(	vLED1Task, "vLED1Task", configMINIMAL_STACK_SIZE, NULL, 1, &xHandle2);
+	xTaskCreate(	vLED1Task, "vLED1Task", configMINIMAL_STACK_SIZE, NULL, 2, &xHandle2);
 	
-	xTaskCreate(	vLED2Task, "vLED2Task", configMINIMAL_STACK_SIZE, NULL, 1, &xHandle3);
+	xTaskCreate(	vLED2Task, "vLED2Task", configMINIMAL_STACK_SIZE, NULL, 2, &xHandle3);
 	
 	xTaskCreate(	vButton0Task, "vButton0Task", configMINIMAL_STACK_SIZE, xHandle1, 1, NULL);
 	

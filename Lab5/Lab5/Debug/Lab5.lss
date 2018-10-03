@@ -15,21 +15,21 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
   5 .fini         00000018  80004000  80004000  00004400  2**2
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  6 .rodata       00000260  80004018  80004018  00004418  2**2
+  6 .rodata       000002c0  80004018  80004018  00004418  2**2
                   CONTENTS, ALLOC, LOAD, READONLY, DATA
   7 .dalign       00000004  00000004  00000004  00000000  2**0
                   ALLOC
-  8 .ctors        00000008  00000008  80004278  00004808  2**2
+  8 .ctors        00000008  00000008  800042d8  00004808  2**2
                   CONTENTS, ALLOC, LOAD, DATA
-  9 .dtors        00000008  00000010  80004280  00004810  2**2
+  9 .dtors        00000008  00000010  800042e0  00004810  2**2
                   CONTENTS, ALLOC, LOAD, DATA
- 10 .jcr          00000004  00000018  80004288  00004818  2**2
+ 10 .jcr          00000004  00000018  800042e8  00004818  2**2
                   CONTENTS, ALLOC, LOAD, DATA
- 11 .got          00000000  0000001c  8000428c  0000481c  2**2
+ 11 .got          00000000  0000001c  800042ec  0000481c  2**2
                   CONTENTS, ALLOC, LOAD, DATA
- 12 .data         0000050c  0000001c  8000428c  0000481c  2**2
+ 12 .data         0000050c  0000001c  800042ec  0000481c  2**2
                   CONTENTS, ALLOC, LOAD, DATA
- 13 .balign       00000000  00000528  80004798  00004d28  2**0
+ 13 .balign       00000000  00000528  800047f8  00004d28  2**0
                   ALLOC
  14 .bss          00000270  00000528  00000528  00000000  2**2
                   ALLOC
@@ -41,23 +41,23 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING
  18 .debug_pubnames 000013d2  00000000  00000000  000056d8  2**0
                   CONTENTS, READONLY, DEBUGGING
- 19 .debug_info   00012d06  00000000  00000000  00006aaa  2**0
+ 19 .debug_info   00012d00  00000000  00000000  00006aaa  2**0
                   CONTENTS, READONLY, DEBUGGING
- 20 .debug_abbrev 00002c00  00000000  00000000  000197b0  2**0
+ 20 .debug_abbrev 00002c00  00000000  00000000  000197aa  2**0
                   CONTENTS, READONLY, DEBUGGING
- 21 .debug_line   00008ee5  00000000  00000000  0001c3b0  2**0
+ 21 .debug_line   00008ee5  00000000  00000000  0001c3aa  2**0
                   CONTENTS, READONLY, DEBUGGING
- 22 .debug_frame  00001628  00000000  00000000  00025298  2**2
+ 22 .debug_frame  00001628  00000000  00000000  00025290  2**2
                   CONTENTS, READONLY, DEBUGGING
- 23 .debug_str    000032f2  00000000  00000000  000268c0  2**0
+ 23 .debug_str    000032ef  00000000  00000000  000268b8  2**0
                   CONTENTS, READONLY, DEBUGGING
- 24 .debug_loc    00003370  00000000  00000000  00029bb2  2**0
+ 24 .debug_loc    00003370  00000000  00000000  00029ba7  2**0
                   CONTENTS, READONLY, DEBUGGING
- 25 .debug_macinfo 00b377d7  00000000  00000000  0002cf22  2**0
+ 25 .debug_macinfo 00b377d7  00000000  00000000  0002cf17  2**0
                   CONTENTS, READONLY, DEBUGGING
  26 .stack        00001000  0000f000  0000f000  00000000  2**0
                   ALLOC
- 27 .debug_ranges 00000940  00000000  00000000  00b646f9  2**0
+ 27 .debug_ranges 00000940  00000000  00000000  00b646ee  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .reset:
@@ -107,7 +107,7 @@ Disassembly of section .text:
 8000202a:	e0 7a 00 00 	mov	r10,65536
 8000202e:	5b fa       	cp.w	r10,-1
 80002030:	f4 0d 17 10 	movne	sp,r10
-80002034:	fe cb dd bc 	sub	r11,pc,-8772
+80002034:	fe cb dd 5c 	sub	r11,pc,-8868
 80002038:	30 8c       	mov	r12,8
 8000203a:	18 3b       	cp.w	r11,r12
 8000203c:	c0 70       	breq	8000204a <_stext+0x22>
@@ -514,7 +514,7 @@ void vLED2Task( void *pvParameters )
 		
 		while(xTaskGetTickCount() > xLastWakeTime + xFreq)
 		{
-			usart_write_line (serialPORT_USART, "LED2 DEADLINE MISSED\n");
+			usart_write_line (serialPORT_USART, "Priority inversion detected... LED2 DEADLINE MISSED\n");
 8000228a:	49 36       	lddpc	r6,800022d4 <vLED2Task+0x64>
 			xLastWakeTime += xFreq;
 		}
@@ -537,7 +537,7 @@ void vLED2Task( void *pvParameters )
 		while(xTaskGetTickCount() > xLastWakeTime + xFreq)
 8000229e:	c0 98       	rjmp	800022b0 <vLED2Task+0x40>
 		{
-			usart_write_line (serialPORT_USART, "LED2 DEADLINE MISSED\n");
+			usart_write_line (serialPORT_USART, "Priority inversion detected... LED2 DEADLINE MISSED\n");
 800022a0:	0c 9b       	mov	r11,r6
 800022a2:	0e 9c       	mov	r12,r7
 800022a4:	f0 1f 00 0e 	mcall	800022dc <vLED2Task+0x6c>
@@ -557,7 +557,7 @@ void vLED2Task( void *pvParameters )
 800022ba:	10 3c       	cp.w	r12,r8
 800022bc:	fe 9b ff f2 	brhi	800022a0 <vLED2Task+0x30>
 		{
-			usart_write_line (serialPORT_USART, "LED2 DEADLINE MISSED\n");
+			usart_write_line (serialPORT_USART, "Priority inversion detected... LED2 DEADLINE MISSED\n");
 			xLastWakeTime += xFreq;
 		}
 		//vTaskDelay(TASK_DELAY_MS(3000));
@@ -608,7 +608,7 @@ void vLED1Task( void *pvParameters )
 		
 		while(xTaskGetTickCount() > xLastWakeTime + xFreq)
 		{
-			usart_write_line (serialPORT_USART, "LED1 DEADLINE MISSED\n");
+			usart_write_line (serialPORT_USART, "Priority inversion detected... LED1 DEADLINE MISSED\n");
 800022fe:	49 36       	lddpc	r6,80002348 <vLED1Task+0x64>
 			xLastWakeTime += xFreq;
 		}
@@ -631,7 +631,7 @@ void vLED1Task( void *pvParameters )
 		while(xTaskGetTickCount() > xLastWakeTime + xFreq)
 80002312:	c0 98       	rjmp	80002324 <vLED1Task+0x40>
 		{
-			usart_write_line (serialPORT_USART, "LED1 DEADLINE MISSED\n");
+			usart_write_line (serialPORT_USART, "Priority inversion detected... LED1 DEADLINE MISSED\n");
 80002314:	0c 9b       	mov	r11,r6
 80002316:	0e 9c       	mov	r12,r7
 80002318:	f0 1f 00 0e 	mcall	80002350 <vLED1Task+0x6c>
@@ -651,7 +651,7 @@ void vLED1Task( void *pvParameters )
 8000232e:	10 3c       	cp.w	r12,r8
 80002330:	fe 9b ff f2 	brhi	80002314 <vLED1Task+0x30>
 		{
-			usart_write_line (serialPORT_USART, "LED1 DEADLINE MISSED\n");
+			usart_write_line (serialPORT_USART, "Priority inversion detected... LED1 DEADLINE MISSED\n");
 			xLastWakeTime += xFreq;
 		}
 		//vTaskDelay(TASK_DELAY_MS(2000));
@@ -665,9 +665,9 @@ void vLED1Task( void *pvParameters )
 80002340:	80 00       	ld.sh	r0,r0[0x0]
 80002342:	2d 5c       	sub	r12,-43
 80002344:	80 00       	ld.sh	r0,r0[0x0]
-80002346:	40 98       	lddsp	r8,sp[0x24]
+80002346:	40 b8       	lddsp	r8,sp[0x2c]
 80002348:	80 00       	ld.sh	r0,r0[0x0]
-8000234a:	40 a8       	lddsp	r8,sp[0x28]
+8000234a:	40 c8       	lddsp	r8,sp[0x30]
 8000234c:	80 00       	ld.sh	r0,r0[0x0]
 8000234e:	21 18       	sub	r8,17
 80002350:	80 00       	ld.sh	r0,r0[0x0]
@@ -702,7 +702,7 @@ void vLED0Task(void *pvParameters)
 		
 		while(xTaskGetTickCount() > xLastWakeTime + xFreq)
 		{
-			usart_write_line (serialPORT_USART, "LED0 DEADLINE MISSED\n");
+			usart_write_line (serialPORT_USART, "Priority inversion detected... LED0 DEADLINE MISSED\n");
 80002372:	49 36       	lddpc	r6,800023bc <vLED0Task+0x64>
 			xLastWakeTime += xFreq;
 		}
@@ -725,7 +725,7 @@ void vLED0Task(void *pvParameters)
 		while(xTaskGetTickCount() > xLastWakeTime + xFreq)
 80002386:	c0 98       	rjmp	80002398 <vLED0Task+0x40>
 		{
-			usart_write_line (serialPORT_USART, "LED0 DEADLINE MISSED\n");
+			usart_write_line (serialPORT_USART, "Priority inversion detected... LED0 DEADLINE MISSED\n");
 80002388:	0c 9b       	mov	r11,r6
 8000238a:	0e 9c       	mov	r12,r7
 8000238c:	f0 1f 00 0e 	mcall	800023c4 <vLED0Task+0x6c>
@@ -745,7 +745,7 @@ void vLED0Task(void *pvParameters)
 800023a2:	10 3c       	cp.w	r12,r8
 800023a4:	fe 9b ff f2 	brhi	80002388 <vLED0Task+0x30>
 		{
-			usart_write_line (serialPORT_USART, "LED0 DEADLINE MISSED\n");
+			usart_write_line (serialPORT_USART, "Priority inversion detected... LED0 DEADLINE MISSED\n");
 			xLastWakeTime += xFreq;
 		}
 		//vTaskDelay(TASK_DELAY_MS(1000));
@@ -759,9 +759,9 @@ void vLED0Task(void *pvParameters)
 800023b4:	80 00       	ld.sh	r0,r0[0x0]
 800023b6:	2d 5c       	sub	r12,-43
 800023b8:	80 00       	ld.sh	r0,r0[0x0]
-800023ba:	40 c0       	lddsp	r0,sp[0x30]
+800023ba:	41 00       	lddsp	r0,sp[0x40]
 800023bc:	80 00       	ld.sh	r0,r0[0x0]
-800023be:	40 d0       	lddsp	r0,sp[0x34]
+800023be:	41 10       	lddsp	r0,sp[0x44]
 800023c0:	80 00       	ld.sh	r0,r0[0x0]
 800023c2:	21 18       	sub	r8,17
 800023c4:	80 00       	ld.sh	r0,r0[0x0]
@@ -814,7 +814,7 @@ void init_usart ( void )
 8000241c:	80 00       	ld.sh	r0,r0[0x0]
 8000241e:	27 40       	sub	r0,116
 80002420:	80 00       	ld.sh	r0,r0[0x0]
-80002422:	41 3c       	lddsp	r12,sp[0x4c]
+80002422:	41 9c       	lddsp	r12,sp[0x64]
 80002424:	80 00       	ld.sh	r0,r0[0x0]
 80002426:	25 74       	sub	r4,87
 80002428:	80 00       	ld.sh	r0,r0[0x0]
@@ -848,7 +848,7 @@ int main(void)
 80002446:	1a d7       	st.w	--sp,r7
 80002448:	fa c8 ff f0 	sub	r8,sp,-16
 8000244c:	1a d8       	st.w	--sp,r8
-8000244e:	30 18       	mov	r8,1
+8000244e:	30 28       	mov	r8,2
 80002450:	0e 99       	mov	r9,r7
 80002452:	e0 6a 01 00 	mov	r10,256
 80002456:	4a 5b       	lddpc	r11,800024e8 <main+0xb4>
@@ -856,27 +856,27 @@ int main(void)
 8000245a:	f0 1f 00 26 	mcall	800024f0 <main+0xbc>
 					configMINIMAL_STACK_SIZE,
 					NULL,
-					1,
+					2,
 					&xHandle1);
 					
-	xTaskCreate(	vLED1Task, "vLED1Task", configMINIMAL_STACK_SIZE, NULL, 1, &xHandle2);
+	xTaskCreate(	vLED1Task, "vLED1Task", configMINIMAL_STACK_SIZE, NULL, 2, &xHandle2);
 8000245e:	1a d7       	st.w	--sp,r7
 80002460:	1a d7       	st.w	--sp,r7
 80002462:	fa c8 ff e8 	sub	r8,sp,-24
 80002466:	1a d8       	st.w	--sp,r8
-80002468:	30 18       	mov	r8,1
+80002468:	30 28       	mov	r8,2
 8000246a:	0e 99       	mov	r9,r7
 8000246c:	e0 6a 01 00 	mov	r10,256
 80002470:	4a 1b       	lddpc	r11,800024f4 <main+0xc0>
 80002472:	4a 2c       	lddpc	r12,800024f8 <main+0xc4>
 80002474:	f0 1f 00 1f 	mcall	800024f0 <main+0xbc>
 	
-	xTaskCreate(	vLED2Task, "vLED2Task", configMINIMAL_STACK_SIZE, NULL, 1, &xHandle3);
+	xTaskCreate(	vLED2Task, "vLED2Task", configMINIMAL_STACK_SIZE, NULL, 2, &xHandle3);
 80002478:	1a d7       	st.w	--sp,r7
 8000247a:	1a d7       	st.w	--sp,r7
 8000247c:	fa c8 ff e0 	sub	r8,sp,-32
 80002480:	1a d8       	st.w	--sp,r8
-80002482:	30 18       	mov	r8,1
+80002482:	30 28       	mov	r8,2
 80002484:	0e 99       	mov	r9,r7
 80002486:	e0 6a 01 00 	mov	r10,256
 8000248a:	49 db       	lddpc	r11,800024fc <main+0xc8>
@@ -927,29 +927,29 @@ int main(void)
 800024e4:	80 00       	ld.sh	r0,r0[0x0]
 800024e6:	23 cc       	sub	r12,60
 800024e8:	80 00       	ld.sh	r0,r0[0x0]
-800024ea:	40 e8       	lddsp	r8,sp[0x38]
+800024ea:	41 48       	lddsp	r8,sp[0x50]
 800024ec:	80 00       	ld.sh	r0,r0[0x0]
 800024ee:	23 58       	sub	r8,53
 800024f0:	80 00       	ld.sh	r0,r0[0x0]
 800024f2:	31 f0       	mov	r0,31
 800024f4:	80 00       	ld.sh	r0,r0[0x0]
-800024f6:	40 f4       	lddsp	r4,sp[0x3c]
+800024f6:	41 54       	lddsp	r4,sp[0x54]
 800024f8:	80 00       	ld.sh	r0,r0[0x0]
 800024fa:	22 e4       	sub	r4,46
 800024fc:	80 00       	ld.sh	r0,r0[0x0]
-800024fe:	41 00       	lddsp	r0,sp[0x40]
+800024fe:	41 60       	lddsp	r0,sp[0x58]
 80002500:	80 00       	ld.sh	r0,r0[0x0]
 80002502:	22 70       	sub	r0,39
 80002504:	80 00       	ld.sh	r0,r0[0x0]
-80002506:	41 0c       	lddsp	r12,sp[0x40]
+80002506:	41 6c       	lddsp	r12,sp[0x58]
 80002508:	80 00       	ld.sh	r0,r0[0x0]
 8000250a:	22 04       	sub	r4,32
 8000250c:	80 00       	ld.sh	r0,r0[0x0]
-8000250e:	41 1c       	lddsp	r12,sp[0x44]
+8000250e:	41 7c       	lddsp	r12,sp[0x5c]
 80002510:	80 00       	ld.sh	r0,r0[0x0]
 80002512:	21 98       	sub	r8,25
 80002514:	80 00       	ld.sh	r0,r0[0x0]
-80002516:	41 2c       	lddsp	r12,sp[0x48]
+80002516:	41 8c       	lddsp	r12,sp[0x60]
 80002518:	80 00       	ld.sh	r0,r0[0x0]
 8000251a:	21 2c       	sub	r12,18
 8000251c:	80 00       	ld.sh	r0,r0[0x0]
@@ -1164,7 +1164,7 @@ void INTC_register_interrupt(__int_handler handler, uint32_t irq,
 8000260a:	f2 08 09 2a 	st.w	r9[r8<<0x2],r10
 8000260e:	5e fc       	retal	r12
 80002610:	80 00       	ld.sh	r0,r0[0x0]
-80002612:	41 4c       	lddsp	r12,sp[0x50]
+80002612:	41 ac       	lddsp	r12,sp[0x68]
 80002614:	80 00       	ld.sh	r0,r0[0x0]
 80002616:	3e 00       	mov	r0,-32
 80002618:	80 00       	ld.sh	r0,r0[0x0]
@@ -1284,7 +1284,7 @@ static __inline__ void INTC_init_evba(void)
 8000266c:	80 00       	ld.sh	r0,r0[0x0]
 8000266e:	3e 00       	mov	r0,-32
 80002670:	80 00       	ld.sh	r0,r0[0x0]
-80002672:	41 4c       	lddsp	r12,sp[0x50]
+80002672:	41 ac       	lddsp	r12,sp[0x68]
 80002674:	80 00       	ld.sh	r0,r0[0x0]
 80002676:	25 a4       	sub	r4,90
 80002678:	80 00       	ld.sh	r0,r0[0x0]
@@ -1332,7 +1332,7 @@ __int_handler _get_interrupt_handler(uint32_t int_level)
 }
 800026ae:	5e fc       	retal	r12
 800026b0:	80 00       	ld.sh	r0,r0[0x0]
-800026b2:	41 4c       	lddsp	r12,sp[0x50]
+800026b2:	41 ac       	lddsp	r12,sp[0x68]
 
 800026b4 <pm_set_osc0_mode>:
  * \param mode Oscillator 0 mode (i.e. AVR32_PM_OSCCTRL0_MODE_x).
@@ -2444,11 +2444,11 @@ int _init_startup(void)
 80002c4c:	00 00       	add	r0,r0
 80002c4e:	07 90       	ld.ub	r0,r3[0x1]
 80002c50:	80 00       	ld.sh	r0,r0[0x0]
-80002c52:	41 f8       	lddsp	r8,sp[0x7c]
+80002c52:	42 58       	lddsp	r8,sp[0x94]
 80002c54:	80 00       	ld.sh	r0,r0[0x0]
 80002c56:	25 74       	sub	r4,87
 80002c58:	80 00       	ld.sh	r0,r0[0x0]
-80002c5a:	41 ec       	lddsp	r12,sp[0x78]
+80002c5a:	42 4c       	lddsp	r12,sp[0x90]
 80002c5c:	80 00       	ld.sh	r0,r0[0x0]
 80002c5e:	28 58       	sub	r8,-123
 
@@ -4032,7 +4032,7 @@ portBASE_TYPE xReturn;
 80003404:	d8 02       	popm	pc
 80003406:	00 00       	add	r0,r0
 80003408:	80 00       	ld.sh	r0,r0[0x0]
-8000340a:	42 08       	lddsp	r8,sp[0x80]
+8000340a:	42 68       	lddsp	r8,sp[0x98]
 8000340c:	80 00       	ld.sh	r0,r0[0x0]
 8000340e:	31 70       	mov	r0,23
 80003410:	80 00       	ld.sh	r0,r0[0x0]
@@ -4058,7 +4058,7 @@ portBASE_TYPE xReturn;
 80003432:	30 0b       	mov	r11,0
 80003434:	18 97       	mov	r7,r12
 80003436:	e0 a0 02 d7 	rcall	800039e4 <__call_exitprocs>
-8000343a:	fe c8 f2 26 	sub	r8,pc,-3546
+8000343a:	fe c8 f1 c6 	sub	r8,pc,-3642
 8000343e:	70 0c       	ld.w	r12,r8[0x0]
 80003440:	78 a8       	ld.w	r8,r12[0x28]
 80003442:	58 08       	cp.w	r8,0
@@ -4577,7 +4577,7 @@ portBASE_TYPE xReturn;
 
 80003940 <__register_exitproc>:
 80003940:	d4 31       	pushm	r0-r7,lr
-80003942:	fe c8 f7 2e 	sub	r8,pc,-2258
+80003942:	fe c8 f6 ce 	sub	r8,pc,-2354
 80003946:	70 03       	ld.w	r3,r8[0x0]
 80003948:	67 24       	ld.w	r4,r3[0x48]
 8000394a:	e6 c8 ff b4 	sub	r8,r3,-76
@@ -4637,7 +4637,7 @@ portBASE_TYPE xReturn;
 800039e4 <__call_exitprocs>:
 800039e4:	d4 31       	pushm	r0-r7,lr
 800039e6:	20 3d       	sub	sp,12
-800039e8:	fe c8 f7 d4 	sub	r8,pc,-2092
+800039e8:	fe c8 f7 74 	sub	r8,pc,-2188
 800039ec:	50 2c       	stdsp	sp[0x8],r12
 800039ee:	70 08       	ld.w	r8,r8[0x0]
 800039f0:	16 91       	mov	r1,r11
