@@ -300,10 +300,6 @@ void vProducer(void *pvParameters)
 80002214:	1a 97       	mov	r7,sp
 80002216:	20 ad       	sub	sp,40
 80002218:	ef 4c ff d8 	st.w	r7[-40],r12
-	//const portTickType xFreq = TASK_DELAY_MS(1000);
-	
-	//xLastWakeTime = xTaskGetTickCount();
-	
 	struct msg message;
 	message.id = 0;
 8000221c:	30 08       	mov	r8,0
@@ -406,9 +402,6 @@ void vConsumer( void *pvParameters )
 800022c8:	1a 97       	mov	r7,sp
 800022ca:	20 2d       	sub	sp,8
 800022cc:	ef 4c ff f8 	st.w	r7[-8],r12
-	//const portTickType xFreq = TASK_DELAY_MS(10000);
-	//volatile portTickType elapsed;
-	
 	struct msg *pMesg;
 	
 	onLED(LED1_BIT_VALUE);
@@ -492,8 +485,8 @@ int main(void)
 	init_usart();
 80002356:	f0 1f 00 1e 	mcall	800023cc <main+0x80>
 	
-	xFillCount = xSemaphoreCreateCounting(BUFFER_SIZE, 5);
-8000235a:	30 5b       	mov	r11,5
+	xFillCount = xSemaphoreCreateCounting(BUFFER_SIZE, 0);
+8000235a:	30 0b       	mov	r11,0
 8000235c:	30 ac       	mov	r12,10
 8000235e:	f0 1f 00 1d 	mcall	800023d0 <main+0x84>
 80002362:	18 99       	mov	r9,r12
