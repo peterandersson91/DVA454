@@ -3,7 +3,7 @@
 #include "LED.h"
 #include "BUTTONS.h"
 #include "usart.h"
-#include "gpio.h"#include "pm.h"#include "semphr.h"#include "queue.h"#include "display_init.h"#include <string.h>#define BUFFER_SIZE 10xSemaphoreHandle xSemaphore;		// Semaphore handle - QueuexSemaphoreHandle xLCDSemaphore;		// Semaphore handle - DisplayxQueueHandle xQHandle;				// Queue handle - Producer, ConsumerxTaskHandle xHandleProducer;		// Task handle - Producer
+#include "gpio.h"#include "pm.h"#include "semphr.h"#include "queue.h"#include "display_init.h"#define BUFFER_SIZE 10xSemaphoreHandle xSemaphore;		// Semaphore handle - QueuexSemaphoreHandle xLCDSemaphore;		// Semaphore handle - DisplayxQueueHandle xQHandle;				// Queue handle - Producer, ConsumerxTaskHandle xHandleProducer;		// Task handle - Producer
 xTaskHandle xHandleConsumer;		// Task handle - ConsumerxTaskHandle xHandleStatus;			// Task handle - Statusint byteCount = 0;					// How long is the queueint statusTaskActive = pdFALSE;		// Show status on display?int statusCount = 0;				// How many characters have been sent
 
 void init_usart ( void )
@@ -47,7 +47,7 @@ void vProducer(void *pvParameters)
 			if(byteCount == BUFFER_SIZE)	// If the message queue is full
 			{				
 				vTaskPrioritySet(NULL, 2);	// Raise priority to not be preempted before going to sleep			
-				offLED(LED0_BIT_VALUE);		// Off when the producer is active
+				offLED(LED0_BIT_VALUE);		// Off when the producer is sleeping
 				if(xSemaphoreGive(xSemaphore) == pdTRUE)
 				{
 					//Successfully given back
@@ -98,7 +98,7 @@ void vConsumer( void *pvParameters )
 		if(xSemaphoreTake(xSemaphore, (portTickType)portMAX_DELAY) == pdTRUE)
 		{
 			//usart_write_line(serialPORT_USART,"CONSUMER1 Semaphore TAKEN\n");
-			if(byteCount == 0)
+			if(byteCount == 0)	// If the queue is empty
 			{
 				vTaskPrioritySet(NULL, 2);		// Raise priority to not be preempted before going to sleep					
 				offLED(LED1_BIT_VALUE);			// Off when Consumer is sleeping
