@@ -80,7 +80,7 @@ void vButton0Task( void *pvParameters )
 {
 	portTickType xLastWakeTime; // Holds tick count last led toggle
 	const portTickType xFreq = TASK_DELAY_MS(10000); // Holds the period
-	volatile portTickType elapsed;
+	volatile portTickType elapsed; // Elapsed time of the work
 	
 	int x = 3000;
 	
@@ -101,7 +101,7 @@ void vButton0Task( void *pvParameters )
 				if(xSemaphoreGive(xSemaphore) == pdTRUE)
 				{
 					usart_write_line(serialPORT_USART, "BUTTON 1, SEMAPHORE GIVEN\n");
-					elapsed = xTaskGetTickCount()-xLastWakeTime;
+					elapsed = xTaskGetTickCount()-xLastWakeTime; // Elapsed time of the work
 				}
 			}
 			else
@@ -114,20 +114,22 @@ void vButton0Task( void *pvParameters )
 	}
 }
 
+// Lights LED1 as long as button1 is pressed
 void vButton1Task( void *pvParameters )
 {
-	portTickType xLastWakeTime;
-	const portTickType xFreq = TASK_DELAY_MS(10000);
+	//portTickType xLastWakeTime;
+	//const portTickType xFreq = TASK_DELAY_MS(10000);
 	
 	while(1)
 	{
 		if(buttonIsPressed(BUTTON1_PIN))
 		{
-			xLastWakeTime = xTaskGetTickCount();
+			//xLastWakeTime = xTaskGetTickCount();
 			
 			onLED(LED1_BIT_VALUE);
 			usart_write_line (serialPORT_USART, "BUTTON 2 PRESSED\n");
 			
+			// Busy wait while button is pressed
 			while(buttonIsPressed(BUTTON1_PIN))
 			{
 				
@@ -137,7 +139,7 @@ void vButton1Task( void *pvParameters )
 		}
 		else
 		{
-			vTaskDelay(TASK_DELAY_MS(10));
+			vTaskDelay(TASK_DELAY_MS(10)); // delays the task so it doesn't poll for input
 		}
 		
 	}
@@ -152,7 +154,6 @@ int main(void)
 	xTaskHandle xHandle1;
 	
 	vSemaphoreCreateBinary(xSemaphore);
-	
 		
 	// Create the task , store the handle .
 	xTaskCreate(	vLED0Task,
