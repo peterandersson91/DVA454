@@ -4,7 +4,7 @@
 #include "BUTTONS.h"
 #include "usart.h"
 #include "gpio.h"#include "pm.h"
-
+// Initialize USART
 void init_usart ( void )
 {
 	static const gpio_map_t USART_SERIAL_GPIO_MAP =
@@ -31,131 +31,139 @@ void init_usart ( void )
 	usart_init_rs232 ( serialPORT_USART , & USART_OPTIONS , FOSC0 );
 	usart_init_rs232 ( configDBG_USART , & USART_OPTIONS , FOSC0 );
 }
-
+// Led0 blinks every 1 sec
 void vLED0Task(void *pvParameters)
 {	
-	portTickType xLastWakeTime;
-	const portTickType xFreq = TASK_DELAY_MS(1000);
+	portTickType xLastWakeTime;	// Holds tick count last led toggle
+	const portTickType xFreq = TASK_DELAY_MS(1000);	// Holds the period
 	
-	xLastWakeTime = xTaskGetTickCount();
+	xLastWakeTime = xTaskGetTickCount();	// Sets current tick count
 	
 	while(1)
 	{
 		toggleLED(LED0_BIT_VALUE);
 		usart_write_line (serialPORT_USART, "LED0 TOGGLE\n");
 		
-		while(xTaskGetTickCount() > xLastWakeTime + xFreq)
+		// Detects deadline misses
+		while(xTaskGetTickCount() > xLastWakeTime + xFreq) // If current tick count exceeds the last wake time + period
 		{
-			usart_write_line (serialPORT_USART, "Priority inversion detected... LED0 DEADLINE MISSED\n");
-			xLastWakeTime += xFreq;
+			usart_write_line (serialPORT_USART, "LED0 DEADLINE MISSED\n");
+			xLastWakeTime += xFreq;	// Adds a period to the last wake time and rechecks if another deadline was missed
 		}
-		//vTaskDelay(TASK_DELAY_MS(1000));
-		vTaskDelayUntil(&xLastWakeTime, xFreq );
+		
+		vTaskDelayUntil(&xLastWakeTime, xFreq ); // Sleep this task until it should toggle the led again
 	}
 }
 
+// Led1 blinks every 2 sec
 void vLED1Task( void *pvParameters )
 {
-	portTickType xLastWakeTime;
-	const portTickType xFreq = TASK_DELAY_MS(2000);;
+	portTickType xLastWakeTime;	// Holds tick count last led toggle
+	const portTickType xFreq = TASK_DELAY_MS(2000);	// Holds the period
 	
-	xLastWakeTime = xTaskGetTickCount();
+	xLastWakeTime = xTaskGetTickCount(); // Sets current tick count
 	
 	while(1)
 	{
 		toggleLED(LED1_BIT_VALUE);
 		usart_write_line (serialPORT_USART, "LED1 TOGGLE\n");
 		
-		while(xTaskGetTickCount() > xLastWakeTime + xFreq)
+		// Detects deadline misses
+		while(xTaskGetTickCount() > xLastWakeTime + xFreq) // If current tick count exceeds the last wake time + period
 		{
-			usart_write_line (serialPORT_USART, "Priority inversion detected... LED1 DEADLINE MISSED\n");
-			xLastWakeTime += xFreq;
+			usart_write_line (serialPORT_USART, "LED1 DEADLINE MISSED\n");
+			xLastWakeTime += xFreq; // Adds a period to the last wake time and rechecks if another deadline was missed
 		}
-		//vTaskDelay(TASK_DELAY_MS(2000));
-		vTaskDelayUntil(&xLastWakeTime, xFreq );
+		
+		vTaskDelayUntil(&xLastWakeTime, xFreq ); // Sleep this task until it should toggle the led again
 	}
 }
 
+// Led2 blinks every 3 sec
 void vLED2Task( void *pvParameters )
 {
-	portTickType xLastWakeTime;
-	const portTickType xFreq = TASK_DELAY_MS(3000);
+	portTickType xLastWakeTime; // Holds tick count last led toggle
+	const portTickType xFreq = TASK_DELAY_MS(3000); // Holds the period
 	
-	xLastWakeTime = xTaskGetTickCount();
+	xLastWakeTime = xTaskGetTickCount(); // Sets current tick count
 	
 	while(1)
 	{
 		toggleLED(LED2_BIT_VALUE);
 		usart_write_line (serialPORT_USART, "LED2 TOGGLE\n");
 		
-		while(xTaskGetTickCount() > xLastWakeTime + xFreq)
+		// Detects deadline misses
+		while(xTaskGetTickCount() > xLastWakeTime + xFreq) // If current tick count exceeds the last wake time + period
 		{
-			usart_write_line (serialPORT_USART, "Priority inversion detected... LED2 DEADLINE MISSED\n");
-			xLastWakeTime += xFreq;
+			usart_write_line (serialPORT_USART, "LED2 DEADLINE MISSED\n");
+			xLastWakeTime += xFreq; // Adds a period to the last wake time and rechecks if another deadline was missed
 		}
-		//vTaskDelay(TASK_DELAY_MS(3000));
-		vTaskDelayUntil(&xLastWakeTime, xFreq );
+		
+		vTaskDelayUntil(&xLastWakeTime, xFreq ); // Sleep this task until it should toggle the led again
 	}
 }
 
+// Lights the LED for 10 sec if the button is pressed 
 void vButton0Task( void *pvParameters )
 {
-	portTickType xLastWakeTime;
-	const portTickType xFreq = TASK_DELAY_MS(10000);
+	portTickType xLastWakeTime; // Holds tick count before suspension
+	const portTickType xFreq = TASK_DELAY_MS(10000); // Time to suspend the LED task
 	
 	while(1)
 	{
 		if(buttonIsPressed(BUTTON0_PIN))
 		{
-			xLastWakeTime = xTaskGetTickCount();
-			vTaskSuspend(pvParameters);
+			xLastWakeTime = xTaskGetTickCount();	// Sets current tick count
+			vTaskSuspend(pvParameters);				// Suspends the corresponding LED task
 			onLED(LED0_BIT_VALUE);
 			usart_write_line (serialPORT_USART, "BUTTON 1 PRESSED\n");
 			
-			vTaskDelayUntil(&xLastWakeTime, xFreq );
-			vTaskResume(pvParameters);
+			vTaskDelayUntil(&xLastWakeTime, xFreq); // Delays this task until the suspension time is met
+			vTaskResume(pvParameters);				// Resumes the LED task
 		}
 		
 	}
 }
 
+// Lights the LED for 10 sec if the button is pressed 
 void vButton1Task( void *pvParameters )
 {
-	portTickType xLastWakeTime;
-	const portTickType xFreq = TASK_DELAY_MS(10000);
+	portTickType xLastWakeTime; // Holds tick count before suspension
+	const portTickType xFreq = TASK_DELAY_MS(10000); // Time to suspend the LED task
 	
 	while(1)
 	{
 		if(buttonIsPressed(BUTTON1_PIN))
 		{
-			xLastWakeTime = xTaskGetTickCount();
-			vTaskSuspend(pvParameters);
+			xLastWakeTime = xTaskGetTickCount();	// Sets current tick count
+			vTaskSuspend(pvParameters);				// Suspends the corresponding LED task
 			onLED(LED1_BIT_VALUE);
 			usart_write_line (serialPORT_USART, "BUTTON 2 PRESSED\n");
 			
-			vTaskDelayUntil(&xLastWakeTime, xFreq );
-			vTaskResume(pvParameters);
+			vTaskDelayUntil(&xLastWakeTime, xFreq ); // Delays this task until the suspension time is met
+			vTaskResume(pvParameters);				 // Resumes the LED task
 		}
 		
 	}
 }
 
+// Lights the LED for 10 sec if the button is pressed 
 void vButton2Task( void *pvParameters )
 {
-	portTickType xLastWakeTime;
-	const portTickType xFreq = TASK_DELAY_MS(10000);
+	portTickType xLastWakeTime; // Holds tick count before suspension
+	const portTickType xFreq = TASK_DELAY_MS(10000); // Time to suspend the LED task
 	
 	while(1)
 	{
 		if(buttonIsPressed(BUTTON2_PIN))
 		{
-			xLastWakeTime = xTaskGetTickCount();
-			vTaskSuspend(pvParameters);
+			xLastWakeTime = xTaskGetTickCount();	// Sets current tick count
+			vTaskSuspend(pvParameters);				// Suspends the corresponding LED task
 			onLED(LED2_BIT_VALUE);
 			usart_write_line (serialPORT_USART, "BUTTON 3 PRESSED\n");
 			
-			vTaskDelayUntil(&xLastWakeTime, xFreq );
-			vTaskResume(pvParameters);
+			vTaskDelayUntil(&xLastWakeTime, xFreq ); // Delays this task until the suspension time is met
+			vTaskResume(pvParameters);				 // Resumes the LED task
 		}
 		
 	}
@@ -167,13 +175,12 @@ int main(void)
 	initLED();
 	init_usart();
 
-	static unsigned char ucParameterToPass ;
 	xTaskHandle xHandle1;
 	xTaskHandle xHandle2;
 	xTaskHandle xHandle3;
 	
 		
-	// Create the task , store the handle .
+	// Create the task, store the handle.
 	xTaskCreate(	vLED0Task,
 					"vLED0Task",
 					configMINIMAL_STACK_SIZE,
@@ -193,7 +200,6 @@ int main(void)
 	
 	vTaskStartScheduler();
 
-	
 	for( ;; )
 	{
 		

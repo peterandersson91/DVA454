@@ -3,7 +3,8 @@
 #include "LED.h"
 #include "BUTTONS.h"
 #include "usart.h"
-#include "gpio.h"#include "pm.h"#include "semphr.h"xSemaphoreHandle xSemaphore;
+#include "gpio.h"#include "pm.h"#include "semphr.h"// Semaphore for all tasksxSemaphoreHandle xSemaphore;
+// Delay function, uses 12MHz clock
 void mdelay(int msec)
 {
 	long volatile cycles = msec * 12000/11;
@@ -13,6 +14,7 @@ void mdelay(int msec)
 	}
 }
 
+// Initialize USART
 void init_usart ( void )
 {
 	static const gpio_map_t USART_SERIAL_GPIO_MAP =
@@ -40,61 +42,66 @@ void init_usart ( void )
 	usart_init_rs232 ( configDBG_USART , & USART_OPTIONS , FOSC0 );
 }
 
+// LED 0 blinks every second
 void vLED0Task(void *pvParameters)
 {	
-	portTickType xLastWakeTime;
-	const portTickType xFreq = TASK_DELAY_MS(1000);
+	portTickType xLastWakeTime; // Holds tick count last led toggle
+	const portTickType xFreq = TASK_DELAY_MS(1000); // Holds the period
 	
-	xLastWakeTime = xTaskGetTickCount();
+	xLastWakeTime = xTaskGetTickCount(); // Sets current tick count
 	
 	while(1)
 	{
+		// Takes semaphore to be able to blink
 		if(xSemaphoreTake(xSemaphore, (portTickType)10) == pdTRUE)
 		{
 			toggleLED(LED0_BIT_VALUE);
 			usart_write_line (serialPORT_USART, "LED1 TOGGLE, SEMAPHORE TAKEN\n");
 			
+			// Gives back semaphore when the LED has toggled
 			if(xSemaphoreGive(xSemaphore) == pdTRUE)
 			{
 				usart_write_line (serialPORT_USART, "LED 1, SEMAPHORE GIVEN\n");
 			}
 		}
 		
+		// Detects deadline misses
 		while(xTaskGetTickCount() > xLastWakeTime + xFreq)
 		{
-			usart_write_line (serialPORT_USART, "Priority inversion detected... LED0 DEADLINE MISSED\n");
+			usart_write_line (serialPORT_USART, "LED0 DEADLINE MISSED\n");
 			xLastWakeTime += xFreq;
 		}
-		//vTaskDelay(TASK_DELAY_MS(1000));
+		
 		vTaskDelayUntil(&xLastWakeTime, xFreq );
 	}
 }
 
 void vButton0Task( void *pvParameters )
 {
-	portTickType xLastWakeTime;
-	const portTickType xFreq = TASK_DELAY_MS(10000);
+	portTickType xLastWakeTime; // Holds tick count last led toggle
+	const portTickType xFreq = TASK_DELAY_MS(10000); // Holds the period
 	volatile portTickType elapsed;
+	
+	int x = 3000;
 	
 	while(1)
 	{
 		if(buttonIsPressed(BUTTON0_PIN))
 		{
+			// Takes the semaphore to turn LED 0 on for x seconds
 			if(xSemaphoreTake(xSemaphore, (portTickType)10) == pdTRUE)
 			{
 				xLastWakeTime = xTaskGetTickCount();
 				onLED(LED0_BIT_VALUE);
 				usart_write_line (serialPORT_USART, "BUTTON 1 PRESSED, SEMAPHORE TAKEN, LED 1 on for 3sec\n");
-			
-				//vTaskDelayUntil(&xLastWakeTime, xFreq );
 				
-				mdelay(3000);
+				mdelay(x); // Busy wait for x seconds
 				
+				// Gives back the semaphore when work is done
 				if(xSemaphoreGive(xSemaphore) == pdTRUE)
 				{
 					usart_write_line(serialPORT_USART, "BUTTON 1, SEMAPHORE GIVEN\n");
 					elapsed = xTaskGetTickCount()-xLastWakeTime;
-					int i = 0;
 				}
 			}
 			else
