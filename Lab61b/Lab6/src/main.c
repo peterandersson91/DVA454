@@ -59,7 +59,6 @@ void vProducer(void *pvParameters)
 >>>>>>> a5aa0592f65820c5de2499cec45cf90cbc494c59
 	struct msg message;
 	message.id = 0;
-	//message.data = 0;
 	message.timestamp = 0;
 	
 	struct msg *pMesg = &message;
@@ -70,7 +69,6 @@ void vProducer(void *pvParameters)
 =======
 >>>>>>> a5aa0592f65820c5de2499cec45cf90cbc494c59
 	
-	onLED(LED0_BIT_VALUE);
 	onLED(LED0_BIT_VALUE);		// On when the producer is active
 	
 	while(1)
@@ -149,7 +147,6 @@ void vConsumer( void *pvParameters )
 >>>>>>> a5aa0592f65820c5de2499cec45cf90cbc494c59
 	struct msg *pMesg;
 	
-	onLED(LED1_BIT_VALUE);
 	onLED(LED1_BIT_VALUE);	// On when the consumer is active
 	
 	while(1)
