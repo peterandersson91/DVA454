@@ -3,7 +3,6 @@
 #include "LED.h"
 #include "BUTTONS.h"
 #include "usart.h"
-<<<<<<< HEAD
 #include "gpio.h"#include "pm.h"#include "semphr.h"#include "queue.h"#include "string.h"#define DATALEN 10#define BUFFER_SIZE 10xSemaphoreHandle xFillCount;xSemaphoreHandle xEmptyCount;xQueueHandle xQHandle;xTaskHandle xHandleProducer;
 xTaskHandle xHandleConsumer;//int byteCount = 0;struct msg{	int id;	char data[DATALEN];	portTickType timestamp;};
 void mdelay(int msec)
@@ -14,10 +13,6 @@ void mdelay(int msec)
 		cycles--;
 	}
 }
-=======
-#include "gpio.h"#include "pm.h"#include "semphr.h"#include "queue.h"#include "string.h"#define DATALEN 10#define BUFFER_SIZE 10xSemaphoreHandle xSemaphore;	// Semaphore handle - QueuexQueueHandle xQHandle;			// Queue handle - Producer, ConsumerxTaskHandle xHandleProducer;	// Task handle - Producer
-xTaskHandle xHandleConsumer;	// Task handle - Consumerint byteCount = 0;				// How long is the queuestruct msg{	int id;	char data[DATALEN];	portTickType timestamp;};
->>>>>>> a5aa0592f65820c5de2499cec45cf90cbc494c59
 
 void init_usart ( void )
 {
@@ -47,165 +42,68 @@ void init_usart ( void )
 }
 
 void vProducer(void *pvParameters)
-<<<<<<< HEAD
 {	
 	//portTickType xLastWakeTime;
 	//const portTickType xFreq = TASK_DELAY_MS(1000);
 	
 	//xLastWakeTime = xTaskGetTickCount();
 	
-=======
-{		
->>>>>>> a5aa0592f65820c5de2499cec45cf90cbc494c59
 	struct msg message;
 	message.id = 0;
+	//message.data = 0;
 	message.timestamp = 0;
 	
 	struct msg *pMesg = &message;
 	
 	char data[DATALEN] = "hej\n";
-<<<<<<< HEAD
 	//int i = byteCount;
-=======
->>>>>>> a5aa0592f65820c5de2499cec45cf90cbc494c59
 	
-	onLED(LED0_BIT_VALUE);		// On when the producer is active
+	onLED(LED0_BIT_VALUE);
 	
 	while(1)
 	{
-<<<<<<< HEAD
 		offLED(LED0_BIT_VALUE);
 		if(xSemaphoreTake(xEmptyCount, (portTickType)portMAX_DELAY) == pdTRUE)
 		{
 			// Semaphore taken
-=======
-		if(xSemaphoreTake(xSemaphore, (portTickType)portMAX_DELAY) == pdTRUE)	// Waits for the queue semaphore
-		{
-			//usart_write_line(serialPORT_USART,"PRODUCER1 Semaphore TAKEN\n");
-			if(byteCount == BUFFER_SIZE)	// If the message queue is full	
-			{
-				vTaskPrioritySet(NULL, 2);	// Raise priority to not be preempted before going to sleep	
-				
-				offLED(LED0_BIT_VALUE);		// Off when the producer is sleeping
-				if(xSemaphoreGive(xSemaphore) == pdTRUE)
-				{
-					//Successfully given back
-					//usart_write_line(serialPORT_USART,"PRODUCER1 Semaphore GIVEN\n");
-				}
-				vTaskSuspend(NULL);			// Go to sleep
-				vTaskPrioritySet(NULL, 1);	// Back to normal priority
-			}
-			else if(xSemaphoreGive(xSemaphore) == pdTRUE)
-			{
-				//Successfully given back
-				//usart_write_line(serialPORT_USART,"PRODUCER1 Semaphore GIVEN\n");
-			}
->>>>>>> a5aa0592f65820c5de2499cec45cf90cbc494c59
 		}
 		onLED(LED0_BIT_VALUE);
 		
-<<<<<<< HEAD
 		strcpy(pMesg->data, data);
-=======
-		strcpy(pMesg->data, data);			// Copy data to pMesg->data
-		
->>>>>>> a5aa0592f65820c5de2499cec45cf90cbc494c59
 		xQueueSendToBack(xQHandle, &pMesg, (portTickType)10);
 		
 		if(xSemaphoreGive(xFillCount) == pdTRUE)
 		{
-<<<<<<< HEAD
 			// Semaphore given
-=======
-			//usart_write_line(serialPORT_USART,"PRODUCER2 Semaphore TAKEN\n");
-			byteCount++;	// One more message in queue
-			
-			if(byteCount == 1)	// There are messages to read
-			{
-				vTaskResume(xHandleConsumer);	// Wake up consumer
-				onLED(LED1_BIT_VALUE);			// On when the consumer is active
-			}
-			if(xSemaphoreGive(xSemaphore) == pdTRUE)
-			{
-				//Successfully given back
-				//usart_write_line(serialPORT_USART,"PRODUCER2 Semaphore GIVEN\n");
-			}
->>>>>>> a5aa0592f65820c5de2499cec45cf90cbc494c59
 		}
 	}
 }
 
 void vConsumer( void *pvParameters )
-<<<<<<< HEAD
 {
 	//portTickType xLastWakeTime;
 	//const portTickType xFreq = TASK_DELAY_MS(10000);
 	//volatile portTickType elapsed;
 	
-=======
-{	
->>>>>>> a5aa0592f65820c5de2499cec45cf90cbc494c59
 	struct msg *pMesg;
 	
-	onLED(LED1_BIT_VALUE);	// On when the consumer is active
+	onLED(LED1_BIT_VALUE);
 	
 	while(1)
 	{
 		offLED(LED1_BIT_VALUE);
 		if(xSemaphoreTake(xFillCount, (portTickType)portMAX_DELAY) == pdTRUE)
 		{
-<<<<<<< HEAD
 			// Semaphore taken
-=======
-			//usart_write_line(serialPORT_USART,"CONSUMER1 Semaphore TAKEN\n");
-			if(byteCount == 0)	// If the queue is empty
-			{
-				vTaskPrioritySet(NULL, 2);	// Raise priority to not be preempted before going to sleep
-				offLED(LED1_BIT_VALUE);		// Off when the consumer is sleeping
-				if(xSemaphoreGive(xSemaphore) == pdTRUE)
-				{
-					//Successfully given back
-					//usart_write_line(serialPORT_USART,"CONSUMER1 Semaphore GIVEN\n");
-				}
-				vTaskSuspend(NULL);			// Go to sleep							
-				vTaskPrioritySet(NULL, 1);	// Set priority back to normal
-			}
-			else if(xSemaphoreGive(xSemaphore) == pdTRUE)
-			{
-					//Successfully given back
-					//usart_write_line(serialPORT_USART,"CONSUMER1 Semaphore GIVEN\n");
-			}
->>>>>>> a5aa0592f65820c5de2499cec45cf90cbc494c59
 		}
 		onLED(LED1_BIT_VALUE);
 		
 		xQueueReceive(xQHandle, &pMesg, (portTickType)10);
-<<<<<<< HEAD
 		usart_write_line(serialPORT_USART, pMesg->data);
 		
 		if(xSemaphoreGive(xEmptyCount) == pdTRUE)
 		{
 			// Semaphore given
-=======
-		usart_write_line(serialPORT_USART, pMesg->data);		
-		
-		
-		if(xSemaphoreTake(xSemaphore, (portTickType)portMAX_DELAY) == pdTRUE)
-		{
-			//usart_write_line(serialPORT_USART,"CONSUMER2 Semaphore TAKEN\n");
-			byteCount--;		// One message removed from queue
-			
-			if(byteCount == BUFFER_SIZE - 1)		// If there is place in queue
-			{
-				vTaskResume(xHandleProducer);		// Wake up Producer
-				onLED(LED0_BIT_VALUE);				// On when producer is active
-			}
-			if(xSemaphoreGive(xSemaphore) == pdTRUE)
-			{
-				//Successfully given back
-				//usart_write_line(serialPORT_USART,"CONSUMER2 Semaphore TAKEN\n");
-			}
->>>>>>> a5aa0592f65820c5de2499cec45cf90cbc494c59
 		}
 	}
 }
@@ -215,7 +113,7 @@ int main(void)
 	initLED();
 	init_usart();
 	
-	xFillCount = xSemaphoreCreateCounting(BUFFER_SIZE, 5);
+	xFillCount = xSemaphoreCreateCounting(BUFFER_SIZE, 0);
 	xEmptyCount = xSemaphoreCreateCounting(BUFFER_SIZE, BUFFER_SIZE);
 	
 	xQHandle = xQueueCreate(10, sizeof(struct msg*));
