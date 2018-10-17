@@ -117,16 +117,11 @@ void vButton0Task( void *pvParameters )
 
 // Lights LED1 as long as button1 is pressed
 void vButton1Task( void *pvParameters )
-{
-	//portTickType xLastWakeTime;
-	//const portTickType xFreq = TASK_DELAY_MS(10000);
-	
+{	
 	while(1)
 	{
 		if(buttonIsPressed(BUTTON1_PIN))
-		{
-			//xLastWakeTime = xTaskGetTickCount();
-			
+		{			
 			onLED(LED1_BIT_VALUE);
 			usart_write_line (serialPORT_USART, "BUTTON 2 PRESSED\n");
 			
