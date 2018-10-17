@@ -45,15 +45,15 @@ void init_usart ( void )
 // LED 0 blinks every second
 void vLED0Task(void *pvParameters)
 {	
-	portTickType xLastWakeTime; // Holds tick count last led toggle
-	const portTickType xFreq = TASK_DELAY_MS(1000); // Holds the period
+	volatile portTickType xLastWakeTime; // Holds tick count last led toggle
+	volatile const portTickType xFreq = TASK_DELAY_MS(1000); // Holds the period
 	
 	xLastWakeTime = xTaskGetTickCount(); // Sets current tick count
 	
 	while(1)
 	{
 		// Takes semaphore to be able to blink
-		if(xSemaphoreTake(xSemaphore, (portTickType)10) == pdTRUE)
+		if(xSemaphoreTake(xSemaphore, (portTickType)portMAX_DELAY) == pdTRUE)
 		{
 			toggleLED(LED0_BIT_VALUE);
 			usart_write_line (serialPORT_USART, "LED1 TOGGLE, SEMAPHORE TAKEN\n");
@@ -63,15 +63,16 @@ void vLED0Task(void *pvParameters)
 			{
 				usart_write_line (serialPORT_USART, "LED 1, SEMAPHORE GIVEN\n");
 			}
+			
 		}
 		
+		portTickType currentTick = xTaskGetTickCount();
 		// Detects deadline misses
-		while(xTaskGetTickCount() > xLastWakeTime + xFreq)
+		while(currentTick > xLastWakeTime + xFreq)
 		{
 			usart_write_line (serialPORT_USART, "LED0 DEADLINE MISSED\n");
 			xLastWakeTime += xFreq;
 		}
-		
 		vTaskDelayUntil(&xLastWakeTime, xFreq );
 	}
 }

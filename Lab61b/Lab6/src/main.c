@@ -3,8 +3,8 @@
 #include "LED.h"
 #include "BUTTONS.h"
 #include "usart.h"
-#include "gpio.h"#include "pm.h"#include "semphr.h"#include "queue.h"#include "string.h"#define DATALEN 10#define BUFFER_SIZE 10xSemaphoreHandle xSemaphore;xQueueHandle xQHandle;xTaskHandle xHandleProducer;
-xTaskHandle xHandleConsumer;int byteCount = 0;struct msg{	int id;	char data[DATALEN];	portTickType timestamp;};
+#include "gpio.h"#include "pm.h"#include "semphr.h"#include "queue.h"#include "string.h"#define DATALEN 10#define BUFFER_SIZE 10xSemaphoreHandle xFillCount;xSemaphoreHandle xEmptyCount;xQueueHandle xQHandle;xTaskHandle xHandleProducer;
+xTaskHandle xHandleConsumer;//int byteCount = 0;struct msg{	int id;	char data[DATALEN];	portTickType timestamp;};
 void mdelay(int msec)
 {
 	long volatile cycles = msec * 12000/11;
@@ -43,10 +43,10 @@ void init_usart ( void )
 
 void vProducer(void *pvParameters)
 {	
-	portTickType xLastWakeTime;
-	const portTickType xFreq = TASK_DELAY_MS(1000);
+	//portTickType xLastWakeTime;
+	//const portTickType xFreq = TASK_DELAY_MS(1000);
 	
-	xLastWakeTime = xTaskGetTickCount();
+	//xLastWakeTime = xTaskGetTickCount();
 	
 	struct msg message;
 	message.id = 0;
@@ -56,65 +56,34 @@ void vProducer(void *pvParameters)
 	struct msg *pMesg = &message;
 	
 	char data[DATALEN] = "hej\n";
-	int i = byteCount;
+	//int i = byteCount;
 	
 	onLED(LED0_BIT_VALUE);
 	
 	while(1)
 	{
-		if(xSemaphoreTake(xSemaphore, (portTickType)portMAX_DELAY) == pdTRUE)
+		offLED(LED0_BIT_VALUE);
+		if(xSemaphoreTake(xEmptyCount, (portTickType)portMAX_DELAY) == pdTRUE)
 		{
-			//usart_write_line(serialPORT_USART,"PRODUCER1 Semaphore TAKEN\n");
-			if(byteCount == BUFFER_SIZE)
-			{
-				vTaskPrioritySet(NULL, 2);
-				
-				offLED(LED0_BIT_VALUE);
-				if(xSemaphoreGive(xSemaphore) == pdTRUE)
-				{
-					//Successfully given back
-					//usart_write_line(serialPORT_USART,"PRODUCER1 Semaphore GIVEN\n");
-				}
-				vTaskSuspend(NULL);
-				vTaskPrioritySet(NULL, 1);
-			}
-			if(xSemaphoreGive(xSemaphore) == pdTRUE)
-			{
-				//Successfully given back
-				//usart_write_line(serialPORT_USART,"PRODUCER1 Semaphore GIVEN\n");
-			}
+			// Semaphore taken
 		}
-		
+		onLED(LED0_BIT_VALUE);
 		
 		strcpy(pMesg->data, data);
-		
 		xQueueSendToBack(xQHandle, &pMesg, (portTickType)10);
 		
-		if(xSemaphoreTake(xSemaphore, (portTickType)portMAX_DELAY) == pdTRUE)
+		if(xSemaphoreGive(xFillCount) == pdTRUE)
 		{
-			//usart_write_line(serialPORT_USART,"PRODUCER2 Semaphore TAKEN\n");
-			byteCount++;
-			
-			if(byteCount == 1)
-			{
-				vTaskResume(xHandleConsumer);
-				onLED(LED1_BIT_VALUE);
-			}
-			if(xSemaphoreGive(xSemaphore) == pdTRUE)
-			{
-				//Successfully given back
-				//usart_write_line(serialPORT_USART,"PRODUCER2 Semaphore GIVEN\n");
-			}
+			// Semaphore given
 		}
-		
 	}
 }
 
 void vConsumer( void *pvParameters )
 {
-	portTickType xLastWakeTime;
-	const portTickType xFreq = TASK_DELAY_MS(10000);
-	volatile portTickType elapsed;
+	//portTickType xLastWakeTime;
+	//const portTickType xFreq = TASK_DELAY_MS(10000);
+	//volatile portTickType elapsed;
 	
 	struct msg *pMesg;
 	
@@ -122,50 +91,19 @@ void vConsumer( void *pvParameters )
 	
 	while(1)
 	{
-		if(xSemaphoreTake(xSemaphore, (portTickType)portMAX_DELAY) == pdTRUE)
+		offLED(LED1_BIT_VALUE);
+		if(xSemaphoreTake(xFillCount, (portTickType)portMAX_DELAY) == pdTRUE)
 		{
-			//usart_write_line(serialPORT_USART,"CONSUMER1 Semaphore TAKEN\n");
-			if(byteCount == 0)
-			{
-				vTaskPrioritySet(NULL, 2);
-				
-				offLED(LED1_BIT_VALUE);
-				if(xSemaphoreGive(xSemaphore) == pdTRUE)
-				{
-					//Successfully given back
-					//usart_write_line(serialPORT_USART,"CONSUMER1 Semaphore GIVEN\n");
-				}
-				vTaskSuspend(NULL);
-							
-				vTaskPrioritySet(NULL, 1);
-			}
-			if(xSemaphoreGive(xSemaphore) == pdTRUE)
-			{
-					//Successfully given back
-					//usart_write_line(serialPORT_USART,"CONSUMER1 Semaphore GIVEN\n");
-			}
+			// Semaphore taken
 		}
-			
+		onLED(LED1_BIT_VALUE);
+		
 		xQueueReceive(xQHandle, &pMesg, (portTickType)10);
 		usart_write_line(serialPORT_USART, pMesg->data);
 		
-		
-		
-		if(xSemaphoreTake(xSemaphore, (portTickType)portMAX_DELAY) == pdTRUE)
+		if(xSemaphoreGive(xEmptyCount) == pdTRUE)
 		{
-			//usart_write_line(serialPORT_USART,"CONSUMER2 Semaphore TAKEN\n");
-			byteCount--;
-			
-			if(byteCount == BUFFER_SIZE - 1)
-			{
-				vTaskResume(xHandleProducer);
-				onLED(LED0_BIT_VALUE);
-			}
-			if(xSemaphoreGive(xSemaphore) == pdTRUE)
-			{
-				//Successfully given back
-				//usart_write_line(serialPORT_USART,"CONSUMER2 Semaphore TAKEN\n");
-			}
+			// Semaphore given
 		}
 	}
 }
@@ -174,17 +112,15 @@ int main(void)
 {
 	initLED();
 	init_usart();
-
-	static unsigned char ucParameterToPass ;
 	
-	vSemaphoreCreateBinary(xSemaphore);
+	xFillCount = xSemaphoreCreateCounting(BUFFER_SIZE, 5);
+	xEmptyCount = xSemaphoreCreateCounting(BUFFER_SIZE, BUFFER_SIZE);
 	
 	xQHandle = xQueueCreate(10, sizeof(struct msg*));
 	if(xQHandle == NULL)
 	{
 		//ERROR!
 	}
-	
 	
 	// Create the task , store the handle .
 	xTaskCreate(	vProducer,
@@ -195,10 +131,7 @@ int main(void)
 					&xHandleProducer);
 	xTaskCreate(	vConsumer, "vConsumer", configMINIMAL_STACK_SIZE, NULL, 1, &xHandleConsumer);
 	
-	
-	
 	vTaskStartScheduler();
-
 	
 	for( ;; )
 	{
