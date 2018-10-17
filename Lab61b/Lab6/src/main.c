@@ -43,11 +43,6 @@ void init_usart ( void )
 
 void vProducer(void *pvParameters)
 {	
-	//portTickType xLastWakeTime;
-	//const portTickType xFreq = TASK_DELAY_MS(1000);
-	
-	//xLastWakeTime = xTaskGetTickCount();
-	
 	struct msg message;
 	message.id = 0;
 	//message.data = 0;
@@ -81,10 +76,6 @@ void vProducer(void *pvParameters)
 
 void vConsumer( void *pvParameters )
 {
-	//portTickType xLastWakeTime;
-	//const portTickType xFreq = TASK_DELAY_MS(10000);
-	//volatile portTickType elapsed;
-	
 	struct msg *pMesg;
 	
 	onLED(LED1_BIT_VALUE);
