@@ -3,17 +3,10 @@
 #include "LED.h"
 #include "BUTTONS.h"
 #include "usart.h"
-#include "gpio.h"#include "pm.h"#include "semphr.h"#include "queue.h"#include "string.h"#define DATALEN 10#define BUFFER_SIZE 10xSemaphoreHandle xSemaphore;xQueueHandle xQHandle;xTaskHandle xHandleProducer;
-xTaskHandle xHandleConsumer;int byteCount = 0;struct msg{	int id;	char data[DATALEN];	portTickType timestamp;};
-void mdelay(int msec)
-{
-	long volatile cycles = msec * 12000/11;
-	while(cycles != 0)
-	{
-		cycles--;
-	}
-}
+#include "gpio.h"#include "pm.h"#include "semphr.h"#include "queue.h"#include <string.h>#define DATALEN 10#define BUFFER_SIZE 10xQueueHandle xQHandle;			// Queue handle - Producer, ConsumerxTaskHandle xHandleProducer;	// Task handle - Producer
+xTaskHandle xHandleConsumer;	// Task handle - Consumerint byteCount = 0;				// How long is the queuestruct msg{	int id;	char data[DATALEN];	portTickType timestamp;};
 
+// Initialize USART and 12 MHz clock, 115,2 kHz baud rate
 void init_usart ( void )
 {
 	static const gpio_map_t USART_SERIAL_GPIO_MAP =
@@ -43,73 +36,62 @@ void init_usart ( void )
 
 void vProducer(void *pvParameters)
 {	
-	portTickType xLastWakeTime;
-	const portTickType xFreq = TASK_DELAY_MS(1000);
-	
-	xLastWakeTime = xTaskGetTickCount();
-	
 	struct msg message;
 	message.id = 0;
-	//message.data = 0;
 	message.timestamp = 0;
 	
 	struct msg *pMesg = &message;
 	
 	char data[DATALEN] = "hej";
-	int i = byteCount;
 	
-	onLED(LED0_BIT_VALUE);
+	onLED(LED0_BIT_VALUE);				// On when the producer is active
 	
 	while(1)
 	{
-		if(byteCount == BUFFER_SIZE)
+		if(byteCount == BUFFER_SIZE)	// If the message queue is full	
 		{
-			offLED(LED0_BIT_VALUE);
-			vTaskSuspend(NULL);	
+			offLED(LED0_BIT_VALUE);		// Off when the producer is sleeping
+			vTaskSuspend(NULL);			// Go to sleep
 		}
 		
-		strcpy(pMesg->data, data);
+		strcpy(pMesg->data, data);		// copy data to pMesg->data
 		
 		xQueueSendToBack(xQHandle, &pMesg, (portTickType)10);
 		
-		byteCount++;
+		byteCount++;					// One more message in queue
 		
-		if(byteCount == 1)
+		if(byteCount == 1)				// There are messages to read
 		{
-			vTaskResume(xHandleConsumer);
-			onLED(LED1_BIT_VALUE);
+			vTaskResume(xHandleConsumer);	// Wake up consumer
+			onLED(LED1_BIT_VALUE);			// On when the consumer is active
 		}
 		
 	}
 }
 
 void vConsumer( void *pvParameters )
-{
-	portTickType xLastWakeTime;
-	const portTickType xFreq = TASK_DELAY_MS(10000);
-	volatile portTickType elapsed;
-	
+{	
 	struct msg *pMesg;
 	
-	onLED(LED1_BIT_VALUE);
+	onLED(LED1_BIT_VALUE);	// On when the consumer is active
 	
 	while(1)
 	{
-		if(byteCount == 0)
+		if(byteCount == 0)			// If the queue is empty
 		{
-			offLED(LED1_BIT_VALUE);
-			vTaskSuspend(NULL);
+			offLED(LED1_BIT_VALUE);	// Off when the consumer is sleeping
+			vTaskSuspend(NULL);		// Go to sleep
 		}
 			
 		xQueueReceive(xQHandle, &pMesg, (portTickType)10);
 		usart_write_line(serialPORT_USART, pMesg->data);
 		
-		byteCount--;
+		byteCount--;				// One message removed from queue
 		
-		if(byteCount == BUFFER_SIZE - 1)
+		if(byteCount == BUFFER_SIZE - 1)	// If there is place in the queue
 		{
-			vTaskResume(xHandleProducer);
-			onLED(LED0_BIT_VALUE);
+			vTaskResume(xHandleProducer);	// Wake up the producer
+			onLED(LED0_BIT_VALUE);			// On when the producer is active
 		}
 	}
 }
@@ -118,10 +100,6 @@ int main(void)
 {
 	initLED();
 	init_usart();
-
-	static unsigned char ucParameterToPass ;
-	
-	vSemaphoreCreateBinary(xSemaphore);
 	
 	xQHandle = xQueueCreate(10, sizeof(struct msg*));
 	if(xQHandle == NULL)
