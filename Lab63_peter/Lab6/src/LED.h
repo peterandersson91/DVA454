@@ -22,6 +22,14 @@
 // This is a 1 - bit written to the bit position of the GPIO pin
 #define LED2_BIT_VALUE (1 << LED2_PIN)
 
+#define LED3_PIN (LED3_GPIO & ( GPIO_MAX_PIN_NUMBER -1))
+// This is a 1 - bit written to the bit position of the GPIO pin
+#define LED3_BIT_VALUE (1 << LED3_PIN)
+
+#define LED4_PIN (LED4_GPIO & ( GPIO_MAX_PIN_NUMBER -1))
+// This is a 1 - bit written to the bit position of the GPIO pin
+#define LED4_BIT_VALUE (1 << LED4_PIN)
+
 void initLED(void);
 void toggleLED(int ledNr);
 void onLED(int ledNr);
