@@ -196,7 +196,7 @@
   <documentation help="" />
   <offline-documentation help="" />
   <dependencies>
-    <content-extension eid="atmel.asf" uuidref="Atmel.ASF" version="3.31.0" />
+    <content-extension eid="atmel.asf" uuidref="Atmel.ASF" version="3.34.1" />
   </dependencies>
   <project id="common.services.freertos.uc3_example.evk1100" value="Add" config="" content-id="Atmel.ASF" />
   <board id="board.evk1100" value="Add" config="" content-id="Atmel.ASF" />
@@ -227,6 +227,8 @@
       </ToolNumber>
       <ToolName xmlns="">Simulator</ToolName>
     </com_atmel_avrdbg_tool_simulator>
+    <ResetRule>0</ResetRule>
+    <EraseKey />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <ToolchainSettings>

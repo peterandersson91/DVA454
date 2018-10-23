@@ -42,14 +42,13 @@ void vTemperature(void *pvParameters)
 	
 	while(1)
 	{
-		adc_start(&AVR32_ADC);
 		offLED(LED0_BIT_VALUE);
 		if(xSemaphoreTake(xEmptyCountTemperature, (portTickType)portMAX_DELAY) == pdTRUE)
 		{
 			// Semaphore taken
 		}
 		onLED(LED0_BIT_VALUE);
-		
+		adc_start(&AVR32_ADC);
 		value_to_send = adc_get_value(&AVR32_ADC, ADC_TEMPERATURE_CHANNEL);
 		xQueueSendToBack(xQHandleTemperature, &value_to_send, (portTickType)portMAX_DELAY);
 		
@@ -59,31 +58,37 @@ void vTemperature(void *pvParameters)
 		}
 		//We have CLK_ADC/2 - 10-bit requires 10 clock cycles - Sample & Hold Time = (SHTIM+1) / ADCClock where SHTIM = 15 - Startup Time = (STARTUP+1) * 8 / ADCClock where STARTUP = 31  
 		// ADCClock = CLK_ADC / ( (PRESCAL+1) * 2 ) where PRESCAL = 0 => ADCClock = CLK_ADC / 2
-		// IF CLK_ADC = 12 MHz => ADDClock = 6 MHz => Sample hold time = 16/6MHz, Startup time = 32 * 8 / 6 MHz
+		// IF CLK_ADC = 12 MHz => ADDClock = 6 MHz => Sample hold time = 16/6MHz = 0.00000267, Startup time = 32 * 8 / 6MHz = 0,00004267
+		// Sample hold time + Startup time = 0,00004534
+		// (Sample hold time + Startup time) * 12MHz = 544
+		// IF CLK_ADC = 115200Hz => (Sample hold time + Startup time) * 115200 = (0,0002778 + 0,00444) * 115200 = 543.49
 		vTaskDelay(TASK_DELAY_MS(100));
 	}
 }
 
 void vPotentiometer(void *pvParameters)
 {
-	//volatile portTickType xLastWakeTime; // Holds tick count last led toggle
+	volatile portTickType xLastWakeTime; // Holds tick count
 	//volatile const portTickType xFreq = TASK_DELAY_MS(1000); // Holds the period		
-	//xLastWakeTime = xTaskGetTickCount(); // Sets current tick count
+	volatile const portTickType xFreq = 544; // Holds the period	
 	volatile int value_to_send;		// Character to send to Consumer
 	
 	onLED(LED1_BIT_VALUE);	// On when the temp-producer is active
 	
 	while(1)
-	{
-		adc_start(&AVR32_ADC);
-		
+	{		
 		offLED(LED1_BIT_VALUE);
 		if(xSemaphoreTake(xEmptyCountPotentiometer, (portTickType)portMAX_DELAY) == pdTRUE)
 		{
 			// Semaphore taken
 		}
+		if (xTaskGetTickCount() > (xLastWakeTime + xFreq))
+		{
+			usart_write_line(serialPORT_USART, "Deadline miss - Potentiometer");
+		}
+		xLastWakeTime = xTaskGetTickCount(); // Sets current tick count
 		onLED(LED0_BIT_VALUE);
-		
+		adc_start(&AVR32_ADC);
 		value_to_send = adc_get_value(&AVR32_ADC, ADC_POTENTIOMETER_CHANNEL);
 		xQueueSendToBack(xQHandlePotentiometer, &value_to_send, (portTickType)portMAX_DELAY);
 		
@@ -91,7 +96,8 @@ void vPotentiometer(void *pvParameters)
 		{
 			// Semaphore given
 		}
-		vTaskDelay(TASK_DELAY_MS(100));
+		vTaskDelayUntil(xLastWakeTime,xFreq);
+		//vTaskDelay(TASK_DELAY_MS(100));
 	}
 }
 
@@ -102,16 +108,14 @@ void vLight(void *pvParameters)
 	onLED(LED2_BIT_VALUE);	// On when the temp-producer is active
 	
 	while(1)
-	{
-		adc_start(&AVR32_ADC);
-		
+	{		
 		offLED(LED2_BIT_VALUE);
 		if(xSemaphoreTake(xEmptyCountLight, (portTickType)portMAX_DELAY) == pdTRUE)
 		{
 			// Semaphore taken
 		}
 		onLED(LED2_BIT_VALUE);
-		
+		adc_start(&AVR32_ADC);
 		value_to_send = adc_get_value(&AVR32_ADC, ADC_LIGHT_CHANNEL);
 		xQueueSendToBack(xQHandleLight, &value_to_send, (portTickType)portMAX_DELAY);
 		
