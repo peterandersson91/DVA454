@@ -260,239 +260,213 @@ LINKER_SCRIPT_DEP+=  \
 
 
 # AVR32/GNU C Compiler
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-src/ASF/avr32/components/display/dip204/%.o: ../src/ASF/avr32/components/display/dip204/%.c
+src/ASF/avr32/components/display/dip204/dip204.o: ../src/ASF/avr32/components/display/dip204/dip204.c
 	@echo Building file: $<
 	@echo Invoking: AVR32/GNU C Compiler : 4.4.7
 	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr32\avr32-gnu-toolchain\bin\avr32-gcc.exe$(QUOTE)  -x c -DDEBUG -DBOARD=EVK1100 -D__FREERTOS__  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\UC3A_DFP\1.0.53\include\AT32UC3A0512" -I"../src/ASF/thirdparty/freertos/demo/avr32_uc3_example/at32uc3a0512_evk1100" -I"../src/ASF/avr32/utils" -I"../src/config" -I"../src/ASF/avr32/boards/evk1100" -I"../src/ASF/thirdparty/freertos/demo/common/include" -I"../src/ASF/common/utils" -I"../src" -I"../src/ASF/avr32/boards" -I"../src/ASF/thirdparty/freertos/demo/avr32_uc3_example" -I"../src/ASF/avr32/drivers/tc" -I"../src/ASF/avr32/drivers/gpio" -I"../src/ASF/thirdparty/freertos/freertos-7.0.0/source/include" -I"../src/ASF/common/boards" -I"../src/ASF/avr32/utils/preprocessor" -I"../src/ASF/avr32/drivers/intc" -I"../src/ASF/thirdparty/freertos/freertos-7.0.0/source/portable/gcc/avr32_uc3" -I"../src/ASF/avr32/drivers/pm" -I"../src/ASF/avr32/drivers/usart" -I"../src/ASF/avr32/drivers/flashc" -I"../src/ASF/avr32/components/display/dip204" -I"../src/ASF/avr32/drivers/cpu/cycle_counter" -I"../src/ASF/avr32/drivers/spi" -I"../src/ASF/avr32/drivers/pwm" -I"../src/ASF/common/services/clock" -I"../src/ASF/common/services/delay" -I"../src/ASF/avr32/drivers/adc"  -O0 -fdata-sections -ffunction-sections -masm-addr-pseudos -g3 -Wall -mpart=uc3a0512 -c -std=gnu99 -fno-strict-aliasing -Wstrict-prototypes -Wmissing-prototypes -Werror-implicit-function-declaration -Wpointer-arith -mrelax -mno-cond-exec-before-reload -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
 	@echo Finished building: $<
 	
 
-src/ASF/avr32/drivers/adc/%.o: ../src/ASF/avr32/drivers/adc/%.c
+src/ASF/avr32/drivers/adc/adc.o: ../src/ASF/avr32/drivers/adc/adc.c
 	@echo Building file: $<
 	@echo Invoking: AVR32/GNU C Compiler : 4.4.7
 	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr32\avr32-gnu-toolchain\bin\avr32-gcc.exe$(QUOTE)  -x c -DDEBUG -DBOARD=EVK1100 -D__FREERTOS__  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\UC3A_DFP\1.0.53\include\AT32UC3A0512" -I"../src/ASF/thirdparty/freertos/demo/avr32_uc3_example/at32uc3a0512_evk1100" -I"../src/ASF/avr32/utils" -I"../src/config" -I"../src/ASF/avr32/boards/evk1100" -I"../src/ASF/thirdparty/freertos/demo/common/include" -I"../src/ASF/common/utils" -I"../src" -I"../src/ASF/avr32/boards" -I"../src/ASF/thirdparty/freertos/demo/avr32_uc3_example" -I"../src/ASF/avr32/drivers/tc" -I"../src/ASF/avr32/drivers/gpio" -I"../src/ASF/thirdparty/freertos/freertos-7.0.0/source/include" -I"../src/ASF/common/boards" -I"../src/ASF/avr32/utils/preprocessor" -I"../src/ASF/avr32/drivers/intc" -I"../src/ASF/thirdparty/freertos/freertos-7.0.0/source/portable/gcc/avr32_uc3" -I"../src/ASF/avr32/drivers/pm" -I"../src/ASF/avr32/drivers/usart" -I"../src/ASF/avr32/drivers/flashc" -I"../src/ASF/avr32/components/display/dip204" -I"../src/ASF/avr32/drivers/cpu/cycle_counter" -I"../src/ASF/avr32/drivers/spi" -I"../src/ASF/avr32/drivers/pwm" -I"../src/ASF/common/services/clock" -I"../src/ASF/common/services/delay" -I"../src/ASF/avr32/drivers/adc"  -O0 -fdata-sections -ffunction-sections -masm-addr-pseudos -g3 -Wall -mpart=uc3a0512 -c -std=gnu99 -fno-strict-aliasing -Wstrict-prototypes -Wmissing-prototypes -Werror-implicit-function-declaration -Wpointer-arith -mrelax -mno-cond-exec-before-reload -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
 	@echo Finished building: $<
 	
 
-src/ASF/avr32/drivers/pwm/%.o: ../src/ASF/avr32/drivers/pwm/%.c
+src/ASF/avr32/drivers/pwm/pwm.o: ../src/ASF/avr32/drivers/pwm/pwm.c
 	@echo Building file: $<
 	@echo Invoking: AVR32/GNU C Compiler : 4.4.7
 	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr32\avr32-gnu-toolchain\bin\avr32-gcc.exe$(QUOTE)  -x c -DDEBUG -DBOARD=EVK1100 -D__FREERTOS__  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\UC3A_DFP\1.0.53\include\AT32UC3A0512" -I"../src/ASF/thirdparty/freertos/demo/avr32_uc3_example/at32uc3a0512_evk1100" -I"../src/ASF/avr32/utils" -I"../src/config" -I"../src/ASF/avr32/boards/evk1100" -I"../src/ASF/thirdparty/freertos/demo/common/include" -I"../src/ASF/common/utils" -I"../src" -I"../src/ASF/avr32/boards" -I"../src/ASF/thirdparty/freertos/demo/avr32_uc3_example" -I"../src/ASF/avr32/drivers/tc" -I"../src/ASF/avr32/drivers/gpio" -I"../src/ASF/thirdparty/freertos/freertos-7.0.0/source/include" -I"../src/ASF/common/boards" -I"../src/ASF/avr32/utils/preprocessor" -I"../src/ASF/avr32/drivers/intc" -I"../src/ASF/thirdparty/freertos/freertos-7.0.0/source/portable/gcc/avr32_uc3" -I"../src/ASF/avr32/drivers/pm" -I"../src/ASF/avr32/drivers/usart" -I"../src/ASF/avr32/drivers/flashc" -I"../src/ASF/avr32/components/display/dip204" -I"../src/ASF/avr32/drivers/cpu/cycle_counter" -I"../src/ASF/avr32/drivers/spi" -I"../src/ASF/avr32/drivers/pwm" -I"../src/ASF/common/services/clock" -I"../src/ASF/common/services/delay" -I"../src/ASF/avr32/drivers/adc"  -O0 -fdata-sections -ffunction-sections -masm-addr-pseudos -g3 -Wall -mpart=uc3a0512 -c -std=gnu99 -fno-strict-aliasing -Wstrict-prototypes -Wmissing-prototypes -Werror-implicit-function-declaration -Wpointer-arith -mrelax -mno-cond-exec-before-reload -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
 	@echo Finished building: $<
 	
 
-src/ASF/avr32/drivers/spi/%.o: ../src/ASF/avr32/drivers/spi/%.c
+src/ASF/avr32/drivers/spi/spi.o: ../src/ASF/avr32/drivers/spi/spi.c
 	@echo Building file: $<
 	@echo Invoking: AVR32/GNU C Compiler : 4.4.7
 	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr32\avr32-gnu-toolchain\bin\avr32-gcc.exe$(QUOTE)  -x c -DDEBUG -DBOARD=EVK1100 -D__FREERTOS__  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\UC3A_DFP\1.0.53\include\AT32UC3A0512" -I"../src/ASF/thirdparty/freertos/demo/avr32_uc3_example/at32uc3a0512_evk1100" -I"../src/ASF/avr32/utils" -I"../src/config" -I"../src/ASF/avr32/boards/evk1100" -I"../src/ASF/thirdparty/freertos/demo/common/include" -I"../src/ASF/common/utils" -I"../src" -I"../src/ASF/avr32/boards" -I"../src/ASF/thirdparty/freertos/demo/avr32_uc3_example" -I"../src/ASF/avr32/drivers/tc" -I"../src/ASF/avr32/drivers/gpio" -I"../src/ASF/thirdparty/freertos/freertos-7.0.0/source/include" -I"../src/ASF/common/boards" -I"../src/ASF/avr32/utils/preprocessor" -I"../src/ASF/avr32/drivers/intc" -I"../src/ASF/thirdparty/freertos/freertos-7.0.0/source/portable/gcc/avr32_uc3" -I"../src/ASF/avr32/drivers/pm" -I"../src/ASF/avr32/drivers/usart" -I"../src/ASF/avr32/drivers/flashc" -I"../src/ASF/avr32/components/display/dip204" -I"../src/ASF/avr32/drivers/cpu/cycle_counter" -I"../src/ASF/avr32/drivers/spi" -I"../src/ASF/avr32/drivers/pwm" -I"../src/ASF/common/services/clock" -I"../src/ASF/common/services/delay" -I"../src/ASF/avr32/drivers/adc"  -O0 -fdata-sections -ffunction-sections -masm-addr-pseudos -g3 -Wall -mpart=uc3a0512 -c -std=gnu99 -fno-strict-aliasing -Wstrict-prototypes -Wmissing-prototypes -Werror-implicit-function-declaration -Wpointer-arith -mrelax -mno-cond-exec-before-reload -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
 	@echo Finished building: $<
 	
 
-src/ASF/common/services/clock/uc3a0_a1/%.o: ../src/ASF/common/services/clock/uc3a0_a1/%.c
+src/ASF/common/services/clock/uc3a0_a1/sysclk.o: ../src/ASF/common/services/clock/uc3a0_a1/sysclk.c
 	@echo Building file: $<
 	@echo Invoking: AVR32/GNU C Compiler : 4.4.7
 	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr32\avr32-gnu-toolchain\bin\avr32-gcc.exe$(QUOTE)  -x c -DDEBUG -DBOARD=EVK1100 -D__FREERTOS__  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\UC3A_DFP\1.0.53\include\AT32UC3A0512" -I"../src/ASF/thirdparty/freertos/demo/avr32_uc3_example/at32uc3a0512_evk1100" -I"../src/ASF/avr32/utils" -I"../src/config" -I"../src/ASF/avr32/boards/evk1100" -I"../src/ASF/thirdparty/freertos/demo/common/include" -I"../src/ASF/common/utils" -I"../src" -I"../src/ASF/avr32/boards" -I"../src/ASF/thirdparty/freertos/demo/avr32_uc3_example" -I"../src/ASF/avr32/drivers/tc" -I"../src/ASF/avr32/drivers/gpio" -I"../src/ASF/thirdparty/freertos/freertos-7.0.0/source/include" -I"../src/ASF/common/boards" -I"../src/ASF/avr32/utils/preprocessor" -I"../src/ASF/avr32/drivers/intc" -I"../src/ASF/thirdparty/freertos/freertos-7.0.0/source/portable/gcc/avr32_uc3" -I"../src/ASF/avr32/drivers/pm" -I"../src/ASF/avr32/drivers/usart" -I"../src/ASF/avr32/drivers/flashc" -I"../src/ASF/avr32/components/display/dip204" -I"../src/ASF/avr32/drivers/cpu/cycle_counter" -I"../src/ASF/avr32/drivers/spi" -I"../src/ASF/avr32/drivers/pwm" -I"../src/ASF/common/services/clock" -I"../src/ASF/common/services/delay" -I"../src/ASF/avr32/drivers/adc"  -O0 -fdata-sections -ffunction-sections -masm-addr-pseudos -g3 -Wall -mpart=uc3a0512 -c -std=gnu99 -fno-strict-aliasing -Wstrict-prototypes -Wmissing-prototypes -Werror-implicit-function-declaration -Wpointer-arith -mrelax -mno-cond-exec-before-reload -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
 	@echo Finished building: $<
 	
 
-src/%.o: ../src/%.c
+src/BUTTONS.o: ../src/BUTTONS.c
 	@echo Building file: $<
 	@echo Invoking: AVR32/GNU C Compiler : 4.4.7
 	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr32\avr32-gnu-toolchain\bin\avr32-gcc.exe$(QUOTE)  -x c -DDEBUG -DBOARD=EVK1100 -D__FREERTOS__  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\UC3A_DFP\1.0.53\include\AT32UC3A0512" -I"../src/ASF/thirdparty/freertos/demo/avr32_uc3_example/at32uc3a0512_evk1100" -I"../src/ASF/avr32/utils" -I"../src/config" -I"../src/ASF/avr32/boards/evk1100" -I"../src/ASF/thirdparty/freertos/demo/common/include" -I"../src/ASF/common/utils" -I"../src" -I"../src/ASF/avr32/boards" -I"../src/ASF/thirdparty/freertos/demo/avr32_uc3_example" -I"../src/ASF/avr32/drivers/tc" -I"../src/ASF/avr32/drivers/gpio" -I"../src/ASF/thirdparty/freertos/freertos-7.0.0/source/include" -I"../src/ASF/common/boards" -I"../src/ASF/avr32/utils/preprocessor" -I"../src/ASF/avr32/drivers/intc" -I"../src/ASF/thirdparty/freertos/freertos-7.0.0/source/portable/gcc/avr32_uc3" -I"../src/ASF/avr32/drivers/pm" -I"../src/ASF/avr32/drivers/usart" -I"../src/ASF/avr32/drivers/flashc" -I"../src/ASF/avr32/components/display/dip204" -I"../src/ASF/avr32/drivers/cpu/cycle_counter" -I"../src/ASF/avr32/drivers/spi" -I"../src/ASF/avr32/drivers/pwm" -I"../src/ASF/common/services/clock" -I"../src/ASF/common/services/delay" -I"../src/ASF/avr32/drivers/adc"  -O0 -fdata-sections -ffunction-sections -masm-addr-pseudos -g3 -Wall -mpart=uc3a0512 -c -std=gnu99 -fno-strict-aliasing -Wstrict-prototypes -Wmissing-prototypes -Werror-implicit-function-declaration -Wpointer-arith -mrelax -mno-cond-exec-before-reload -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
 	@echo Finished building: $<
 	
 
-src/config/%.o: ../src/config/%.c
+src/config/display_init.o: ../src/config/display_init.c
 	@echo Building file: $<
 	@echo Invoking: AVR32/GNU C Compiler : 4.4.7
 	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr32\avr32-gnu-toolchain\bin\avr32-gcc.exe$(QUOTE)  -x c -DDEBUG -DBOARD=EVK1100 -D__FREERTOS__  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\UC3A_DFP\1.0.53\include\AT32UC3A0512" -I"../src/ASF/thirdparty/freertos/demo/avr32_uc3_example/at32uc3a0512_evk1100" -I"../src/ASF/avr32/utils" -I"../src/config" -I"../src/ASF/avr32/boards/evk1100" -I"../src/ASF/thirdparty/freertos/demo/common/include" -I"../src/ASF/common/utils" -I"../src" -I"../src/ASF/avr32/boards" -I"../src/ASF/thirdparty/freertos/demo/avr32_uc3_example" -I"../src/ASF/avr32/drivers/tc" -I"../src/ASF/avr32/drivers/gpio" -I"../src/ASF/thirdparty/freertos/freertos-7.0.0/source/include" -I"../src/ASF/common/boards" -I"../src/ASF/avr32/utils/preprocessor" -I"../src/ASF/avr32/drivers/intc" -I"../src/ASF/thirdparty/freertos/freertos-7.0.0/source/portable/gcc/avr32_uc3" -I"../src/ASF/avr32/drivers/pm" -I"../src/ASF/avr32/drivers/usart" -I"../src/ASF/avr32/drivers/flashc" -I"../src/ASF/avr32/components/display/dip204" -I"../src/ASF/avr32/drivers/cpu/cycle_counter" -I"../src/ASF/avr32/drivers/spi" -I"../src/ASF/avr32/drivers/pwm" -I"../src/ASF/common/services/clock" -I"../src/ASF/common/services/delay" -I"../src/ASF/avr32/drivers/adc"  -O0 -fdata-sections -ffunction-sections -masm-addr-pseudos -g3 -Wall -mpart=uc3a0512 -c -std=gnu99 -fno-strict-aliasing -Wstrict-prototypes -Wmissing-prototypes -Werror-implicit-function-declaration -Wpointer-arith -mrelax -mno-cond-exec-before-reload -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
 	@echo Finished building: $<
 	
 
-src/ASF/avr32/boards/evk1100/%.o: ../src/ASF/avr32/boards/evk1100/%.c
+src/LED.o: ../src/LED.c
 	@echo Building file: $<
 	@echo Invoking: AVR32/GNU C Compiler : 4.4.7
 	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr32\avr32-gnu-toolchain\bin\avr32-gcc.exe$(QUOTE)  -x c -DDEBUG -DBOARD=EVK1100 -D__FREERTOS__  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\UC3A_DFP\1.0.53\include\AT32UC3A0512" -I"../src/ASF/thirdparty/freertos/demo/avr32_uc3_example/at32uc3a0512_evk1100" -I"../src/ASF/avr32/utils" -I"../src/config" -I"../src/ASF/avr32/boards/evk1100" -I"../src/ASF/thirdparty/freertos/demo/common/include" -I"../src/ASF/common/utils" -I"../src" -I"../src/ASF/avr32/boards" -I"../src/ASF/thirdparty/freertos/demo/avr32_uc3_example" -I"../src/ASF/avr32/drivers/tc" -I"../src/ASF/avr32/drivers/gpio" -I"../src/ASF/thirdparty/freertos/freertos-7.0.0/source/include" -I"../src/ASF/common/boards" -I"../src/ASF/avr32/utils/preprocessor" -I"../src/ASF/avr32/drivers/intc" -I"../src/ASF/thirdparty/freertos/freertos-7.0.0/source/portable/gcc/avr32_uc3" -I"../src/ASF/avr32/drivers/pm" -I"../src/ASF/avr32/drivers/usart" -I"../src/ASF/avr32/drivers/flashc" -I"../src/ASF/avr32/components/display/dip204" -I"../src/ASF/avr32/drivers/cpu/cycle_counter" -I"../src/ASF/avr32/drivers/spi" -I"../src/ASF/avr32/drivers/pwm" -I"../src/ASF/common/services/clock" -I"../src/ASF/common/services/delay" -I"../src/ASF/avr32/drivers/adc"  -O0 -fdata-sections -ffunction-sections -masm-addr-pseudos -g3 -Wall -mpart=uc3a0512 -c -std=gnu99 -fno-strict-aliasing -Wstrict-prototypes -Wmissing-prototypes -Werror-implicit-function-declaration -Wpointer-arith -mrelax -mno-cond-exec-before-reload -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
 	@echo Finished building: $<
 	
 
-src/ASF/avr32/drivers/flashc/%.o: ../src/ASF/avr32/drivers/flashc/%.c
+src/main.o: ../src/main.c
 	@echo Building file: $<
 	@echo Invoking: AVR32/GNU C Compiler : 4.4.7
 	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr32\avr32-gnu-toolchain\bin\avr32-gcc.exe$(QUOTE)  -x c -DDEBUG -DBOARD=EVK1100 -D__FREERTOS__  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\UC3A_DFP\1.0.53\include\AT32UC3A0512" -I"../src/ASF/thirdparty/freertos/demo/avr32_uc3_example/at32uc3a0512_evk1100" -I"../src/ASF/avr32/utils" -I"../src/config" -I"../src/ASF/avr32/boards/evk1100" -I"../src/ASF/thirdparty/freertos/demo/common/include" -I"../src/ASF/common/utils" -I"../src" -I"../src/ASF/avr32/boards" -I"../src/ASF/thirdparty/freertos/demo/avr32_uc3_example" -I"../src/ASF/avr32/drivers/tc" -I"../src/ASF/avr32/drivers/gpio" -I"../src/ASF/thirdparty/freertos/freertos-7.0.0/source/include" -I"../src/ASF/common/boards" -I"../src/ASF/avr32/utils/preprocessor" -I"../src/ASF/avr32/drivers/intc" -I"../src/ASF/thirdparty/freertos/freertos-7.0.0/source/portable/gcc/avr32_uc3" -I"../src/ASF/avr32/drivers/pm" -I"../src/ASF/avr32/drivers/usart" -I"../src/ASF/avr32/drivers/flashc" -I"../src/ASF/avr32/components/display/dip204" -I"../src/ASF/avr32/drivers/cpu/cycle_counter" -I"../src/ASF/avr32/drivers/spi" -I"../src/ASF/avr32/drivers/pwm" -I"../src/ASF/common/services/clock" -I"../src/ASF/common/services/delay" -I"../src/ASF/avr32/drivers/adc"  -O0 -fdata-sections -ffunction-sections -masm-addr-pseudos -g3 -Wall -mpart=uc3a0512 -c -std=gnu99 -fno-strict-aliasing -Wstrict-prototypes -Wmissing-prototypes -Werror-implicit-function-declaration -Wpointer-arith -mrelax -mno-cond-exec-before-reload -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
 	@echo Finished building: $<
 	
 
-src/ASF/avr32/drivers/gpio/%.o: ../src/ASF/avr32/drivers/gpio/%.c
+src/ASF/avr32/boards/evk1100/led.o: ../src/ASF/avr32/boards/evk1100/led.c
 	@echo Building file: $<
 	@echo Invoking: AVR32/GNU C Compiler : 4.4.7
 	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr32\avr32-gnu-toolchain\bin\avr32-gcc.exe$(QUOTE)  -x c -DDEBUG -DBOARD=EVK1100 -D__FREERTOS__  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\UC3A_DFP\1.0.53\include\AT32UC3A0512" -I"../src/ASF/thirdparty/freertos/demo/avr32_uc3_example/at32uc3a0512_evk1100" -I"../src/ASF/avr32/utils" -I"../src/config" -I"../src/ASF/avr32/boards/evk1100" -I"../src/ASF/thirdparty/freertos/demo/common/include" -I"../src/ASF/common/utils" -I"../src" -I"../src/ASF/avr32/boards" -I"../src/ASF/thirdparty/freertos/demo/avr32_uc3_example" -I"../src/ASF/avr32/drivers/tc" -I"../src/ASF/avr32/drivers/gpio" -I"../src/ASF/thirdparty/freertos/freertos-7.0.0/source/include" -I"../src/ASF/common/boards" -I"../src/ASF/avr32/utils/preprocessor" -I"../src/ASF/avr32/drivers/intc" -I"../src/ASF/thirdparty/freertos/freertos-7.0.0/source/portable/gcc/avr32_uc3" -I"../src/ASF/avr32/drivers/pm" -I"../src/ASF/avr32/drivers/usart" -I"../src/ASF/avr32/drivers/flashc" -I"../src/ASF/avr32/components/display/dip204" -I"../src/ASF/avr32/drivers/cpu/cycle_counter" -I"../src/ASF/avr32/drivers/spi" -I"../src/ASF/avr32/drivers/pwm" -I"../src/ASF/common/services/clock" -I"../src/ASF/common/services/delay" -I"../src/ASF/avr32/drivers/adc"  -O0 -fdata-sections -ffunction-sections -masm-addr-pseudos -g3 -Wall -mpart=uc3a0512 -c -std=gnu99 -fno-strict-aliasing -Wstrict-prototypes -Wmissing-prototypes -Werror-implicit-function-declaration -Wpointer-arith -mrelax -mno-cond-exec-before-reload -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
 	@echo Finished building: $<
 	
 
-src/ASF/avr32/drivers/intc/%.o: ../src/ASF/avr32/drivers/intc/%.c
+src/ASF/avr32/drivers/flashc/flashc.o: ../src/ASF/avr32/drivers/flashc/flashc.c
 	@echo Building file: $<
 	@echo Invoking: AVR32/GNU C Compiler : 4.4.7
 	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr32\avr32-gnu-toolchain\bin\avr32-gcc.exe$(QUOTE)  -x c -DDEBUG -DBOARD=EVK1100 -D__FREERTOS__  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\UC3A_DFP\1.0.53\include\AT32UC3A0512" -I"../src/ASF/thirdparty/freertos/demo/avr32_uc3_example/at32uc3a0512_evk1100" -I"../src/ASF/avr32/utils" -I"../src/config" -I"../src/ASF/avr32/boards/evk1100" -I"../src/ASF/thirdparty/freertos/demo/common/include" -I"../src/ASF/common/utils" -I"../src" -I"../src/ASF/avr32/boards" -I"../src/ASF/thirdparty/freertos/demo/avr32_uc3_example" -I"../src/ASF/avr32/drivers/tc" -I"../src/ASF/avr32/drivers/gpio" -I"../src/ASF/thirdparty/freertos/freertos-7.0.0/source/include" -I"../src/ASF/common/boards" -I"../src/ASF/avr32/utils/preprocessor" -I"../src/ASF/avr32/drivers/intc" -I"../src/ASF/thirdparty/freertos/freertos-7.0.0/source/portable/gcc/avr32_uc3" -I"../src/ASF/avr32/drivers/pm" -I"../src/ASF/avr32/drivers/usart" -I"../src/ASF/avr32/drivers/flashc" -I"../src/ASF/avr32/components/display/dip204" -I"../src/ASF/avr32/drivers/cpu/cycle_counter" -I"../src/ASF/avr32/drivers/spi" -I"../src/ASF/avr32/drivers/pwm" -I"../src/ASF/common/services/clock" -I"../src/ASF/common/services/delay" -I"../src/ASF/avr32/drivers/adc"  -O0 -fdata-sections -ffunction-sections -masm-addr-pseudos -g3 -Wall -mpart=uc3a0512 -c -std=gnu99 -fno-strict-aliasing -Wstrict-prototypes -Wmissing-prototypes -Werror-implicit-function-declaration -Wpointer-arith -mrelax -mno-cond-exec-before-reload -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
 	@echo Finished building: $<
 	
 
-src/ASF/avr32/drivers/pm/%.o: ../src/ASF/avr32/drivers/pm/%.c
+src/ASF/avr32/drivers/gpio/gpio.o: ../src/ASF/avr32/drivers/gpio/gpio.c
 	@echo Building file: $<
 	@echo Invoking: AVR32/GNU C Compiler : 4.4.7
 	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr32\avr32-gnu-toolchain\bin\avr32-gcc.exe$(QUOTE)  -x c -DDEBUG -DBOARD=EVK1100 -D__FREERTOS__  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\UC3A_DFP\1.0.53\include\AT32UC3A0512" -I"../src/ASF/thirdparty/freertos/demo/avr32_uc3_example/at32uc3a0512_evk1100" -I"../src/ASF/avr32/utils" -I"../src/config" -I"../src/ASF/avr32/boards/evk1100" -I"../src/ASF/thirdparty/freertos/demo/common/include" -I"../src/ASF/common/utils" -I"../src" -I"../src/ASF/avr32/boards" -I"../src/ASF/thirdparty/freertos/demo/avr32_uc3_example" -I"../src/ASF/avr32/drivers/tc" -I"../src/ASF/avr32/drivers/gpio" -I"../src/ASF/thirdparty/freertos/freertos-7.0.0/source/include" -I"../src/ASF/common/boards" -I"../src/ASF/avr32/utils/preprocessor" -I"../src/ASF/avr32/drivers/intc" -I"../src/ASF/thirdparty/freertos/freertos-7.0.0/source/portable/gcc/avr32_uc3" -I"../src/ASF/avr32/drivers/pm" -I"../src/ASF/avr32/drivers/usart" -I"../src/ASF/avr32/drivers/flashc" -I"../src/ASF/avr32/components/display/dip204" -I"../src/ASF/avr32/drivers/cpu/cycle_counter" -I"../src/ASF/avr32/drivers/spi" -I"../src/ASF/avr32/drivers/pwm" -I"../src/ASF/common/services/clock" -I"../src/ASF/common/services/delay" -I"../src/ASF/avr32/drivers/adc"  -O0 -fdata-sections -ffunction-sections -masm-addr-pseudos -g3 -Wall -mpart=uc3a0512 -c -std=gnu99 -fno-strict-aliasing -Wstrict-prototypes -Wmissing-prototypes -Werror-implicit-function-declaration -Wpointer-arith -mrelax -mno-cond-exec-before-reload -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
 	@echo Finished building: $<
 	
 
-src/ASF/avr32/drivers/tc/%.o: ../src/ASF/avr32/drivers/tc/%.c
+src/ASF/avr32/drivers/intc/intc.o: ../src/ASF/avr32/drivers/intc/intc.c
 	@echo Building file: $<
 	@echo Invoking: AVR32/GNU C Compiler : 4.4.7
 	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr32\avr32-gnu-toolchain\bin\avr32-gcc.exe$(QUOTE)  -x c -DDEBUG -DBOARD=EVK1100 -D__FREERTOS__  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\UC3A_DFP\1.0.53\include\AT32UC3A0512" -I"../src/ASF/thirdparty/freertos/demo/avr32_uc3_example/at32uc3a0512_evk1100" -I"../src/ASF/avr32/utils" -I"../src/config" -I"../src/ASF/avr32/boards/evk1100" -I"../src/ASF/thirdparty/freertos/demo/common/include" -I"../src/ASF/common/utils" -I"../src" -I"../src/ASF/avr32/boards" -I"../src/ASF/thirdparty/freertos/demo/avr32_uc3_example" -I"../src/ASF/avr32/drivers/tc" -I"../src/ASF/avr32/drivers/gpio" -I"../src/ASF/thirdparty/freertos/freertos-7.0.0/source/include" -I"../src/ASF/common/boards" -I"../src/ASF/avr32/utils/preprocessor" -I"../src/ASF/avr32/drivers/intc" -I"../src/ASF/thirdparty/freertos/freertos-7.0.0/source/portable/gcc/avr32_uc3" -I"../src/ASF/avr32/drivers/pm" -I"../src/ASF/avr32/drivers/usart" -I"../src/ASF/avr32/drivers/flashc" -I"../src/ASF/avr32/components/display/dip204" -I"../src/ASF/avr32/drivers/cpu/cycle_counter" -I"../src/ASF/avr32/drivers/spi" -I"../src/ASF/avr32/drivers/pwm" -I"../src/ASF/common/services/clock" -I"../src/ASF/common/services/delay" -I"../src/ASF/avr32/drivers/adc"  -O0 -fdata-sections -ffunction-sections -masm-addr-pseudos -g3 -Wall -mpart=uc3a0512 -c -std=gnu99 -fno-strict-aliasing -Wstrict-prototypes -Wmissing-prototypes -Werror-implicit-function-declaration -Wpointer-arith -mrelax -mno-cond-exec-before-reload -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
 	@echo Finished building: $<
 	
 
-src/ASF/avr32/drivers/usart/%.o: ../src/ASF/avr32/drivers/usart/%.c
+src/ASF/avr32/drivers/pm/pm.o: ../src/ASF/avr32/drivers/pm/pm.c
 	@echo Building file: $<
 	@echo Invoking: AVR32/GNU C Compiler : 4.4.7
 	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr32\avr32-gnu-toolchain\bin\avr32-gcc.exe$(QUOTE)  -x c -DDEBUG -DBOARD=EVK1100 -D__FREERTOS__  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\UC3A_DFP\1.0.53\include\AT32UC3A0512" -I"../src/ASF/thirdparty/freertos/demo/avr32_uc3_example/at32uc3a0512_evk1100" -I"../src/ASF/avr32/utils" -I"../src/config" -I"../src/ASF/avr32/boards/evk1100" -I"../src/ASF/thirdparty/freertos/demo/common/include" -I"../src/ASF/common/utils" -I"../src" -I"../src/ASF/avr32/boards" -I"../src/ASF/thirdparty/freertos/demo/avr32_uc3_example" -I"../src/ASF/avr32/drivers/tc" -I"../src/ASF/avr32/drivers/gpio" -I"../src/ASF/thirdparty/freertos/freertos-7.0.0/source/include" -I"../src/ASF/common/boards" -I"../src/ASF/avr32/utils/preprocessor" -I"../src/ASF/avr32/drivers/intc" -I"../src/ASF/thirdparty/freertos/freertos-7.0.0/source/portable/gcc/avr32_uc3" -I"../src/ASF/avr32/drivers/pm" -I"../src/ASF/avr32/drivers/usart" -I"../src/ASF/avr32/drivers/flashc" -I"../src/ASF/avr32/components/display/dip204" -I"../src/ASF/avr32/drivers/cpu/cycle_counter" -I"../src/ASF/avr32/drivers/spi" -I"../src/ASF/avr32/drivers/pwm" -I"../src/ASF/common/services/clock" -I"../src/ASF/common/services/delay" -I"../src/ASF/avr32/drivers/adc"  -O0 -fdata-sections -ffunction-sections -masm-addr-pseudos -g3 -Wall -mpart=uc3a0512 -c -std=gnu99 -fno-strict-aliasing -Wstrict-prototypes -Wmissing-prototypes -Werror-implicit-function-declaration -Wpointer-arith -mrelax -mno-cond-exec-before-reload -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
 	@echo Finished building: $<
 	
 
-src/ASF/thirdparty/freertos/freertos-7.0.0/source/%.o: ../src/ASF/thirdparty/freertos/freertos-7.0.0/source/%.c
+src/ASF/avr32/drivers/pm/pm_conf_clocks.o: ../src/ASF/avr32/drivers/pm/pm_conf_clocks.c
 	@echo Building file: $<
 	@echo Invoking: AVR32/GNU C Compiler : 4.4.7
 	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr32\avr32-gnu-toolchain\bin\avr32-gcc.exe$(QUOTE)  -x c -DDEBUG -DBOARD=EVK1100 -D__FREERTOS__  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\UC3A_DFP\1.0.53\include\AT32UC3A0512" -I"../src/ASF/thirdparty/freertos/demo/avr32_uc3_example/at32uc3a0512_evk1100" -I"../src/ASF/avr32/utils" -I"../src/config" -I"../src/ASF/avr32/boards/evk1100" -I"../src/ASF/thirdparty/freertos/demo/common/include" -I"../src/ASF/common/utils" -I"../src" -I"../src/ASF/avr32/boards" -I"../src/ASF/thirdparty/freertos/demo/avr32_uc3_example" -I"../src/ASF/avr32/drivers/tc" -I"../src/ASF/avr32/drivers/gpio" -I"../src/ASF/thirdparty/freertos/freertos-7.0.0/source/include" -I"../src/ASF/common/boards" -I"../src/ASF/avr32/utils/preprocessor" -I"../src/ASF/avr32/drivers/intc" -I"../src/ASF/thirdparty/freertos/freertos-7.0.0/source/portable/gcc/avr32_uc3" -I"../src/ASF/avr32/drivers/pm" -I"../src/ASF/avr32/drivers/usart" -I"../src/ASF/avr32/drivers/flashc" -I"../src/ASF/avr32/components/display/dip204" -I"../src/ASF/avr32/drivers/cpu/cycle_counter" -I"../src/ASF/avr32/drivers/spi" -I"../src/ASF/avr32/drivers/pwm" -I"../src/ASF/common/services/clock" -I"../src/ASF/common/services/delay" -I"../src/ASF/avr32/drivers/adc"  -O0 -fdata-sections -ffunction-sections -masm-addr-pseudos -g3 -Wall -mpart=uc3a0512 -c -std=gnu99 -fno-strict-aliasing -Wstrict-prototypes -Wmissing-prototypes -Werror-implicit-function-declaration -Wpointer-arith -mrelax -mno-cond-exec-before-reload -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
 	@echo Finished building: $<
 	
 
-src/ASF/thirdparty/freertos/freertos-7.0.0/source/portable/gcc/avr32_uc3/%.o: ../src/ASF/thirdparty/freertos/freertos-7.0.0/source/portable/gcc/avr32_uc3/%.c
+src/ASF/avr32/drivers/pm/power_clocks_lib.o: ../src/ASF/avr32/drivers/pm/power_clocks_lib.c
 	@echo Building file: $<
 	@echo Invoking: AVR32/GNU C Compiler : 4.4.7
 	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr32\avr32-gnu-toolchain\bin\avr32-gcc.exe$(QUOTE)  -x c -DDEBUG -DBOARD=EVK1100 -D__FREERTOS__  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\UC3A_DFP\1.0.53\include\AT32UC3A0512" -I"../src/ASF/thirdparty/freertos/demo/avr32_uc3_example/at32uc3a0512_evk1100" -I"../src/ASF/avr32/utils" -I"../src/config" -I"../src/ASF/avr32/boards/evk1100" -I"../src/ASF/thirdparty/freertos/demo/common/include" -I"../src/ASF/common/utils" -I"../src" -I"../src/ASF/avr32/boards" -I"../src/ASF/thirdparty/freertos/demo/avr32_uc3_example" -I"../src/ASF/avr32/drivers/tc" -I"../src/ASF/avr32/drivers/gpio" -I"../src/ASF/thirdparty/freertos/freertos-7.0.0/source/include" -I"../src/ASF/common/boards" -I"../src/ASF/avr32/utils/preprocessor" -I"../src/ASF/avr32/drivers/intc" -I"../src/ASF/thirdparty/freertos/freertos-7.0.0/source/portable/gcc/avr32_uc3" -I"../src/ASF/avr32/drivers/pm" -I"../src/ASF/avr32/drivers/usart" -I"../src/ASF/avr32/drivers/flashc" -I"../src/ASF/avr32/components/display/dip204" -I"../src/ASF/avr32/drivers/cpu/cycle_counter" -I"../src/ASF/avr32/drivers/spi" -I"../src/ASF/avr32/drivers/pwm" -I"../src/ASF/common/services/clock" -I"../src/ASF/common/services/delay" -I"../src/ASF/avr32/drivers/adc"  -O0 -fdata-sections -ffunction-sections -masm-addr-pseudos -g3 -Wall -mpart=uc3a0512 -c -std=gnu99 -fno-strict-aliasing -Wstrict-prototypes -Wmissing-prototypes -Werror-implicit-function-declaration -Wpointer-arith -mrelax -mno-cond-exec-before-reload -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
 	@echo Finished building: $<
 	
 
-src/ASF/thirdparty/freertos/freertos-7.0.0/source/portable/memmang/%.o: ../src/ASF/thirdparty/freertos/freertos-7.0.0/source/portable/memmang/%.c
+src/ASF/avr32/drivers/tc/tc.o: ../src/ASF/avr32/drivers/tc/tc.c
 	@echo Building file: $<
 	@echo Invoking: AVR32/GNU C Compiler : 4.4.7
 	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr32\avr32-gnu-toolchain\bin\avr32-gcc.exe$(QUOTE)  -x c -DDEBUG -DBOARD=EVK1100 -D__FREERTOS__  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\UC3A_DFP\1.0.53\include\AT32UC3A0512" -I"../src/ASF/thirdparty/freertos/demo/avr32_uc3_example/at32uc3a0512_evk1100" -I"../src/ASF/avr32/utils" -I"../src/config" -I"../src/ASF/avr32/boards/evk1100" -I"../src/ASF/thirdparty/freertos/demo/common/include" -I"../src/ASF/common/utils" -I"../src" -I"../src/ASF/avr32/boards" -I"../src/ASF/thirdparty/freertos/demo/avr32_uc3_example" -I"../src/ASF/avr32/drivers/tc" -I"../src/ASF/avr32/drivers/gpio" -I"../src/ASF/thirdparty/freertos/freertos-7.0.0/source/include" -I"../src/ASF/common/boards" -I"../src/ASF/avr32/utils/preprocessor" -I"../src/ASF/avr32/drivers/intc" -I"../src/ASF/thirdparty/freertos/freertos-7.0.0/source/portable/gcc/avr32_uc3" -I"../src/ASF/avr32/drivers/pm" -I"../src/ASF/avr32/drivers/usart" -I"../src/ASF/avr32/drivers/flashc" -I"../src/ASF/avr32/components/display/dip204" -I"../src/ASF/avr32/drivers/cpu/cycle_counter" -I"../src/ASF/avr32/drivers/spi" -I"../src/ASF/avr32/drivers/pwm" -I"../src/ASF/common/services/clock" -I"../src/ASF/common/services/delay" -I"../src/ASF/avr32/drivers/adc"  -O0 -fdata-sections -ffunction-sections -masm-addr-pseudos -g3 -Wall -mpart=uc3a0512 -c -std=gnu99 -fno-strict-aliasing -Wstrict-prototypes -Wmissing-prototypes -Werror-implicit-function-declaration -Wpointer-arith -mrelax -mno-cond-exec-before-reload -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
 	@echo Finished building: $<
 	
+
+src/ASF/avr32/drivers/usart/usart.o: ../src/ASF/avr32/drivers/usart/usart.c
+	@echo Building file: $<
+	@echo Invoking: AVR32/GNU C Compiler : 4.4.7
+	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr32\avr32-gnu-toolchain\bin\avr32-gcc.exe$(QUOTE)  -x c -DDEBUG -DBOARD=EVK1100 -D__FREERTOS__  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\UC3A_DFP\1.0.53\include\AT32UC3A0512" -I"../src/ASF/thirdparty/freertos/demo/avr32_uc3_example/at32uc3a0512_evk1100" -I"../src/ASF/avr32/utils" -I"../src/config" -I"../src/ASF/avr32/boards/evk1100" -I"../src/ASF/thirdparty/freertos/demo/common/include" -I"../src/ASF/common/utils" -I"../src" -I"../src/ASF/avr32/boards" -I"../src/ASF/thirdparty/freertos/demo/avr32_uc3_example" -I"../src/ASF/avr32/drivers/tc" -I"../src/ASF/avr32/drivers/gpio" -I"../src/ASF/thirdparty/freertos/freertos-7.0.0/source/include" -I"../src/ASF/common/boards" -I"../src/ASF/avr32/utils/preprocessor" -I"../src/ASF/avr32/drivers/intc" -I"../src/ASF/thirdparty/freertos/freertos-7.0.0/source/portable/gcc/avr32_uc3" -I"../src/ASF/avr32/drivers/pm" -I"../src/ASF/avr32/drivers/usart" -I"../src/ASF/avr32/drivers/flashc" -I"../src/ASF/avr32/components/display/dip204" -I"../src/ASF/avr32/drivers/cpu/cycle_counter" -I"../src/ASF/avr32/drivers/spi" -I"../src/ASF/avr32/drivers/pwm" -I"../src/ASF/common/services/clock" -I"../src/ASF/common/services/delay" -I"../src/ASF/avr32/drivers/adc"  -O0 -fdata-sections -ffunction-sections -masm-addr-pseudos -g3 -Wall -mpart=uc3a0512 -c -std=gnu99 -fno-strict-aliasing -Wstrict-prototypes -Wmissing-prototypes -Werror-implicit-function-declaration -Wpointer-arith -mrelax -mno-cond-exec-before-reload -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
+
+src/ASF/thirdparty/freertos/freertos-7.0.0/source/croutine.o: ../src/ASF/thirdparty/freertos/freertos-7.0.0/source/croutine.c
+	@echo Building file: $<
+	@echo Invoking: AVR32/GNU C Compiler : 4.4.7
+	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr32\avr32-gnu-toolchain\bin\avr32-gcc.exe$(QUOTE)  -x c -DDEBUG -DBOARD=EVK1100 -D__FREERTOS__  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\UC3A_DFP\1.0.53\include\AT32UC3A0512" -I"../src/ASF/thirdparty/freertos/demo/avr32_uc3_example/at32uc3a0512_evk1100" -I"../src/ASF/avr32/utils" -I"../src/config" -I"../src/ASF/avr32/boards/evk1100" -I"../src/ASF/thirdparty/freertos/demo/common/include" -I"../src/ASF/common/utils" -I"../src" -I"../src/ASF/avr32/boards" -I"../src/ASF/thirdparty/freertos/demo/avr32_uc3_example" -I"../src/ASF/avr32/drivers/tc" -I"../src/ASF/avr32/drivers/gpio" -I"../src/ASF/thirdparty/freertos/freertos-7.0.0/source/include" -I"../src/ASF/common/boards" -I"../src/ASF/avr32/utils/preprocessor" -I"../src/ASF/avr32/drivers/intc" -I"../src/ASF/thirdparty/freertos/freertos-7.0.0/source/portable/gcc/avr32_uc3" -I"../src/ASF/avr32/drivers/pm" -I"../src/ASF/avr32/drivers/usart" -I"../src/ASF/avr32/drivers/flashc" -I"../src/ASF/avr32/components/display/dip204" -I"../src/ASF/avr32/drivers/cpu/cycle_counter" -I"../src/ASF/avr32/drivers/spi" -I"../src/ASF/avr32/drivers/pwm" -I"../src/ASF/common/services/clock" -I"../src/ASF/common/services/delay" -I"../src/ASF/avr32/drivers/adc"  -O0 -fdata-sections -ffunction-sections -masm-addr-pseudos -g3 -Wall -mpart=uc3a0512 -c -std=gnu99 -fno-strict-aliasing -Wstrict-prototypes -Wmissing-prototypes -Werror-implicit-function-declaration -Wpointer-arith -mrelax -mno-cond-exec-before-reload -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
+
+src/ASF/thirdparty/freertos/freertos-7.0.0/source/list.o: ../src/ASF/thirdparty/freertos/freertos-7.0.0/source/list.c
+	@echo Building file: $<
+	@echo Invoking: AVR32/GNU C Compiler : 4.4.7
+	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr32\avr32-gnu-toolchain\bin\avr32-gcc.exe$(QUOTE)  -x c -DDEBUG -DBOARD=EVK1100 -D__FREERTOS__  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\UC3A_DFP\1.0.53\include\AT32UC3A0512" -I"../src/ASF/thirdparty/freertos/demo/avr32_uc3_example/at32uc3a0512_evk1100" -I"../src/ASF/avr32/utils" -I"../src/config" -I"../src/ASF/avr32/boards/evk1100" -I"../src/ASF/thirdparty/freertos/demo/common/include" -I"../src/ASF/common/utils" -I"../src" -I"../src/ASF/avr32/boards" -I"../src/ASF/thirdparty/freertos/demo/avr32_uc3_example" -I"../src/ASF/avr32/drivers/tc" -I"../src/ASF/avr32/drivers/gpio" -I"../src/ASF/thirdparty/freertos/freertos-7.0.0/source/include" -I"../src/ASF/common/boards" -I"../src/ASF/avr32/utils/preprocessor" -I"../src/ASF/avr32/drivers/intc" -I"../src/ASF/thirdparty/freertos/freertos-7.0.0/source/portable/gcc/avr32_uc3" -I"../src/ASF/avr32/drivers/pm" -I"../src/ASF/avr32/drivers/usart" -I"../src/ASF/avr32/drivers/flashc" -I"../src/ASF/avr32/components/display/dip204" -I"../src/ASF/avr32/drivers/cpu/cycle_counter" -I"../src/ASF/avr32/drivers/spi" -I"../src/ASF/avr32/drivers/pwm" -I"../src/ASF/common/services/clock" -I"../src/ASF/common/services/delay" -I"../src/ASF/avr32/drivers/adc"  -O0 -fdata-sections -ffunction-sections -masm-addr-pseudos -g3 -Wall -mpart=uc3a0512 -c -std=gnu99 -fno-strict-aliasing -Wstrict-prototypes -Wmissing-prototypes -Werror-implicit-function-declaration -Wpointer-arith -mrelax -mno-cond-exec-before-reload -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
+
+src/ASF/thirdparty/freertos/freertos-7.0.0/source/portable/gcc/avr32_uc3/port.o: ../src/ASF/thirdparty/freertos/freertos-7.0.0/source/portable/gcc/avr32_uc3/port.c
+	@echo Building file: $<
+	@echo Invoking: AVR32/GNU C Compiler : 4.4.7
+	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr32\avr32-gnu-toolchain\bin\avr32-gcc.exe$(QUOTE)  -x c -DDEBUG -DBOARD=EVK1100 -D__FREERTOS__  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\UC3A_DFP\1.0.53\include\AT32UC3A0512" -I"../src/ASF/thirdparty/freertos/demo/avr32_uc3_example/at32uc3a0512_evk1100" -I"../src/ASF/avr32/utils" -I"../src/config" -I"../src/ASF/avr32/boards/evk1100" -I"../src/ASF/thirdparty/freertos/demo/common/include" -I"../src/ASF/common/utils" -I"../src" -I"../src/ASF/avr32/boards" -I"../src/ASF/thirdparty/freertos/demo/avr32_uc3_example" -I"../src/ASF/avr32/drivers/tc" -I"../src/ASF/avr32/drivers/gpio" -I"../src/ASF/thirdparty/freertos/freertos-7.0.0/source/include" -I"../src/ASF/common/boards" -I"../src/ASF/avr32/utils/preprocessor" -I"../src/ASF/avr32/drivers/intc" -I"../src/ASF/thirdparty/freertos/freertos-7.0.0/source/portable/gcc/avr32_uc3" -I"../src/ASF/avr32/drivers/pm" -I"../src/ASF/avr32/drivers/usart" -I"../src/ASF/avr32/drivers/flashc" -I"../src/ASF/avr32/components/display/dip204" -I"../src/ASF/avr32/drivers/cpu/cycle_counter" -I"../src/ASF/avr32/drivers/spi" -I"../src/ASF/avr32/drivers/pwm" -I"../src/ASF/common/services/clock" -I"../src/ASF/common/services/delay" -I"../src/ASF/avr32/drivers/adc"  -O0 -fdata-sections -ffunction-sections -masm-addr-pseudos -g3 -Wall -mpart=uc3a0512 -c -std=gnu99 -fno-strict-aliasing -Wstrict-prototypes -Wmissing-prototypes -Werror-implicit-function-declaration -Wpointer-arith -mrelax -mno-cond-exec-before-reload -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
+
+src/ASF/thirdparty/freertos/freertos-7.0.0/source/portable/gcc/avr32_uc3/read.o: ../src/ASF/thirdparty/freertos/freertos-7.0.0/source/portable/gcc/avr32_uc3/read.c
+	@echo Building file: $<
+	@echo Invoking: AVR32/GNU C Compiler : 4.4.7
+	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr32\avr32-gnu-toolchain\bin\avr32-gcc.exe$(QUOTE)  -x c -DDEBUG -DBOARD=EVK1100 -D__FREERTOS__  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\UC3A_DFP\1.0.53\include\AT32UC3A0512" -I"../src/ASF/thirdparty/freertos/demo/avr32_uc3_example/at32uc3a0512_evk1100" -I"../src/ASF/avr32/utils" -I"../src/config" -I"../src/ASF/avr32/boards/evk1100" -I"../src/ASF/thirdparty/freertos/demo/common/include" -I"../src/ASF/common/utils" -I"../src" -I"../src/ASF/avr32/boards" -I"../src/ASF/thirdparty/freertos/demo/avr32_uc3_example" -I"../src/ASF/avr32/drivers/tc" -I"../src/ASF/avr32/drivers/gpio" -I"../src/ASF/thirdparty/freertos/freertos-7.0.0/source/include" -I"../src/ASF/common/boards" -I"../src/ASF/avr32/utils/preprocessor" -I"../src/ASF/avr32/drivers/intc" -I"../src/ASF/thirdparty/freertos/freertos-7.0.0/source/portable/gcc/avr32_uc3" -I"../src/ASF/avr32/drivers/pm" -I"../src/ASF/avr32/drivers/usart" -I"../src/ASF/avr32/drivers/flashc" -I"../src/ASF/avr32/components/display/dip204" -I"../src/ASF/avr32/drivers/cpu/cycle_counter" -I"../src/ASF/avr32/drivers/spi" -I"../src/ASF/avr32/drivers/pwm" -I"../src/ASF/common/services/clock" -I"../src/ASF/common/services/delay" -I"../src/ASF/avr32/drivers/adc"  -O0 -fdata-sections -ffunction-sections -masm-addr-pseudos -g3 -Wall -mpart=uc3a0512 -c -std=gnu99 -fno-strict-aliasing -Wstrict-prototypes -Wmissing-prototypes -Werror-implicit-function-declaration -Wpointer-arith -mrelax -mno-cond-exec-before-reload -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
+
+src/ASF/thirdparty/freertos/freertos-7.0.0/source/portable/gcc/avr32_uc3/write.o: ../src/ASF/thirdparty/freertos/freertos-7.0.0/source/portable/gcc/avr32_uc3/write.c
+	@echo Building file: $<
+	@echo Invoking: AVR32/GNU C Compiler : 4.4.7
+	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr32\avr32-gnu-toolchain\bin\avr32-gcc.exe$(QUOTE)  -x c -DDEBUG -DBOARD=EVK1100 -D__FREERTOS__  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\UC3A_DFP\1.0.53\include\AT32UC3A0512" -I"../src/ASF/thirdparty/freertos/demo/avr32_uc3_example/at32uc3a0512_evk1100" -I"../src/ASF/avr32/utils" -I"../src/config" -I"../src/ASF/avr32/boards/evk1100" -I"../src/ASF/thirdparty/freertos/demo/common/include" -I"../src/ASF/common/utils" -I"../src" -I"../src/ASF/avr32/boards" -I"../src/ASF/thirdparty/freertos/demo/avr32_uc3_example" -I"../src/ASF/avr32/drivers/tc" -I"../src/ASF/avr32/drivers/gpio" -I"../src/ASF/thirdparty/freertos/freertos-7.0.0/source/include" -I"../src/ASF/common/boards" -I"../src/ASF/avr32/utils/preprocessor" -I"../src/ASF/avr32/drivers/intc" -I"../src/ASF/thirdparty/freertos/freertos-7.0.0/source/portable/gcc/avr32_uc3" -I"../src/ASF/avr32/drivers/pm" -I"../src/ASF/avr32/drivers/usart" -I"../src/ASF/avr32/drivers/flashc" -I"../src/ASF/avr32/components/display/dip204" -I"../src/ASF/avr32/drivers/cpu/cycle_counter" -I"../src/ASF/avr32/drivers/spi" -I"../src/ASF/avr32/drivers/pwm" -I"../src/ASF/common/services/clock" -I"../src/ASF/common/services/delay" -I"../src/ASF/avr32/drivers/adc"  -O0 -fdata-sections -ffunction-sections -masm-addr-pseudos -g3 -Wall -mpart=uc3a0512 -c -std=gnu99 -fno-strict-aliasing -Wstrict-prototypes -Wmissing-prototypes -Werror-implicit-function-declaration -Wpointer-arith -mrelax -mno-cond-exec-before-reload -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
+
+src/ASF/thirdparty/freertos/freertos-7.0.0/source/portable/memmang/heap_3.o: ../src/ASF/thirdparty/freertos/freertos-7.0.0/source/portable/memmang/heap_3.c
+	@echo Building file: $<
+	@echo Invoking: AVR32/GNU C Compiler : 4.4.7
+	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr32\avr32-gnu-toolchain\bin\avr32-gcc.exe$(QUOTE)  -x c -DDEBUG -DBOARD=EVK1100 -D__FREERTOS__  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\UC3A_DFP\1.0.53\include\AT32UC3A0512" -I"../src/ASF/thirdparty/freertos/demo/avr32_uc3_example/at32uc3a0512_evk1100" -I"../src/ASF/avr32/utils" -I"../src/config" -I"../src/ASF/avr32/boards/evk1100" -I"../src/ASF/thirdparty/freertos/demo/common/include" -I"../src/ASF/common/utils" -I"../src" -I"../src/ASF/avr32/boards" -I"../src/ASF/thirdparty/freertos/demo/avr32_uc3_example" -I"../src/ASF/avr32/drivers/tc" -I"../src/ASF/avr32/drivers/gpio" -I"../src/ASF/thirdparty/freertos/freertos-7.0.0/source/include" -I"../src/ASF/common/boards" -I"../src/ASF/avr32/utils/preprocessor" -I"../src/ASF/avr32/drivers/intc" -I"../src/ASF/thirdparty/freertos/freertos-7.0.0/source/portable/gcc/avr32_uc3" -I"../src/ASF/avr32/drivers/pm" -I"../src/ASF/avr32/drivers/usart" -I"../src/ASF/avr32/drivers/flashc" -I"../src/ASF/avr32/components/display/dip204" -I"../src/ASF/avr32/drivers/cpu/cycle_counter" -I"../src/ASF/avr32/drivers/spi" -I"../src/ASF/avr32/drivers/pwm" -I"../src/ASF/common/services/clock" -I"../src/ASF/common/services/delay" -I"../src/ASF/avr32/drivers/adc"  -O0 -fdata-sections -ffunction-sections -masm-addr-pseudos -g3 -Wall -mpart=uc3a0512 -c -std=gnu99 -fno-strict-aliasing -Wstrict-prototypes -Wmissing-prototypes -Werror-implicit-function-declaration -Wpointer-arith -mrelax -mno-cond-exec-before-reload -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
+
+src/ASF/thirdparty/freertos/freertos-7.0.0/source/queue.o: ../src/ASF/thirdparty/freertos/freertos-7.0.0/source/queue.c
+	@echo Building file: $<
+	@echo Invoking: AVR32/GNU C Compiler : 4.4.7
+	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr32\avr32-gnu-toolchain\bin\avr32-gcc.exe$(QUOTE)  -x c -DDEBUG -DBOARD=EVK1100 -D__FREERTOS__  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\UC3A_DFP\1.0.53\include\AT32UC3A0512" -I"../src/ASF/thirdparty/freertos/demo/avr32_uc3_example/at32uc3a0512_evk1100" -I"../src/ASF/avr32/utils" -I"../src/config" -I"../src/ASF/avr32/boards/evk1100" -I"../src/ASF/thirdparty/freertos/demo/common/include" -I"../src/ASF/common/utils" -I"../src" -I"../src/ASF/avr32/boards" -I"../src/ASF/thirdparty/freertos/demo/avr32_uc3_example" -I"../src/ASF/avr32/drivers/tc" -I"../src/ASF/avr32/drivers/gpio" -I"../src/ASF/thirdparty/freertos/freertos-7.0.0/source/include" -I"../src/ASF/common/boards" -I"../src/ASF/avr32/utils/preprocessor" -I"../src/ASF/avr32/drivers/intc" -I"../src/ASF/thirdparty/freertos/freertos-7.0.0/source/portable/gcc/avr32_uc3" -I"../src/ASF/avr32/drivers/pm" -I"../src/ASF/avr32/drivers/usart" -I"../src/ASF/avr32/drivers/flashc" -I"../src/ASF/avr32/components/display/dip204" -I"../src/ASF/avr32/drivers/cpu/cycle_counter" -I"../src/ASF/avr32/drivers/spi" -I"../src/ASF/avr32/drivers/pwm" -I"../src/ASF/common/services/clock" -I"../src/ASF/common/services/delay" -I"../src/ASF/avr32/drivers/adc"  -O0 -fdata-sections -ffunction-sections -masm-addr-pseudos -g3 -Wall -mpart=uc3a0512 -c -std=gnu99 -fno-strict-aliasing -Wstrict-prototypes -Wmissing-prototypes -Werror-implicit-function-declaration -Wpointer-arith -mrelax -mno-cond-exec-before-reload -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
+
+src/ASF/thirdparty/freertos/freertos-7.0.0/source/tasks.o: ../src/ASF/thirdparty/freertos/freertos-7.0.0/source/tasks.c
+	@echo Building file: $<
+	@echo Invoking: AVR32/GNU C Compiler : 4.4.7
+	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr32\avr32-gnu-toolchain\bin\avr32-gcc.exe$(QUOTE)  -x c -DDEBUG -DBOARD=EVK1100 -D__FREERTOS__  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\UC3A_DFP\1.0.53\include\AT32UC3A0512" -I"../src/ASF/thirdparty/freertos/demo/avr32_uc3_example/at32uc3a0512_evk1100" -I"../src/ASF/avr32/utils" -I"../src/config" -I"../src/ASF/avr32/boards/evk1100" -I"../src/ASF/thirdparty/freertos/demo/common/include" -I"../src/ASF/common/utils" -I"../src" -I"../src/ASF/avr32/boards" -I"../src/ASF/thirdparty/freertos/demo/avr32_uc3_example" -I"../src/ASF/avr32/drivers/tc" -I"../src/ASF/avr32/drivers/gpio" -I"../src/ASF/thirdparty/freertos/freertos-7.0.0/source/include" -I"../src/ASF/common/boards" -I"../src/ASF/avr32/utils/preprocessor" -I"../src/ASF/avr32/drivers/intc" -I"../src/ASF/thirdparty/freertos/freertos-7.0.0/source/portable/gcc/avr32_uc3" -I"../src/ASF/avr32/drivers/pm" -I"../src/ASF/avr32/drivers/usart" -I"../src/ASF/avr32/drivers/flashc" -I"../src/ASF/avr32/components/display/dip204" -I"../src/ASF/avr32/drivers/cpu/cycle_counter" -I"../src/ASF/avr32/drivers/spi" -I"../src/ASF/avr32/drivers/pwm" -I"../src/ASF/common/services/clock" -I"../src/ASF/common/services/delay" -I"../src/ASF/avr32/drivers/adc"  -O0 -fdata-sections -ffunction-sections -masm-addr-pseudos -g3 -Wall -mpart=uc3a0512 -c -std=gnu99 -fno-strict-aliasing -Wstrict-prototypes -Wmissing-prototypes -Werror-implicit-function-declaration -Wpointer-arith -mrelax -mno-cond-exec-before-reload -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
+
+src/ASF/thirdparty/freertos/freertos-7.0.0/source/timers.o: ../src/ASF/thirdparty/freertos/freertos-7.0.0/source/timers.c
+	@echo Building file: $<
+	@echo Invoking: AVR32/GNU C Compiler : 4.4.7
+	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr32\avr32-gnu-toolchain\bin\avr32-gcc.exe$(QUOTE)  -x c -DDEBUG -DBOARD=EVK1100 -D__FREERTOS__  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\UC3A_DFP\1.0.53\include\AT32UC3A0512" -I"../src/ASF/thirdparty/freertos/demo/avr32_uc3_example/at32uc3a0512_evk1100" -I"../src/ASF/avr32/utils" -I"../src/config" -I"../src/ASF/avr32/boards/evk1100" -I"../src/ASF/thirdparty/freertos/demo/common/include" -I"../src/ASF/common/utils" -I"../src" -I"../src/ASF/avr32/boards" -I"../src/ASF/thirdparty/freertos/demo/avr32_uc3_example" -I"../src/ASF/avr32/drivers/tc" -I"../src/ASF/avr32/drivers/gpio" -I"../src/ASF/thirdparty/freertos/freertos-7.0.0/source/include" -I"../src/ASF/common/boards" -I"../src/ASF/avr32/utils/preprocessor" -I"../src/ASF/avr32/drivers/intc" -I"../src/ASF/thirdparty/freertos/freertos-7.0.0/source/portable/gcc/avr32_uc3" -I"../src/ASF/avr32/drivers/pm" -I"../src/ASF/avr32/drivers/usart" -I"../src/ASF/avr32/drivers/flashc" -I"../src/ASF/avr32/components/display/dip204" -I"../src/ASF/avr32/drivers/cpu/cycle_counter" -I"../src/ASF/avr32/drivers/spi" -I"../src/ASF/avr32/drivers/pwm" -I"../src/ASF/common/services/clock" -I"../src/ASF/common/services/delay" -I"../src/ASF/avr32/drivers/adc"  -O0 -fdata-sections -ffunction-sections -masm-addr-pseudos -g3 -Wall -mpart=uc3a0512 -c -std=gnu99 -fno-strict-aliasing -Wstrict-prototypes -Wmissing-prototypes -Werror-implicit-function-declaration -Wpointer-arith -mrelax -mno-cond-exec-before-reload -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
+
 
 
 
 # AVR32/GNU Preprocessing Assembler
-
-src/ASF/avr32/utils/startup/%.o: ../src/ASF/avr32/utils/startup/%.S
+src/ASF/avr32/utils/startup/trampoline_uc3.o: ../src/ASF/avr32/utils/startup/trampoline_uc3.S
 	@echo Building file: $<
 	@echo Invoking: AVR32/GNU Preprocessing Assembler : 4.4.7
 	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr32\avr32-gnu-toolchain\bin\avr32-gcc.exe$(QUOTE) -x assembler-with-cpp -c -mpart=uc3a0512 -mrelax -DBOARD=EVK1100 -D__FREERTOS__ -I "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\UC3A_DFP\1.0.53\include\AT32UC3A0512" -I "../src/ASF/thirdparty/freertos/demo/avr32_uc3_example/at32uc3a0512_evk1100" -I "../src/ASF/avr32/utils" -I "../src/config" -I "../src/ASF/avr32/boards/evk1100" -I "../src/ASF/thirdparty/freertos/demo/common/include" -I "../src/ASF/common/utils" -I "../src" -I "../src/ASF/avr32/boards" -I "../src/ASF/thirdparty/freertos/demo/avr32_uc3_example" -I "../src/ASF/avr32/drivers/tc" -I "../src/ASF/avr32/drivers/gpio" -I "../src/ASF/thirdparty/freertos/freertos-7.0.0/source/include" -I "../src/ASF/common/boards" -I "../src/ASF/avr32/utils/preprocessor" -I "../src/ASF/avr32/drivers/intc" -I "../src/ASF/thirdparty/freertos/freertos-7.0.0/source/portable/gcc/avr32_uc3" -I "../src/ASF/avr32/drivers/pm" -I "../src/ASF/avr32/drivers/usart" -I "../src/ASF/avr32/drivers/flashc" -I "../src/ASF/avr32/components/display/dip204" -I "../src/ASF/avr32/drivers/cpu/cycle_counter" -I "../src/ASF/avr32/drivers/spi" -I "../src/ASF/avr32/drivers/pwm" -I "../src/ASF/common/services/clock" -I "../src/ASF/common/services/delay" -I "../src/ASF/avr32/drivers/adc"  -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)" -Wa,-g   -o "$@" "$<" 
 	@echo Finished building: $<
 	
 
-src/ASF/avr32/utils/startup/%.o: ../src/ASF/avr32/utils/startup/%.x
+src/ASF/thirdparty/freertos/freertos-7.0.0/source/portable/gcc/avr32_uc3/exception.o: ../src/ASF/thirdparty/freertos/freertos-7.0.0/source/portable/gcc/avr32_uc3/exception.S
 	@echo Building file: $<
 	@echo Invoking: AVR32/GNU Preprocessing Assembler : 4.4.7
 	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr32\avr32-gnu-toolchain\bin\avr32-gcc.exe$(QUOTE) -x assembler-with-cpp -c -mpart=uc3a0512 -mrelax -DBOARD=EVK1100 -D__FREERTOS__ -I "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\UC3A_DFP\1.0.53\include\AT32UC3A0512" -I "../src/ASF/thirdparty/freertos/demo/avr32_uc3_example/at32uc3a0512_evk1100" -I "../src/ASF/avr32/utils" -I "../src/config" -I "../src/ASF/avr32/boards/evk1100" -I "../src/ASF/thirdparty/freertos/demo/common/include" -I "../src/ASF/common/utils" -I "../src" -I "../src/ASF/avr32/boards" -I "../src/ASF/thirdparty/freertos/demo/avr32_uc3_example" -I "../src/ASF/avr32/drivers/tc" -I "../src/ASF/avr32/drivers/gpio" -I "../src/ASF/thirdparty/freertos/freertos-7.0.0/source/include" -I "../src/ASF/common/boards" -I "../src/ASF/avr32/utils/preprocessor" -I "../src/ASF/avr32/drivers/intc" -I "../src/ASF/thirdparty/freertos/freertos-7.0.0/source/portable/gcc/avr32_uc3" -I "../src/ASF/avr32/drivers/pm" -I "../src/ASF/avr32/drivers/usart" -I "../src/ASF/avr32/drivers/flashc" -I "../src/ASF/avr32/components/display/dip204" -I "../src/ASF/avr32/drivers/cpu/cycle_counter" -I "../src/ASF/avr32/drivers/spi" -I "../src/ASF/avr32/drivers/pwm" -I "../src/ASF/common/services/clock" -I "../src/ASF/common/services/delay" -I "../src/ASF/avr32/drivers/adc"  -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)" -Wa,-g   -o "$@" "$<" 
 	@echo Finished building: $<
 	
 
-src/ASF/avr32/utils/startup/%.o: ../src/ASF/avr32/utils/startup/%.X
-	@echo Building file: $<
-	@echo Invoking: AVR32/GNU Preprocessing Assembler : 4.4.7
-	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr32\avr32-gnu-toolchain\bin\avr32-gcc.exe$(QUOTE) -x assembler-with-cpp -c -mpart=uc3a0512 -mrelax -DBOARD=EVK1100 -D__FREERTOS__ -I "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\UC3A_DFP\1.0.53\include\AT32UC3A0512" -I "../src/ASF/thirdparty/freertos/demo/avr32_uc3_example/at32uc3a0512_evk1100" -I "../src/ASF/avr32/utils" -I "../src/config" -I "../src/ASF/avr32/boards/evk1100" -I "../src/ASF/thirdparty/freertos/demo/common/include" -I "../src/ASF/common/utils" -I "../src" -I "../src/ASF/avr32/boards" -I "../src/ASF/thirdparty/freertos/demo/avr32_uc3_example" -I "../src/ASF/avr32/drivers/tc" -I "../src/ASF/avr32/drivers/gpio" -I "../src/ASF/thirdparty/freertos/freertos-7.0.0/source/include" -I "../src/ASF/common/boards" -I "../src/ASF/avr32/utils/preprocessor" -I "../src/ASF/avr32/drivers/intc" -I "../src/ASF/thirdparty/freertos/freertos-7.0.0/source/portable/gcc/avr32_uc3" -I "../src/ASF/avr32/drivers/pm" -I "../src/ASF/avr32/drivers/usart" -I "../src/ASF/avr32/drivers/flashc" -I "../src/ASF/avr32/components/display/dip204" -I "../src/ASF/avr32/drivers/cpu/cycle_counter" -I "../src/ASF/avr32/drivers/spi" -I "../src/ASF/avr32/drivers/pwm" -I "../src/ASF/common/services/clock" -I "../src/ASF/common/services/delay" -I "../src/ASF/avr32/drivers/adc"  -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)" -Wa,-g   -o "$@" "$<" 
-	@echo Finished building: $<
-	
-
-src/ASF/avr32/utils/startup/%.o: ../src/ASF/avr32/utils/startup/%.sx
-	@echo Building file: $<
-	@echo Invoking: AVR32/GNU Preprocessing Assembler : 4.4.7
-	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr32\avr32-gnu-toolchain\bin\avr32-gcc.exe$(QUOTE) -x assembler-with-cpp -c -mpart=uc3a0512 -mrelax -DBOARD=EVK1100 -D__FREERTOS__ -I "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\UC3A_DFP\1.0.53\include\AT32UC3A0512" -I "../src/ASF/thirdparty/freertos/demo/avr32_uc3_example/at32uc3a0512_evk1100" -I "../src/ASF/avr32/utils" -I "../src/config" -I "../src/ASF/avr32/boards/evk1100" -I "../src/ASF/thirdparty/freertos/demo/common/include" -I "../src/ASF/common/utils" -I "../src" -I "../src/ASF/avr32/boards" -I "../src/ASF/thirdparty/freertos/demo/avr32_uc3_example" -I "../src/ASF/avr32/drivers/tc" -I "../src/ASF/avr32/drivers/gpio" -I "../src/ASF/thirdparty/freertos/freertos-7.0.0/source/include" -I "../src/ASF/common/boards" -I "../src/ASF/avr32/utils/preprocessor" -I "../src/ASF/avr32/drivers/intc" -I "../src/ASF/thirdparty/freertos/freertos-7.0.0/source/portable/gcc/avr32_uc3" -I "../src/ASF/avr32/drivers/pm" -I "../src/ASF/avr32/drivers/usart" -I "../src/ASF/avr32/drivers/flashc" -I "../src/ASF/avr32/components/display/dip204" -I "../src/ASF/avr32/drivers/cpu/cycle_counter" -I "../src/ASF/avr32/drivers/spi" -I "../src/ASF/avr32/drivers/pwm" -I "../src/ASF/common/services/clock" -I "../src/ASF/common/services/delay" -I "../src/ASF/avr32/drivers/adc"  -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)" -Wa,-g   -o "$@" "$<" 
-	@echo Finished building: $<
-	
-
-src/ASF/thirdparty/freertos/freertos-7.0.0/source/portable/gcc/avr32_uc3/%.o: ../src/ASF/thirdparty/freertos/freertos-7.0.0/source/portable/gcc/avr32_uc3/%.S
-	@echo Building file: $<
-	@echo Invoking: AVR32/GNU Preprocessing Assembler : 4.4.7
-	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr32\avr32-gnu-toolchain\bin\avr32-gcc.exe$(QUOTE) -x assembler-with-cpp -c -mpart=uc3a0512 -mrelax -DBOARD=EVK1100 -D__FREERTOS__ -I "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\UC3A_DFP\1.0.53\include\AT32UC3A0512" -I "../src/ASF/thirdparty/freertos/demo/avr32_uc3_example/at32uc3a0512_evk1100" -I "../src/ASF/avr32/utils" -I "../src/config" -I "../src/ASF/avr32/boards/evk1100" -I "../src/ASF/thirdparty/freertos/demo/common/include" -I "../src/ASF/common/utils" -I "../src" -I "../src/ASF/avr32/boards" -I "../src/ASF/thirdparty/freertos/demo/avr32_uc3_example" -I "../src/ASF/avr32/drivers/tc" -I "../src/ASF/avr32/drivers/gpio" -I "../src/ASF/thirdparty/freertos/freertos-7.0.0/source/include" -I "../src/ASF/common/boards" -I "../src/ASF/avr32/utils/preprocessor" -I "../src/ASF/avr32/drivers/intc" -I "../src/ASF/thirdparty/freertos/freertos-7.0.0/source/portable/gcc/avr32_uc3" -I "../src/ASF/avr32/drivers/pm" -I "../src/ASF/avr32/drivers/usart" -I "../src/ASF/avr32/drivers/flashc" -I "../src/ASF/avr32/components/display/dip204" -I "../src/ASF/avr32/drivers/cpu/cycle_counter" -I "../src/ASF/avr32/drivers/spi" -I "../src/ASF/avr32/drivers/pwm" -I "../src/ASF/common/services/clock" -I "../src/ASF/common/services/delay" -I "../src/ASF/avr32/drivers/adc"  -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)" -Wa,-g   -o "$@" "$<" 
-	@echo Finished building: $<
-	
-
-src/ASF/thirdparty/freertos/freertos-7.0.0/source/portable/gcc/avr32_uc3/%.o: ../src/ASF/thirdparty/freertos/freertos-7.0.0/source/portable/gcc/avr32_uc3/%.x
-	@echo Building file: $<
-	@echo Invoking: AVR32/GNU Preprocessing Assembler : 4.4.7
-	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr32\avr32-gnu-toolchain\bin\avr32-gcc.exe$(QUOTE) -x assembler-with-cpp -c -mpart=uc3a0512 -mrelax -DBOARD=EVK1100 -D__FREERTOS__ -I "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\UC3A_DFP\1.0.53\include\AT32UC3A0512" -I "../src/ASF/thirdparty/freertos/demo/avr32_uc3_example/at32uc3a0512_evk1100" -I "../src/ASF/avr32/utils" -I "../src/config" -I "../src/ASF/avr32/boards/evk1100" -I "../src/ASF/thirdparty/freertos/demo/common/include" -I "../src/ASF/common/utils" -I "../src" -I "../src/ASF/avr32/boards" -I "../src/ASF/thirdparty/freertos/demo/avr32_uc3_example" -I "../src/ASF/avr32/drivers/tc" -I "../src/ASF/avr32/drivers/gpio" -I "../src/ASF/thirdparty/freertos/freertos-7.0.0/source/include" -I "../src/ASF/common/boards" -I "../src/ASF/avr32/utils/preprocessor" -I "../src/ASF/avr32/drivers/intc" -I "../src/ASF/thirdparty/freertos/freertos-7.0.0/source/portable/gcc/avr32_uc3" -I "../src/ASF/avr32/drivers/pm" -I "../src/ASF/avr32/drivers/usart" -I "../src/ASF/avr32/drivers/flashc" -I "../src/ASF/avr32/components/display/dip204" -I "../src/ASF/avr32/drivers/cpu/cycle_counter" -I "../src/ASF/avr32/drivers/spi" -I "../src/ASF/avr32/drivers/pwm" -I "../src/ASF/common/services/clock" -I "../src/ASF/common/services/delay" -I "../src/ASF/avr32/drivers/adc"  -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)" -Wa,-g   -o "$@" "$<" 
-	@echo Finished building: $<
-	
-
-src/ASF/thirdparty/freertos/freertos-7.0.0/source/portable/gcc/avr32_uc3/%.o: ../src/ASF/thirdparty/freertos/freertos-7.0.0/source/portable/gcc/avr32_uc3/%.X
-	@echo Building file: $<
-	@echo Invoking: AVR32/GNU Preprocessing Assembler : 4.4.7
-	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr32\avr32-gnu-toolchain\bin\avr32-gcc.exe$(QUOTE) -x assembler-with-cpp -c -mpart=uc3a0512 -mrelax -DBOARD=EVK1100 -D__FREERTOS__ -I "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\UC3A_DFP\1.0.53\include\AT32UC3A0512" -I "../src/ASF/thirdparty/freertos/demo/avr32_uc3_example/at32uc3a0512_evk1100" -I "../src/ASF/avr32/utils" -I "../src/config" -I "../src/ASF/avr32/boards/evk1100" -I "../src/ASF/thirdparty/freertos/demo/common/include" -I "../src/ASF/common/utils" -I "../src" -I "../src/ASF/avr32/boards" -I "../src/ASF/thirdparty/freertos/demo/avr32_uc3_example" -I "../src/ASF/avr32/drivers/tc" -I "../src/ASF/avr32/drivers/gpio" -I "../src/ASF/thirdparty/freertos/freertos-7.0.0/source/include" -I "../src/ASF/common/boards" -I "../src/ASF/avr32/utils/preprocessor" -I "../src/ASF/avr32/drivers/intc" -I "../src/ASF/thirdparty/freertos/freertos-7.0.0/source/portable/gcc/avr32_uc3" -I "../src/ASF/avr32/drivers/pm" -I "../src/ASF/avr32/drivers/usart" -I "../src/ASF/avr32/drivers/flashc" -I "../src/ASF/avr32/components/display/dip204" -I "../src/ASF/avr32/drivers/cpu/cycle_counter" -I "../src/ASF/avr32/drivers/spi" -I "../src/ASF/avr32/drivers/pwm" -I "../src/ASF/common/services/clock" -I "../src/ASF/common/services/delay" -I "../src/ASF/avr32/drivers/adc"  -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)" -Wa,-g   -o "$@" "$<" 
-	@echo Finished building: $<
-	
-
-src/ASF/thirdparty/freertos/freertos-7.0.0/source/portable/gcc/avr32_uc3/%.o: ../src/ASF/thirdparty/freertos/freertos-7.0.0/source/portable/gcc/avr32_uc3/%.sx
-	@echo Building file: $<
-	@echo Invoking: AVR32/GNU Preprocessing Assembler : 4.4.7
-	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr32\avr32-gnu-toolchain\bin\avr32-gcc.exe$(QUOTE) -x assembler-with-cpp -c -mpart=uc3a0512 -mrelax -DBOARD=EVK1100 -D__FREERTOS__ -I "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\UC3A_DFP\1.0.53\include\AT32UC3A0512" -I "../src/ASF/thirdparty/freertos/demo/avr32_uc3_example/at32uc3a0512_evk1100" -I "../src/ASF/avr32/utils" -I "../src/config" -I "../src/ASF/avr32/boards/evk1100" -I "../src/ASF/thirdparty/freertos/demo/common/include" -I "../src/ASF/common/utils" -I "../src" -I "../src/ASF/avr32/boards" -I "../src/ASF/thirdparty/freertos/demo/avr32_uc3_example" -I "../src/ASF/avr32/drivers/tc" -I "../src/ASF/avr32/drivers/gpio" -I "../src/ASF/thirdparty/freertos/freertos-7.0.0/source/include" -I "../src/ASF/common/boards" -I "../src/ASF/avr32/utils/preprocessor" -I "../src/ASF/avr32/drivers/intc" -I "../src/ASF/thirdparty/freertos/freertos-7.0.0/source/portable/gcc/avr32_uc3" -I "../src/ASF/avr32/drivers/pm" -I "../src/ASF/avr32/drivers/usart" -I "../src/ASF/avr32/drivers/flashc" -I "../src/ASF/avr32/components/display/dip204" -I "../src/ASF/avr32/drivers/cpu/cycle_counter" -I "../src/ASF/avr32/drivers/spi" -I "../src/ASF/avr32/drivers/pwm" -I "../src/ASF/common/services/clock" -I "../src/ASF/common/services/delay" -I "../src/ASF/avr32/drivers/adc"  -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)" -Wa,-g   -o "$@" "$<" 
-	@echo Finished building: $<
-	
 
 
 
