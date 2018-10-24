@@ -52,7 +52,7 @@ void vPotentiometer( void *pvParameters )
 		{
 			// Semaphore taken
 		}
-		if(xSemaphoreTake(xLCDSemaphore,(portTickType)portMAX_DELAY) == pdTRUE)
+		if(xSemaphoreTake(xMutex,(portTickType)portMAX_DELAY) == pdTRUE)
 		{
 			usart_write_line(serialPORT_USART, "Pot tar mutex");
 		}
@@ -67,7 +67,7 @@ void vPotentiometer( void *pvParameters )
 		// Put the value on the queue
 		xQueueSendToBack(xQHandle, &pot_struct, (portTickType)10);
 		
-		if(xSemaphoreGive(xLCDSemaphore) == pdTRUE)
+		if(xSemaphoreGive(xMutex) == pdTRUE)
 		{
 			usart_write_line(serialPORT_USART, "pot lämnar mutex");
 		}
@@ -95,7 +95,7 @@ void vTemperature( void *pvParameters )
 		{
 			// Semaphore taken
 		}
-		if(xSemaphoreTake(xLCDSemaphore,(portTickType)portMAX_DELAY) == pdTRUE)
+		if(xSemaphoreTake(xMutex,(portTickType)portMAX_DELAY) == pdTRUE)
 		{
 			usart_write_line(serialPORT_USART, "temp tar mutex");
 		}
@@ -107,7 +107,7 @@ void vTemperature( void *pvParameters )
 		// Put the value on the queue
 		xQueueSendToBack(xQHandle, &temp_struct, (portTickType)10);
 		
-		if(xSemaphoreGive(xLCDSemaphore) == pdTRUE)
+		if(xSemaphoreGive(xMutex) == pdTRUE)
 		{
 			usart_write_line(serialPORT_USART, "temp lämnar mutex");
 		}
@@ -136,7 +136,7 @@ void vLight( void *pvParameters )
 		{
 			// Semaphore taken
 		}
-		if(xSemaphoreTake(xLCDSemaphore,(portTickType)portMAX_DELAY) == pdTRUE)
+		if(xSemaphoreTake(xMutex,(portTickType)portMAX_DELAY) == pdTRUE)
 		{
 			usart_write_line(serialPORT_USART, "Light tar mutex");
 		}
@@ -148,7 +148,7 @@ void vLight( void *pvParameters )
 		// Put the value on the queue
 		xQueueSendToBack(xQHandle, &light_struct, (portTickType)10);
 		
-		if(xSemaphoreGive(xLCDSemaphore) == pdTRUE)
+		if(xSemaphoreGive(xMutex) == pdTRUE)
 		{
 			usart_write_line(serialPORT_USART, "Light lämnar mutex");
 		}
@@ -177,7 +177,7 @@ void vLCDWrite( void *pvParameters )
 			// Semaphore taken
 		}
 		
-		if(xSemaphoreTake(xLCDSemaphore, (portTickType)portMAX_DELAY) == pdTRUE)
+		if(xSemaphoreTake(xMutex, (portTickType)portMAX_DELAY) == pdTRUE)
 		{
 			usart_write_line(serialPORT_USART, "LCD tar mutex");
 		}
@@ -208,7 +208,7 @@ void vLCDWrite( void *pvParameters )
 		usart_write_line(serialPORT_USART, str_temp);
 		usart_write_line(serialPORT_USART, str_light);
 		
-		if(xSemaphoreGive(xLCDSemaphore) == pdTRUE)
+		if(xSemaphoreGive(xMutex) == pdTRUE)
 		{
 			usart_write_line(serialPORT_USART, "LCD lämnar mutex");
 		}
