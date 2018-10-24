@@ -4,7 +4,7 @@
 #include "BUTTONS.h"
 #include "usart.h"
 #include "gpio.h"#include "pm.h"#include "semphr.h"#include "queue.h"#include "display_init.h"#include <string.h>#include <stdio.h>
-#include "adc.h"#include "board.h"#define BUFFER_SIZE 9volatile xSemaphoreHandle xFillCountTemperature;		// Semaphore handle - Queue Tempvolatile xSemaphoreHandle xEmptyCountTemperature;volatile xSemaphoreHandle xFillCountPotentiometer;	// Semaphore handle - Queue Potentiometervolatile xSemaphoreHandle xEmptyCountPotentiometer;volatile xSemaphoreHandle xFillCountLight;			// Semaphore handle - Queue Lightvolatile xSemaphoreHandle xEmptyCountLight;xSemaphoreHandle xLCDSemaphore;		// Semaphore handle - DisplayxQueueHandle xQHandleTemperature;	// Queue handle - Temperature, ConsumerxQueueHandle xQHandlePotentiometer;	// Queue handle - Potentiometer, ConsumerxQueueHandle xQHandleLight;			// Queue handle - Light, Consumer
+#include "adc.h"#include "board.h"#define BUFFER_SIZE 1volatile xSemaphoreHandle xFillCountTemperature;		// Semaphore handle - Queue Tempvolatile xSemaphoreHandle xEmptyCountTemperature;volatile xSemaphoreHandle xFillCountPotentiometer;	// Semaphore handle - Queue Potentiometervolatile xSemaphoreHandle xEmptyCountPotentiometer;volatile xSemaphoreHandle xFillCountLight;			// Semaphore handle - Queue Lightvolatile xSemaphoreHandle xEmptyCountLight;xSemaphoreHandle xLCDSemaphore;		// Semaphore handle - DisplayxQueueHandle xQHandleTemperature;	// Queue handle - Temperature, ConsumerxQueueHandle xQHandlePotentiometer;	// Queue handle - Potentiometer, ConsumerxQueueHandle xQHandleLight;			// Queue handle - Light, Consumer
 xTaskHandle xHandleConsumer;		// Task handle - ConsumerxTaskHandle xHandleTemperature;		// Task handle - TemperaturexTaskHandle xHandlePotentiometer;	// Task handle - PotentiometerxTaskHandle xHandleLight;			// Task handle - Light
 
 void init_usart ( void )
@@ -36,6 +36,9 @@ void init_usart ( void )
 
 void vTemperature(void *pvParameters)
 {
+	volatile portTickType xLastWakeTime; // Holds tick count
+	xLastWakeTime = xTaskGetTickCount(); // Sets current tick count
+	//volatile const portTickType xFreq = 544; // Holds the period	
 	volatile uint32_t value_to_send;		// Character to send to Consumer
 	
 	while(1)
@@ -43,14 +46,14 @@ void vTemperature(void *pvParameters)
 		if(xSemaphoreTake(xEmptyCountTemperature, (portTickType)portMAX_DELAY) == pdTRUE)
 		{
 			// Semaphore taken
-		}
-		adc_start(&AVR32_ADC);
-		value_to_send = adc_get_value(&AVR32_ADC, ADC_TEMPERATURE_CHANNEL);
-		xQueueSendToBack(xQHandleTemperature, &value_to_send, (portTickType)10);
+			adc_start(&AVR32_ADC);
+			value_to_send = adc_get_value(&AVR32_ADC, ADC_TEMPERATURE_CHANNEL);
+			xQueueSendToBack(xQHandleTemperature, &value_to_send, (portTickType)10);
 		
-		if(xSemaphoreGive(xFillCountTemperature) == pdTRUE)
-		{
-			// Semaphore given
+			if(xSemaphoreGive(xFillCountTemperature) == pdTRUE)
+			{
+				// Semaphore given
+			}
 		}
 		//We have CLK_ADC/2 - 10-bit requires 10 clock cycles - Sample & Hold Time = (SHTIM+1) / ADCClock where SHTIM = 15 - Startup Time = (STARTUP+1) * 8 / ADCClock where STARTUP = 31  
 		// ADCClock = CLK_ADC / ( (PRESCAL+1) * 2 ) where PRESCAL = 0 => ADCClock = CLK_ADC / 2
@@ -59,15 +62,17 @@ void vTemperature(void *pvParameters)
 		// (Sample hold time + Startup time) * 12MHz = 544
 		// IF CLK_ADC = 115200Hz => (Sample hold time + Startup time) * 115200 = (0,0002778 + 0,00444) * 115200 = 543.49
 
-		vTaskDelay(500);
+		//vTaskDelay(100);
+		//vTaskDelayUntil(xLastWakeTime,xFreq);
 	}
 }
 
 void vPotentiometer(void *pvParameters)
 {
 	volatile portTickType xLastWakeTime; // Holds tick count
-	volatile const portTickType xFreq = TASK_DELAY_MS(1000); // Holds the period		
-	//volatile const portTickType xFreq = 544; // Holds the period	
+	xLastWakeTime = xTaskGetTickCount(); // Sets current tick count
+	//volatile const portTickType xFreq = TASK_DELAY_MS(1000); // Holds the period		
+	volatile const portTickType xFreq = 544; // Holds the period	
 	volatile uint32_t value_to_send;		// Character to send to Consumer
 	
 	while(1)
@@ -75,27 +80,29 @@ void vPotentiometer(void *pvParameters)
 		if(xSemaphoreTake(xEmptyCountPotentiometer, (portTickType)portMAX_DELAY) == pdTRUE)
 		{
 			// Semaphore taken
+			adc_start(&AVR32_ADC);
+			value_to_send = adc_get_value(&AVR32_ADC, ADC_POTENTIOMETER_CHANNEL);
+			xQueueSendToBack(xQHandlePotentiometer, &value_to_send, (portTickType)10);	
+				
+			if(xSemaphoreGive(xFillCountPotentiometer) == pdTRUE)
+			{
+				// Semaphore given
+			}
 		}
 		/*if (xTaskGetTickCount() > (xLastWakeTime + xFreq))
 		{
 			usart_write_line(serialPORT_USART, "Deadline miss - Potentiometer");
 		}*/
-		xLastWakeTime = xTaskGetTickCount(); // Sets current tick count
-		adc_start(&AVR32_ADC);
-		value_to_send = adc_get_value(&AVR32_ADC, ADC_POTENTIOMETER_CHANNEL);
-		xQueueSendToBack(xQHandlePotentiometer, &value_to_send, (portTickType)10);
-		
-		if(xSemaphoreGive(xFillCountPotentiometer) == pdTRUE)
-		{
-			// Semaphore given
-		}
 		//vTaskDelayUntil(xLastWakeTime,xFreq);
-		vTaskDelay(500);
+		//vTaskDelay(100);
 	}
 }
 
 void vLight(void *pvParameters)
 {
+	volatile portTickType xLastWakeTime; // Holds tick count
+	xLastWakeTime = xTaskGetTickCount(); // Sets current tick count
+	//volatile const portTickType xFreq = 544; // Holds the period	
 	volatile uint32_t value_to_send;		// Character to send to Consumer
 	
 	while(1)
@@ -103,28 +110,29 @@ void vLight(void *pvParameters)
 		if(xSemaphoreTake(xEmptyCountLight, (portTickType)portMAX_DELAY) == pdTRUE)
 		{
 			// Semaphore taken
-		}
-		adc_start(&AVR32_ADC);
-		value_to_send = adc_get_value(&AVR32_ADC, ADC_LIGHT_CHANNEL);
-		xQueueSendToBack(xQHandleLight, &value_to_send, (portTickType)10);
+			adc_start(&AVR32_ADC);
+			value_to_send = adc_get_value(&AVR32_ADC, ADC_LIGHT_CHANNEL);
+			xQueueSendToBack(xQHandleLight, &value_to_send, (portTickType)10);
 		
-		if(xSemaphoreGive(xFillCountLight) == pdTRUE)
-		{
-			// Semaphore given
+			if(xSemaphoreGive(xFillCountLight) == pdTRUE)
+			{
+				// Semaphore given
+			}
 		}
 		//vTaskDelay(TASK_DELAY_MS(100));
-		vTaskDelay(500);
+		//vTaskDelayUntil(xLastWakeTime,xFreq);
+		//vTaskDelay(100);
 	}
 }
 
 void vConsumer( void *pvParameters )
 {
-	volatile int temperature_received = 0;		// Value received
-	volatile int potentiometer_received = 0;	// Value received
-	volatile int light_received = 0;			// Value received
-	volatile int temp_usart_write = 0;			// Value received
-	volatile int pot_usart_write = 0;			// Value received
-	volatile int light_usart_write = 0;			// Value received
+	volatile uint32_t temperature_received = 0;		// Value received
+	volatile uint32_t potentiometer_received = 0;	// Value received
+	volatile uint32_t light_received = 0;			// Value received
+	volatile uint32_t temp_usart_write = 0;			// Value received
+	volatile uint32_t pot_usart_write = 0;			// Value received
+	volatile uint32_t light_usart_write = 0;			// Value received
 	volatile const char * string_temp = "Temperature:";
 	volatile const char * string_potentiometer = "Potentiometer:";
 	volatile const char * string_light = "Light:";
@@ -144,48 +152,48 @@ void vConsumer( void *pvParameters )
 	
 	while(1)
 	{
-		if(xSemaphoreTake(xFillCountTemperature, (portTickType)portMAX_DELAY) == pdTRUE)
+		if(xSemaphoreTake(xFillCountTemperature, (portTickType)10) == pdTRUE)
 		{
 			// Semaphore taken
+			xQueueReceive(xQHandleTemperature, &temperature_received, (portTickType)10);
+			temp_usart_write = temperature_received;
+		
+			if(xSemaphoreGive(xEmptyCountTemperature) == pdTRUE)
+			{
+				// Semaphore given
+			}
 		}
 		
-		xQueueReceive(xQHandleTemperature, &temperature_received, (portTickType)10);
-		temp_usart_write = temperature_received;
-		
-		if(xSemaphoreGive(xEmptyCountTemperature) == pdTRUE)
-		{
-			// Semaphore given
-		}
-		if(xSemaphoreTake(xFillCountPotentiometer, (portTickType)portMAX_DELAY) == pdTRUE)
+		if(xSemaphoreTake(xFillCountPotentiometer, (portTickType)10) == pdTRUE)
 		{
 			// Semaphore taken
+			xQueueReceive(xQHandlePotentiometer, &potentiometer_received, (portTickType)10);
+			pot_usart_write = potentiometer_received;
+		
+			if(xSemaphoreGive(xEmptyCountPotentiometer) == pdTRUE)
+			{
+				// Semaphore given
+			}
 		}		
-		xQueueReceive(xQHandlePotentiometer, &potentiometer_received, (portTickType)10);
-		pot_usart_write = potentiometer_received;
-		
-		if(xSemaphoreGive(xEmptyCountPotentiometer) == pdTRUE)
-		{
-			// Semaphore given
-		}
-		if(xSemaphoreTake(xFillCountLight, (portTickType)portMAX_DELAY) == pdTRUE)
+
+		if(xSemaphoreTake(xFillCountLight, (portTickType)10) == pdTRUE)
 		{
 			// Semaphore taken
-		}
+			xQueueReceive(xQHandleLight, &light_received, (portTickType)10);
+			light_usart_write = light_received;
 		
-		xQueueReceive(xQHandleLight, &light_received, (portTickType)10);
-		light_usart_write = light_received;
-		
-		if(xSemaphoreGive(xEmptyCountLight) == pdTRUE)
-		{
-			// Semaphore given
+			if(xSemaphoreGive(xEmptyCountLight) == pdTRUE)
+			{
+				// Semaphore given
+			}
 		}
 
-		/*sprintf(temperature_usart, "Temperature %d\n", temp_usart_write);
+		sprintf(temperature_usart, "Temperature %d\n", temp_usart_write);
 		usart_write_line(serialPORT_USART, temperature_usart);
 		sprintf(potentiometer_usart, "Potentiometer %d\n", pot_usart_write);
 		usart_write_line(serialPORT_USART, potentiometer_usart);
 		sprintf(light_usart, "Light %d\n", light_usart_write);
-		usart_write_line(serialPORT_USART, light_usart);*/
+		usart_write_line(serialPORT_USART, light_usart);
 		dip204_set_cursor_position(15, 1);
 		dip204_printf_string("%04d", temperature_received); //print value
 		dip204_set_cursor_position(15, 2);
@@ -193,6 +201,7 @@ void vConsumer( void *pvParameters )
 		dip204_set_cursor_position(15, 3);
 		dip204_printf_string("%04d", light_received); //print value
 		
+		vTaskDelay(TASK_DELAY_MS(100));
 	}
 }
 
@@ -220,14 +229,14 @@ int main(void)
 	xFillCountLight = xSemaphoreCreateCounting(BUFFER_SIZE, 0);
 	xEmptyCountLight = xSemaphoreCreateCounting(BUFFER_SIZE, BUFFER_SIZE);
 	
-	xQHandlePotentiometer = xQueueCreate(BUFFER_SIZE, sizeof(int*));
-	xQHandleTemperature = xQueueCreate(BUFFER_SIZE, sizeof(int*));
-	xQHandleLight = xQueueCreate(BUFFER_SIZE, sizeof(int*));
+	xQHandlePotentiometer = xQueueCreate(BUFFER_SIZE, sizeof(uint32_t*));
+	xQHandleTemperature = xQueueCreate(BUFFER_SIZE, sizeof(uint32_t*));
+	xQHandleLight = xQueueCreate(BUFFER_SIZE, sizeof(uint32_t*));
 	
-	xTaskCreate(	vConsumer, "vConsumer", configMINIMAL_STACK_SIZE, NULL, 1, NULL);	
-	xTaskCreate(	vTemperature, "vTemperature", configMINIMAL_STACK_SIZE, NULL, 1,NULL);
-	xTaskCreate(	vPotentiometer, "vPotentiometer", configMINIMAL_STACK_SIZE, NULL, 1, NULL);
-	xTaskCreate(	vLight, "vLight", configMINIMAL_STACK_SIZE, NULL, 1, NULL);
+	xTaskCreate(	vConsumer, "vConsumer", (( unsigned portSHORT ) 2000), NULL, 1, NULL);	
+	xTaskCreate(	vTemperature, "vTemperature", (( unsigned portSHORT ) 2000), NULL, 1,NULL);
+	xTaskCreate(	vPotentiometer, "vPotentiometer", (( unsigned portSHORT ) 2000), NULL, 1, NULL);
+	xTaskCreate(	vLight, "vLight", (( unsigned portSHORT ) 2000), NULL, 1, NULL);
 	
 	vTaskStartScheduler();		// Starts the schedueling
 
