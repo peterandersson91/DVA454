@@ -28,181 +28,181 @@
     <eraseonlaunchrule>0</eraseonlaunchrule>
     <AsfFrameworkConfig>
       <framework-data>
-  <options>
-    <option id="avr32.components.display.dip204" value="Add" config="" content-id="Atmel.ASF" />
-    <option id="avr32.drivers.adc" value="Add" config="" content-id="Atmel.ASF" />
-    <option id="avr32.drivers.gpio" value="Add" config="" content-id="Atmel.ASF" />
-    <option id="avr32.drivers.intc" value="Add" config="" content-id="Atmel.ASF" />
-    <option id="avr32.drivers.pm" value="Add" config="" content-id="Atmel.ASF" />
-    <option id="avr32.drivers.tc" value="Add" config="" content-id="Atmel.ASF" />
-    <option id="avr32.drivers.usart" value="Add" config="" content-id="Atmel.ASF" />
-    <option id="common.boards" value="Add" config="" content-id="Atmel.ASF" />
-    <option id="avr32.drivers.cpu.cycle_counter" value="Add" config="" content-id="Atmel.ASF" />
-    <option id="avr32.drivers.flashc" value="Add" config="" content-id="Atmel.ASF" />
-    <option id="avr32.drivers.pwm" value="Add" config="" content-id="Atmel.ASF" />
-    <option id="avr32.drivers.spi" value="Add" config="" content-id="Atmel.ASF" />
-    <option id="common.services.freertos.demo.common.minimal" value="Add" config="" content-id="Atmel.ASF" />
-    <option id="common.services.freertos.uc3_example" value="Add" config="" content-id="Atmel.ASF" />
-    <option id="common.services.os.freertos" value="Add" config="" content-id="Atmel.ASF" />
-  </options>
-  <configurations>
-    <configuration key="config.avr32.utils.gccstartup" value="no" default="no" content-id="Atmel.ASF" />
-    <configuration key="config.compiler.iarew32.heap_size" value="0xF300" default="0xF300" content-id="Atmel.ASF" />
-    <configuration key="config.board.evk1100.init" value="no" default="no" content-id="Atmel.ASF" />
-    <configuration key="config.compiler.iarew32.app_stack_size" value="0x0000" default="0x0000" content-id="Atmel.ASF" />
-    <configuration key="config.compiler.avr32gcc.use_startfiles" value="yes" default="yes" content-id="Atmel.ASF" />
-    <configuration key="config.board.evk1100.led" value="yes" default="yes" content-id="Atmel.ASF" />
-    <configuration key="config.compiler.iarew32.sys_stack_size" value="0x0800" default="0x0800" content-id="Atmel.ASF" />
-    <configuration key="config.avr32.drivers.intc.exception" value="no" default="no" content-id="Atmel.ASF" />
-    <configuration key="config.avr32.utils.trampoline" value="yes" default="yes" content-id="Atmel.ASF" />
-    <configuration key="config.utils.interrupt.intc" value="yes" default="yes" content-id="Atmel.ASF" />
-  </configurations>
-  <files>
-    <file path="src/ASF/avr32/boards/evk1100/evk1100.h" framework="" version="" source="avr32/boards/evk1100/evk1100.h" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/avr32/boards/evk1100/led.c" framework="" version="" source="avr32/boards/evk1100/led.c" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/avr32/boards/evk1100/led.h" framework="" version="" source="avr32/boards/evk1100/led.h" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/avr32/drivers/flashc/flashc.c" framework="" version="" source="avr32/drivers/flashc/flashc.c" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/avr32/drivers/flashc/flashc.h" framework="" version="" source="avr32/drivers/flashc/flashc.h" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/avr32/drivers/gpio/gpio.c" framework="" version="" source="avr32/drivers/gpio/gpio.c" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/avr32/drivers/gpio/gpio.h" framework="" version="" source="avr32/drivers/gpio/gpio.h" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/avr32/drivers/intc/intc.c" framework="" version="" source="avr32/drivers/intc/intc.c" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/avr32/drivers/intc/intc.h" framework="" version="" source="avr32/drivers/intc/intc.h" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/avr32/drivers/pm/pm.c" framework="" version="" source="avr32/drivers/pm/pm.c" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/avr32/drivers/pm/pm.h" framework="" version="" source="avr32/drivers/pm/pm.h" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/avr32/drivers/pm/pm_conf_clocks.c" framework="" version="" source="avr32/drivers/pm/pm_conf_clocks.c" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/avr32/drivers/pm/power_clocks_lib.c" framework="" version="" source="avr32/drivers/pm/power_clocks_lib.c" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/avr32/drivers/pm/power_clocks_lib.h" framework="" version="" source="avr32/drivers/pm/power_clocks_lib.h" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/avr32/drivers/pm/sleep.h" framework="" version="" source="avr32/drivers/pm/sleep.h" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/avr32/drivers/tc/tc.c" framework="" version="" source="avr32/drivers/tc/tc.c" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/avr32/drivers/tc/tc.h" framework="" version="" source="avr32/drivers/tc/tc.h" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/avr32/drivers/usart/usart.c" framework="" version="" source="avr32/drivers/usart/usart.c" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/avr32/drivers/usart/usart.h" framework="" version="" source="avr32/drivers/usart/usart.h" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/avr32/utils/compiler.h" framework="" version="" source="avr32/utils/compiler.h" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/avr32/utils/header_files/uc3d_defines_fix.h" framework="" version="" source="avr32/utils/header_files/uc3d_defines_fix.h" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/avr32/utils/header_files/uc3l3_l4_defines_fix.h" framework="" version="" source="avr32/utils/header_files/uc3l3_l4_defines_fix.h" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/avr32/utils/linker_scripts/at32uc3a/0512/gcc/link_uc3a0512.lds" framework="" version="" source="avr32/utils/linker_scripts/at32uc3a/0512/gcc/link_uc3a0512.lds" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/avr32/utils/make/Makefile.avr32.in" framework="" version="" source="avr32/utils/make/Makefile.avr32.in" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/avr32/utils/make/Makefile.avr32program.in" framework="" version="" source="avr32/utils/make/Makefile.avr32program.in" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/avr32/utils/make/Makefile.batchisp.in" framework="" version="" source="avr32/utils/make/Makefile.batchisp.in" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/avr32/utils/preprocessor/mrepeat.h" framework="" version="" source="avr32/utils/preprocessor/mrepeat.h" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/avr32/utils/preprocessor/preprocessor.h" framework="" version="" source="avr32/utils/preprocessor/preprocessor.h" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/avr32/utils/preprocessor/stringz.h" framework="" version="" source="avr32/utils/preprocessor/stringz.h" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/avr32/utils/preprocessor/tpaste.h" framework="" version="" source="avr32/utils/preprocessor/tpaste.h" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/avr32/utils/startup/trampoline_uc3.S" framework="" version="" source="avr32/utils/startup/trampoline_uc3.S" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/avr32/utils/startup/trampoline_uc3.h" framework="" version="" source="avr32/utils/startup/trampoline_uc3.h" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/avr32/utils/status_codes.h" framework="" version="" source="avr32/utils/status_codes.h" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/common/boards/board.h" framework="" version="" source="common/boards/board.h" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/common/utils/interrupt.h" framework="" version="" source="common/utils/interrupt.h" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/common/utils/interrupt/interrupt_avr32.h" framework="" version="" source="common/utils/interrupt/interrupt_avr32.h" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/common/utils/parts.h" framework="" version="" source="common/utils/parts.h" changed="False" content-id="Atmel.ASF" />
-    <file path="src/config/FreeRTOSConfig.h" framework="" version="" source="thirdparty/freertos/demo/avr32_uc3_example/FreeRTOSConfig.h" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/thirdparty/freertos/demo/avr32_uc3_example/at32uc3a0512_evk1100/conf_example.h" framework="" version="" source="thirdparty/freertos/demo/avr32_uc3_example/at32uc3a0512_evk1100/conf_example.h" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/thirdparty/freertos/demo/avr32_uc3_example/documentation.h" framework="" version="" source="thirdparty/freertos/demo/avr32_uc3_example/documentation.h" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/thirdparty/freertos/demo/avr32_uc3_example/main.c" framework="" version="" source="thirdparty/freertos/demo/avr32_uc3_example/main.c" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/thirdparty/freertos/demo/avr32_uc3_example/partest/ParTest.c" framework="" version="" source="thirdparty/freertos/demo/avr32_uc3_example/partest/ParTest.c" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/thirdparty/freertos/demo/avr32_uc3_example/serial/serial.c" framework="" version="" source="thirdparty/freertos/demo/avr32_uc3_example/serial/serial.c" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/thirdparty/freertos/demo/common/include/AltBlckQ.h" framework="" version="" source="thirdparty/freertos/demo/common/include/AltBlckQ.h" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/thirdparty/freertos/demo/common/include/AltBlock.h" framework="" version="" source="thirdparty/freertos/demo/common/include/AltBlock.h" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/thirdparty/freertos/demo/common/include/AltPollQ.h" framework="" version="" source="thirdparty/freertos/demo/common/include/AltPollQ.h" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/thirdparty/freertos/demo/common/include/AltQTest.h" framework="" version="" source="thirdparty/freertos/demo/common/include/AltQTest.h" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/thirdparty/freertos/demo/common/include/BlockQ.h" framework="" version="" source="thirdparty/freertos/demo/common/include/BlockQ.h" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/thirdparty/freertos/demo/common/include/GenQTest.h" framework="" version="" source="thirdparty/freertos/demo/common/include/GenQTest.h" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/thirdparty/freertos/demo/common/include/IntQueue.h" framework="" version="" source="thirdparty/freertos/demo/common/include/IntQueue.h" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/thirdparty/freertos/demo/common/include/PollQ.h" framework="" version="" source="thirdparty/freertos/demo/common/include/PollQ.h" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/thirdparty/freertos/demo/common/include/QPeek.h" framework="" version="" source="thirdparty/freertos/demo/common/include/QPeek.h" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/thirdparty/freertos/demo/common/include/blocktim.h" framework="" version="" source="thirdparty/freertos/demo/common/include/blocktim.h" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/thirdparty/freertos/demo/common/include/comtest.h" framework="" version="" source="thirdparty/freertos/demo/common/include/comtest.h" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/thirdparty/freertos/demo/common/include/comtest2.h" framework="" version="" source="thirdparty/freertos/demo/common/include/comtest2.h" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/thirdparty/freertos/demo/common/include/countsem.h" framework="" version="" source="thirdparty/freertos/demo/common/include/countsem.h" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/thirdparty/freertos/demo/common/include/crflash.h" framework="" version="" source="thirdparty/freertos/demo/common/include/crflash.h" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/thirdparty/freertos/demo/common/include/crhook.h" framework="" version="" source="thirdparty/freertos/demo/common/include/crhook.h" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/thirdparty/freertos/demo/common/include/death.h" framework="" version="" source="thirdparty/freertos/demo/common/include/death.h" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/thirdparty/freertos/demo/common/include/dynamic.h" framework="" version="" source="thirdparty/freertos/demo/common/include/dynamic.h" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/thirdparty/freertos/demo/common/include/fileIO.h" framework="" version="" source="thirdparty/freertos/demo/common/include/fileIO.h" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/thirdparty/freertos/demo/common/include/flash.h" framework="" version="" source="thirdparty/freertos/demo/common/include/flash.h" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/thirdparty/freertos/demo/common/include/flop.h" framework="" version="" source="thirdparty/freertos/demo/common/include/flop.h" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/thirdparty/freertos/demo/common/include/integer.h" framework="" version="" source="thirdparty/freertos/demo/common/include/integer.h" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/thirdparty/freertos/demo/common/include/mevents.h" framework="" version="" source="thirdparty/freertos/demo/common/include/mevents.h" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/thirdparty/freertos/demo/common/include/partest.h" framework="" version="" source="thirdparty/freertos/demo/common/include/partest.h" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/thirdparty/freertos/demo/common/include/print.h" framework="" version="" source="thirdparty/freertos/demo/common/include/print.h" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/thirdparty/freertos/demo/common/include/recmutex.h" framework="" version="" source="thirdparty/freertos/demo/common/include/recmutex.h" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/thirdparty/freertos/demo/common/include/semtest.h" framework="" version="" source="thirdparty/freertos/demo/common/include/semtest.h" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/thirdparty/freertos/demo/common/include/serial.h" framework="" version="" source="thirdparty/freertos/demo/common/include/serial.h" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/thirdparty/freertos/demo/common/minimal/AltBlckQ.c" framework="" version="" source="thirdparty/freertos/demo/common/minimal/AltBlckQ.c" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/thirdparty/freertos/demo/common/minimal/AltBlock.c" framework="" version="" source="thirdparty/freertos/demo/common/minimal/AltBlock.c" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/thirdparty/freertos/demo/common/minimal/AltPollQ.c" framework="" version="" source="thirdparty/freertos/demo/common/minimal/AltPollQ.c" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/thirdparty/freertos/demo/common/minimal/AltQTest.c" framework="" version="" source="thirdparty/freertos/demo/common/minimal/AltQTest.c" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/thirdparty/freertos/demo/common/minimal/BlockQ.c" framework="" version="" source="thirdparty/freertos/demo/common/minimal/BlockQ.c" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/thirdparty/freertos/demo/common/minimal/GenQTest.c" framework="" version="" source="thirdparty/freertos/demo/common/minimal/GenQTest.c" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/thirdparty/freertos/demo/common/minimal/PollQ.c" framework="" version="" source="thirdparty/freertos/demo/common/minimal/PollQ.c" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/thirdparty/freertos/demo/common/minimal/QPeek.c" framework="" version="" source="thirdparty/freertos/demo/common/minimal/QPeek.c" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/thirdparty/freertos/demo/common/minimal/blocktim.c" framework="" version="" source="thirdparty/freertos/demo/common/minimal/blocktim.c" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/thirdparty/freertos/demo/common/minimal/comtest.c" framework="" version="" source="thirdparty/freertos/demo/common/minimal/comtest.c" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/thirdparty/freertos/demo/common/minimal/countsem.c" framework="" version="" source="thirdparty/freertos/demo/common/minimal/countsem.c" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/thirdparty/freertos/demo/common/minimal/crflash.c" framework="" version="" source="thirdparty/freertos/demo/common/minimal/crflash.c" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/thirdparty/freertos/demo/common/minimal/crhook.c" framework="" version="" source="thirdparty/freertos/demo/common/minimal/crhook.c" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/thirdparty/freertos/demo/common/minimal/death.c" framework="" version="" source="thirdparty/freertos/demo/common/minimal/death.c" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/thirdparty/freertos/demo/common/minimal/dynamic.c" framework="" version="" source="thirdparty/freertos/demo/common/minimal/dynamic.c" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/thirdparty/freertos/demo/common/minimal/flash.c" framework="" version="" source="thirdparty/freertos/demo/common/minimal/flash.c" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/thirdparty/freertos/demo/common/minimal/flop.c" framework="" version="" source="thirdparty/freertos/demo/common/minimal/flop.c" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/thirdparty/freertos/demo/common/minimal/integer.c" framework="" version="" source="thirdparty/freertos/demo/common/minimal/integer.c" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/thirdparty/freertos/demo/common/minimal/recmutex.c" framework="" version="" source="thirdparty/freertos/demo/common/minimal/recmutex.c" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/thirdparty/freertos/demo/common/minimal/semtest.c" framework="" version="" source="thirdparty/freertos/demo/common/minimal/semtest.c" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/thirdparty/freertos/freertos-7.0.0/ATMEL-disclaimer.txt" framework="" version="" source="thirdparty/freertos/freertos-7.0.0/ATMEL-disclaimer.txt" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/thirdparty/freertos/freertos-7.0.0/license/license.txt" framework="" version="" source="thirdparty/freertos/freertos-7.0.0/license/license.txt" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/thirdparty/freertos/freertos-7.0.0/readme.txt" framework="" version="" source="thirdparty/freertos/freertos-7.0.0/readme.txt" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/thirdparty/freertos/freertos-7.0.0/source/croutine.c" framework="" version="" source="thirdparty/freertos/freertos-7.0.0/source/croutine.c" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/thirdparty/freertos/freertos-7.0.0/source/include/FreeRTOS.h" framework="" version="" source="thirdparty/freertos/freertos-7.0.0/source/include/FreeRTOS.h" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/thirdparty/freertos/freertos-7.0.0/source/include/StackMacros.h" framework="" version="" source="thirdparty/freertos/freertos-7.0.0/source/include/StackMacros.h" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/thirdparty/freertos/freertos-7.0.0/source/include/croutine.h" framework="" version="" source="thirdparty/freertos/freertos-7.0.0/source/include/croutine.h" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/thirdparty/freertos/freertos-7.0.0/source/include/list.h" framework="" version="" source="thirdparty/freertos/freertos-7.0.0/source/include/list.h" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/thirdparty/freertos/freertos-7.0.0/source/include/mpu_wrappers.h" framework="" version="" source="thirdparty/freertos/freertos-7.0.0/source/include/mpu_wrappers.h" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/thirdparty/freertos/freertos-7.0.0/source/include/portable.h" framework="" version="" source="thirdparty/freertos/freertos-7.0.0/source/include/portable.h" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/thirdparty/freertos/freertos-7.0.0/source/include/projdefs.h" framework="" version="" source="thirdparty/freertos/freertos-7.0.0/source/include/projdefs.h" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/thirdparty/freertos/freertos-7.0.0/source/include/queue.h" framework="" version="" source="thirdparty/freertos/freertos-7.0.0/source/include/queue.h" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/thirdparty/freertos/freertos-7.0.0/source/include/semphr.h" framework="" version="" source="thirdparty/freertos/freertos-7.0.0/source/include/semphr.h" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/thirdparty/freertos/freertos-7.0.0/source/include/task.h" framework="" version="" source="thirdparty/freertos/freertos-7.0.0/source/include/task.h" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/thirdparty/freertos/freertos-7.0.0/source/include/timers.h" framework="" version="" source="thirdparty/freertos/freertos-7.0.0/source/include/timers.h" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/thirdparty/freertos/freertos-7.0.0/source/list.c" framework="" version="" source="thirdparty/freertos/freertos-7.0.0/source/list.c" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/thirdparty/freertos/freertos-7.0.0/source/portable/gcc/avr32_uc3/exception.S" framework="" version="" source="thirdparty/freertos/freertos-7.0.0/source/portable/gcc/avr32_uc3/exception.S" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/thirdparty/freertos/freertos-7.0.0/source/portable/gcc/avr32_uc3/port.c" framework="" version="" source="thirdparty/freertos/freertos-7.0.0/source/portable/gcc/avr32_uc3/port.c" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/thirdparty/freertos/freertos-7.0.0/source/portable/gcc/avr32_uc3/portmacro.h" framework="" version="" source="thirdparty/freertos/freertos-7.0.0/source/portable/gcc/avr32_uc3/portmacro.h" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/thirdparty/freertos/freertos-7.0.0/source/portable/gcc/avr32_uc3/read.c" framework="" version="" source="thirdparty/freertos/freertos-7.0.0/source/portable/gcc/avr32_uc3/read.c" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/thirdparty/freertos/freertos-7.0.0/source/portable/gcc/avr32_uc3/write.c" framework="" version="" source="thirdparty/freertos/freertos-7.0.0/source/portable/gcc/avr32_uc3/write.c" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/thirdparty/freertos/freertos-7.0.0/source/portable/memmang/heap_3.c" framework="" version="" source="thirdparty/freertos/freertos-7.0.0/source/portable/memmang/heap_3.c" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/thirdparty/freertos/freertos-7.0.0/source/queue.c" framework="" version="" source="thirdparty/freertos/freertos-7.0.0/source/queue.c" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/thirdparty/freertos/freertos-7.0.0/source/tasks.c" framework="" version="" source="thirdparty/freertos/freertos-7.0.0/source/tasks.c" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/thirdparty/freertos/freertos-7.0.0/source/timers.c" framework="" version="" source="thirdparty/freertos/freertos-7.0.0/source/timers.c" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/avr32/components/display/dip204/dip204.c" framework="" version="3.31.0" source="avr32\components\display\dip204\dip204.c" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/avr32/components/display/dip204/dip204.h" framework="" version="3.31.0" source="avr32\components\display\dip204\dip204.h" changed="False" content-id="Atmel.ASF" />
-    <file path="src/Config/conf_dip204.h" framework="" version="3.31.0" source="avr32\components\display\dip204\module_config\conf_dip204.h" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/avr32/drivers/cpu/cycle_counter/cycle_counter.h" framework="" version="3.31.0" source="avr32\drivers\cpu\cycle_counter\cycle_counter.h" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/avr32/drivers/spi/spi.c" framework="" version="3.31.0" source="avr32\drivers\spi\spi.c" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/avr32/drivers/spi/spi.h" framework="" version="3.31.0" source="avr32\drivers\spi\spi.h" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/avr32/drivers/pwm/pwm.c" framework="" version="3.31.0" source="avr32\drivers\pwm\pwm.c" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/avr32/drivers/pwm/pwm.h" framework="" version="3.31.0" source="avr32\drivers\pwm\pwm.h" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/common/services/clock/uc3a0_a1/sysclk.c" framework="" version="3.31.0" source="common\services\clock\uc3a0_a1\sysclk.c" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/common/services/clock/genclk.h" framework="" version="3.31.0" source="common\services\clock\genclk.h" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/common/services/clock/osc.h" framework="" version="3.31.0" source="common\services\clock\osc.h" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/common/services/clock/uc3a0_a1/genclk.h" framework="" version="3.31.0" source="common\services\clock\uc3a0_a1\genclk.h" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/common/services/clock/uc3a0_a1/osc.h" framework="" version="3.31.0" source="common\services\clock\uc3a0_a1\osc.h" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/common/services/clock/uc3a0_a1/pll.h" framework="" version="3.31.0" source="common\services\clock\uc3a0_a1\pll.h" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/common/services/clock/uc3a0_a1/sysclk.h" framework="" version="3.31.0" source="common\services\clock\uc3a0_a1\sysclk.h" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/common/services/clock/sysclk.h" framework="" version="3.31.0" source="common\services\clock\sysclk.h" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/common/services/clock/pll.h" framework="" version="3.31.0" source="common\services\clock\pll.h" changed="False" content-id="Atmel.ASF" />
-    <file path="src/Config/conf_clock.h" framework="" version="3.31.0" source="common\services\clock\uc3a0_a1\module_config\conf_clock.h" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/common/services/delay/delay.h" framework="" version="3.31.0" source="common\services\delay\delay.h" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/avr32/drivers/adc/adc.c" framework="" version="3.31.0" source="avr32\drivers\adc\adc.c" changed="False" content-id="Atmel.ASF" />
-    <file path="src/ASF/avr32/drivers/adc/adc.h" framework="" version="3.31.0" source="avr32\drivers\adc\adc.h" changed="False" content-id="Atmel.ASF" />
-  </files>
-  <documentation help="" />
-  <offline-documentation help="" />
-  <dependencies>
-    <content-extension eid="atmel.asf" uuidref="Atmel.ASF" version="3.31.0" />
-  </dependencies>
-  <project id="common.services.freertos.uc3_example.evk1100" value="Add" config="" content-id="Atmel.ASF" />
-  <board id="board.evk1100" value="Add" config="" content-id="Atmel.ASF" />
-</framework-data>
+        <options>
+          <option id="avr32.components.display.dip204" value="Add" config="" content-id="Atmel.ASF" />
+          <option id="avr32.drivers.adc" value="Add" config="" content-id="Atmel.ASF" />
+          <option id="avr32.drivers.gpio" value="Add" config="" content-id="Atmel.ASF" />
+          <option id="avr32.drivers.intc" value="Add" config="" content-id="Atmel.ASF" />
+          <option id="avr32.drivers.pm" value="Add" config="" content-id="Atmel.ASF" />
+          <option id="avr32.drivers.tc" value="Add" config="" content-id="Atmel.ASF" />
+          <option id="avr32.drivers.usart" value="Add" config="" content-id="Atmel.ASF" />
+          <option id="common.boards" value="Add" config="" content-id="Atmel.ASF" />
+          <option id="avr32.drivers.cpu.cycle_counter" value="Add" config="" content-id="Atmel.ASF" />
+          <option id="avr32.drivers.flashc" value="Add" config="" content-id="Atmel.ASF" />
+          <option id="avr32.drivers.pwm" value="Add" config="" content-id="Atmel.ASF" />
+          <option id="avr32.drivers.spi" value="Add" config="" content-id="Atmel.ASF" />
+          <option id="common.services.freertos.demo.common.minimal" value="Add" config="" content-id="Atmel.ASF" />
+          <option id="common.services.freertos.uc3_example" value="Add" config="" content-id="Atmel.ASF" />
+          <option id="common.services.os.freertos" value="Add" config="" content-id="Atmel.ASF" />
+        </options>
+        <configurations>
+          <configuration key="config.avr32.utils.gccstartup" value="no" default="no" content-id="Atmel.ASF" />
+          <configuration key="config.compiler.iarew32.heap_size" value="0xF300" default="0xF300" content-id="Atmel.ASF" />
+          <configuration key="config.board.evk1100.init" value="no" default="no" content-id="Atmel.ASF" />
+          <configuration key="config.compiler.iarew32.app_stack_size" value="0x0000" default="0x0000" content-id="Atmel.ASF" />
+          <configuration key="config.compiler.avr32gcc.use_startfiles" value="yes" default="yes" content-id="Atmel.ASF" />
+          <configuration key="config.board.evk1100.led" value="yes" default="yes" content-id="Atmel.ASF" />
+          <configuration key="config.compiler.iarew32.sys_stack_size" value="0x0800" default="0x0800" content-id="Atmel.ASF" />
+          <configuration key="config.avr32.drivers.intc.exception" value="no" default="no" content-id="Atmel.ASF" />
+          <configuration key="config.avr32.utils.trampoline" value="yes" default="yes" content-id="Atmel.ASF" />
+          <configuration key="config.utils.interrupt.intc" value="yes" default="yes" content-id="Atmel.ASF" />
+        </configurations>
+        <files>
+          <file path="src/ASF/avr32/boards/evk1100/evk1100.h" framework="" version="" source="avr32/boards/evk1100/evk1100.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/avr32/boards/evk1100/led.c" framework="" version="" source="avr32/boards/evk1100/led.c" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/avr32/boards/evk1100/led.h" framework="" version="" source="avr32/boards/evk1100/led.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/avr32/drivers/flashc/flashc.c" framework="" version="" source="avr32/drivers/flashc/flashc.c" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/avr32/drivers/flashc/flashc.h" framework="" version="" source="avr32/drivers/flashc/flashc.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/avr32/drivers/gpio/gpio.c" framework="" version="" source="avr32/drivers/gpio/gpio.c" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/avr32/drivers/gpio/gpio.h" framework="" version="" source="avr32/drivers/gpio/gpio.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/avr32/drivers/intc/intc.c" framework="" version="" source="avr32/drivers/intc/intc.c" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/avr32/drivers/intc/intc.h" framework="" version="" source="avr32/drivers/intc/intc.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/avr32/drivers/pm/pm.c" framework="" version="" source="avr32/drivers/pm/pm.c" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/avr32/drivers/pm/pm.h" framework="" version="" source="avr32/drivers/pm/pm.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/avr32/drivers/pm/pm_conf_clocks.c" framework="" version="" source="avr32/drivers/pm/pm_conf_clocks.c" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/avr32/drivers/pm/power_clocks_lib.c" framework="" version="" source="avr32/drivers/pm/power_clocks_lib.c" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/avr32/drivers/pm/power_clocks_lib.h" framework="" version="" source="avr32/drivers/pm/power_clocks_lib.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/avr32/drivers/pm/sleep.h" framework="" version="" source="avr32/drivers/pm/sleep.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/avr32/drivers/tc/tc.c" framework="" version="" source="avr32/drivers/tc/tc.c" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/avr32/drivers/tc/tc.h" framework="" version="" source="avr32/drivers/tc/tc.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/avr32/drivers/usart/usart.c" framework="" version="" source="avr32/drivers/usart/usart.c" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/avr32/drivers/usart/usart.h" framework="" version="" source="avr32/drivers/usart/usart.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/avr32/utils/compiler.h" framework="" version="" source="avr32/utils/compiler.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/avr32/utils/header_files/uc3d_defines_fix.h" framework="" version="" source="avr32/utils/header_files/uc3d_defines_fix.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/avr32/utils/header_files/uc3l3_l4_defines_fix.h" framework="" version="" source="avr32/utils/header_files/uc3l3_l4_defines_fix.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/avr32/utils/linker_scripts/at32uc3a/0512/gcc/link_uc3a0512.lds" framework="" version="" source="avr32/utils/linker_scripts/at32uc3a/0512/gcc/link_uc3a0512.lds" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/avr32/utils/make/Makefile.avr32.in" framework="" version="" source="avr32/utils/make/Makefile.avr32.in" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/avr32/utils/make/Makefile.avr32program.in" framework="" version="" source="avr32/utils/make/Makefile.avr32program.in" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/avr32/utils/make/Makefile.batchisp.in" framework="" version="" source="avr32/utils/make/Makefile.batchisp.in" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/avr32/utils/preprocessor/mrepeat.h" framework="" version="" source="avr32/utils/preprocessor/mrepeat.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/avr32/utils/preprocessor/preprocessor.h" framework="" version="" source="avr32/utils/preprocessor/preprocessor.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/avr32/utils/preprocessor/stringz.h" framework="" version="" source="avr32/utils/preprocessor/stringz.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/avr32/utils/preprocessor/tpaste.h" framework="" version="" source="avr32/utils/preprocessor/tpaste.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/avr32/utils/startup/trampoline_uc3.S" framework="" version="" source="avr32/utils/startup/trampoline_uc3.S" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/avr32/utils/startup/trampoline_uc3.h" framework="" version="" source="avr32/utils/startup/trampoline_uc3.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/avr32/utils/status_codes.h" framework="" version="" source="avr32/utils/status_codes.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/common/boards/board.h" framework="" version="" source="common/boards/board.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/common/utils/interrupt.h" framework="" version="" source="common/utils/interrupt.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/common/utils/interrupt/interrupt_avr32.h" framework="" version="" source="common/utils/interrupt/interrupt_avr32.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/common/utils/parts.h" framework="" version="" source="common/utils/parts.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/config/FreeRTOSConfig.h" framework="" version="" source="thirdparty/freertos/demo/avr32_uc3_example/FreeRTOSConfig.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/thirdparty/freertos/demo/avr32_uc3_example/at32uc3a0512_evk1100/conf_example.h" framework="" version="" source="thirdparty/freertos/demo/avr32_uc3_example/at32uc3a0512_evk1100/conf_example.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/thirdparty/freertos/demo/avr32_uc3_example/documentation.h" framework="" version="" source="thirdparty/freertos/demo/avr32_uc3_example/documentation.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/thirdparty/freertos/demo/avr32_uc3_example/main.c" framework="" version="" source="thirdparty/freertos/demo/avr32_uc3_example/main.c" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/thirdparty/freertos/demo/avr32_uc3_example/partest/ParTest.c" framework="" version="" source="thirdparty/freertos/demo/avr32_uc3_example/partest/ParTest.c" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/thirdparty/freertos/demo/avr32_uc3_example/serial/serial.c" framework="" version="" source="thirdparty/freertos/demo/avr32_uc3_example/serial/serial.c" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/thirdparty/freertos/demo/common/include/AltBlckQ.h" framework="" version="" source="thirdparty/freertos/demo/common/include/AltBlckQ.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/thirdparty/freertos/demo/common/include/AltBlock.h" framework="" version="" source="thirdparty/freertos/demo/common/include/AltBlock.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/thirdparty/freertos/demo/common/include/AltPollQ.h" framework="" version="" source="thirdparty/freertos/demo/common/include/AltPollQ.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/thirdparty/freertos/demo/common/include/AltQTest.h" framework="" version="" source="thirdparty/freertos/demo/common/include/AltQTest.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/thirdparty/freertos/demo/common/include/BlockQ.h" framework="" version="" source="thirdparty/freertos/demo/common/include/BlockQ.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/thirdparty/freertos/demo/common/include/GenQTest.h" framework="" version="" source="thirdparty/freertos/demo/common/include/GenQTest.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/thirdparty/freertos/demo/common/include/IntQueue.h" framework="" version="" source="thirdparty/freertos/demo/common/include/IntQueue.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/thirdparty/freertos/demo/common/include/PollQ.h" framework="" version="" source="thirdparty/freertos/demo/common/include/PollQ.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/thirdparty/freertos/demo/common/include/QPeek.h" framework="" version="" source="thirdparty/freertos/demo/common/include/QPeek.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/thirdparty/freertos/demo/common/include/blocktim.h" framework="" version="" source="thirdparty/freertos/demo/common/include/blocktim.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/thirdparty/freertos/demo/common/include/comtest.h" framework="" version="" source="thirdparty/freertos/demo/common/include/comtest.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/thirdparty/freertos/demo/common/include/comtest2.h" framework="" version="" source="thirdparty/freertos/demo/common/include/comtest2.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/thirdparty/freertos/demo/common/include/countsem.h" framework="" version="" source="thirdparty/freertos/demo/common/include/countsem.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/thirdparty/freertos/demo/common/include/crflash.h" framework="" version="" source="thirdparty/freertos/demo/common/include/crflash.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/thirdparty/freertos/demo/common/include/crhook.h" framework="" version="" source="thirdparty/freertos/demo/common/include/crhook.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/thirdparty/freertos/demo/common/include/death.h" framework="" version="" source="thirdparty/freertos/demo/common/include/death.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/thirdparty/freertos/demo/common/include/dynamic.h" framework="" version="" source="thirdparty/freertos/demo/common/include/dynamic.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/thirdparty/freertos/demo/common/include/fileIO.h" framework="" version="" source="thirdparty/freertos/demo/common/include/fileIO.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/thirdparty/freertos/demo/common/include/flash.h" framework="" version="" source="thirdparty/freertos/demo/common/include/flash.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/thirdparty/freertos/demo/common/include/flop.h" framework="" version="" source="thirdparty/freertos/demo/common/include/flop.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/thirdparty/freertos/demo/common/include/integer.h" framework="" version="" source="thirdparty/freertos/demo/common/include/integer.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/thirdparty/freertos/demo/common/include/mevents.h" framework="" version="" source="thirdparty/freertos/demo/common/include/mevents.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/thirdparty/freertos/demo/common/include/partest.h" framework="" version="" source="thirdparty/freertos/demo/common/include/partest.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/thirdparty/freertos/demo/common/include/print.h" framework="" version="" source="thirdparty/freertos/demo/common/include/print.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/thirdparty/freertos/demo/common/include/recmutex.h" framework="" version="" source="thirdparty/freertos/demo/common/include/recmutex.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/thirdparty/freertos/demo/common/include/semtest.h" framework="" version="" source="thirdparty/freertos/demo/common/include/semtest.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/thirdparty/freertos/demo/common/include/serial.h" framework="" version="" source="thirdparty/freertos/demo/common/include/serial.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/thirdparty/freertos/demo/common/minimal/AltBlckQ.c" framework="" version="" source="thirdparty/freertos/demo/common/minimal/AltBlckQ.c" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/thirdparty/freertos/demo/common/minimal/AltBlock.c" framework="" version="" source="thirdparty/freertos/demo/common/minimal/AltBlock.c" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/thirdparty/freertos/demo/common/minimal/AltPollQ.c" framework="" version="" source="thirdparty/freertos/demo/common/minimal/AltPollQ.c" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/thirdparty/freertos/demo/common/minimal/AltQTest.c" framework="" version="" source="thirdparty/freertos/demo/common/minimal/AltQTest.c" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/thirdparty/freertos/demo/common/minimal/BlockQ.c" framework="" version="" source="thirdparty/freertos/demo/common/minimal/BlockQ.c" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/thirdparty/freertos/demo/common/minimal/GenQTest.c" framework="" version="" source="thirdparty/freertos/demo/common/minimal/GenQTest.c" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/thirdparty/freertos/demo/common/minimal/PollQ.c" framework="" version="" source="thirdparty/freertos/demo/common/minimal/PollQ.c" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/thirdparty/freertos/demo/common/minimal/QPeek.c" framework="" version="" source="thirdparty/freertos/demo/common/minimal/QPeek.c" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/thirdparty/freertos/demo/common/minimal/blocktim.c" framework="" version="" source="thirdparty/freertos/demo/common/minimal/blocktim.c" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/thirdparty/freertos/demo/common/minimal/comtest.c" framework="" version="" source="thirdparty/freertos/demo/common/minimal/comtest.c" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/thirdparty/freertos/demo/common/minimal/countsem.c" framework="" version="" source="thirdparty/freertos/demo/common/minimal/countsem.c" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/thirdparty/freertos/demo/common/minimal/crflash.c" framework="" version="" source="thirdparty/freertos/demo/common/minimal/crflash.c" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/thirdparty/freertos/demo/common/minimal/crhook.c" framework="" version="" source="thirdparty/freertos/demo/common/minimal/crhook.c" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/thirdparty/freertos/demo/common/minimal/death.c" framework="" version="" source="thirdparty/freertos/demo/common/minimal/death.c" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/thirdparty/freertos/demo/common/minimal/dynamic.c" framework="" version="" source="thirdparty/freertos/demo/common/minimal/dynamic.c" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/thirdparty/freertos/demo/common/minimal/flash.c" framework="" version="" source="thirdparty/freertos/demo/common/minimal/flash.c" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/thirdparty/freertos/demo/common/minimal/flop.c" framework="" version="" source="thirdparty/freertos/demo/common/minimal/flop.c" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/thirdparty/freertos/demo/common/minimal/integer.c" framework="" version="" source="thirdparty/freertos/demo/common/minimal/integer.c" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/thirdparty/freertos/demo/common/minimal/recmutex.c" framework="" version="" source="thirdparty/freertos/demo/common/minimal/recmutex.c" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/thirdparty/freertos/demo/common/minimal/semtest.c" framework="" version="" source="thirdparty/freertos/demo/common/minimal/semtest.c" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/thirdparty/freertos/freertos-7.0.0/ATMEL-disclaimer.txt" framework="" version="" source="thirdparty/freertos/freertos-7.0.0/ATMEL-disclaimer.txt" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/thirdparty/freertos/freertos-7.0.0/license/license.txt" framework="" version="" source="thirdparty/freertos/freertos-7.0.0/license/license.txt" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/thirdparty/freertos/freertos-7.0.0/readme.txt" framework="" version="" source="thirdparty/freertos/freertos-7.0.0/readme.txt" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/thirdparty/freertos/freertos-7.0.0/source/croutine.c" framework="" version="" source="thirdparty/freertos/freertos-7.0.0/source/croutine.c" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/thirdparty/freertos/freertos-7.0.0/source/include/FreeRTOS.h" framework="" version="" source="thirdparty/freertos/freertos-7.0.0/source/include/FreeRTOS.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/thirdparty/freertos/freertos-7.0.0/source/include/StackMacros.h" framework="" version="" source="thirdparty/freertos/freertos-7.0.0/source/include/StackMacros.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/thirdparty/freertos/freertos-7.0.0/source/include/croutine.h" framework="" version="" source="thirdparty/freertos/freertos-7.0.0/source/include/croutine.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/thirdparty/freertos/freertos-7.0.0/source/include/list.h" framework="" version="" source="thirdparty/freertos/freertos-7.0.0/source/include/list.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/thirdparty/freertos/freertos-7.0.0/source/include/mpu_wrappers.h" framework="" version="" source="thirdparty/freertos/freertos-7.0.0/source/include/mpu_wrappers.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/thirdparty/freertos/freertos-7.0.0/source/include/portable.h" framework="" version="" source="thirdparty/freertos/freertos-7.0.0/source/include/portable.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/thirdparty/freertos/freertos-7.0.0/source/include/projdefs.h" framework="" version="" source="thirdparty/freertos/freertos-7.0.0/source/include/projdefs.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/thirdparty/freertos/freertos-7.0.0/source/include/queue.h" framework="" version="" source="thirdparty/freertos/freertos-7.0.0/source/include/queue.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/thirdparty/freertos/freertos-7.0.0/source/include/semphr.h" framework="" version="" source="thirdparty/freertos/freertos-7.0.0/source/include/semphr.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/thirdparty/freertos/freertos-7.0.0/source/include/task.h" framework="" version="" source="thirdparty/freertos/freertos-7.0.0/source/include/task.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/thirdparty/freertos/freertos-7.0.0/source/include/timers.h" framework="" version="" source="thirdparty/freertos/freertos-7.0.0/source/include/timers.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/thirdparty/freertos/freertos-7.0.0/source/list.c" framework="" version="" source="thirdparty/freertos/freertos-7.0.0/source/list.c" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/thirdparty/freertos/freertos-7.0.0/source/portable/gcc/avr32_uc3/exception.S" framework="" version="" source="thirdparty/freertos/freertos-7.0.0/source/portable/gcc/avr32_uc3/exception.S" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/thirdparty/freertos/freertos-7.0.0/source/portable/gcc/avr32_uc3/port.c" framework="" version="" source="thirdparty/freertos/freertos-7.0.0/source/portable/gcc/avr32_uc3/port.c" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/thirdparty/freertos/freertos-7.0.0/source/portable/gcc/avr32_uc3/portmacro.h" framework="" version="" source="thirdparty/freertos/freertos-7.0.0/source/portable/gcc/avr32_uc3/portmacro.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/thirdparty/freertos/freertos-7.0.0/source/portable/gcc/avr32_uc3/read.c" framework="" version="" source="thirdparty/freertos/freertos-7.0.0/source/portable/gcc/avr32_uc3/read.c" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/thirdparty/freertos/freertos-7.0.0/source/portable/gcc/avr32_uc3/write.c" framework="" version="" source="thirdparty/freertos/freertos-7.0.0/source/portable/gcc/avr32_uc3/write.c" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/thirdparty/freertos/freertos-7.0.0/source/portable/memmang/heap_3.c" framework="" version="" source="thirdparty/freertos/freertos-7.0.0/source/portable/memmang/heap_3.c" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/thirdparty/freertos/freertos-7.0.0/source/queue.c" framework="" version="" source="thirdparty/freertos/freertos-7.0.0/source/queue.c" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/thirdparty/freertos/freertos-7.0.0/source/tasks.c" framework="" version="" source="thirdparty/freertos/freertos-7.0.0/source/tasks.c" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/thirdparty/freertos/freertos-7.0.0/source/timers.c" framework="" version="" source="thirdparty/freertos/freertos-7.0.0/source/timers.c" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/avr32/components/display/dip204/dip204.c" framework="" version="3.31.0" source="avr32\components\display\dip204\dip204.c" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/avr32/components/display/dip204/dip204.h" framework="" version="3.31.0" source="avr32\components\display\dip204\dip204.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/Config/conf_dip204.h" framework="" version="3.31.0" source="avr32\components\display\dip204\module_config\conf_dip204.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/avr32/drivers/cpu/cycle_counter/cycle_counter.h" framework="" version="3.31.0" source="avr32\drivers\cpu\cycle_counter\cycle_counter.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/avr32/drivers/spi/spi.c" framework="" version="3.31.0" source="avr32\drivers\spi\spi.c" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/avr32/drivers/spi/spi.h" framework="" version="3.31.0" source="avr32\drivers\spi\spi.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/avr32/drivers/pwm/pwm.c" framework="" version="3.31.0" source="avr32\drivers\pwm\pwm.c" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/avr32/drivers/pwm/pwm.h" framework="" version="3.31.0" source="avr32\drivers\pwm\pwm.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/common/services/clock/uc3a0_a1/sysclk.c" framework="" version="3.31.0" source="common\services\clock\uc3a0_a1\sysclk.c" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/common/services/clock/genclk.h" framework="" version="3.31.0" source="common\services\clock\genclk.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/common/services/clock/osc.h" framework="" version="3.31.0" source="common\services\clock\osc.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/common/services/clock/uc3a0_a1/genclk.h" framework="" version="3.31.0" source="common\services\clock\uc3a0_a1\genclk.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/common/services/clock/uc3a0_a1/osc.h" framework="" version="3.31.0" source="common\services\clock\uc3a0_a1\osc.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/common/services/clock/uc3a0_a1/pll.h" framework="" version="3.31.0" source="common\services\clock\uc3a0_a1\pll.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/common/services/clock/uc3a0_a1/sysclk.h" framework="" version="3.31.0" source="common\services\clock\uc3a0_a1\sysclk.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/common/services/clock/sysclk.h" framework="" version="3.31.0" source="common\services\clock\sysclk.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/common/services/clock/pll.h" framework="" version="3.31.0" source="common\services\clock\pll.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/Config/conf_clock.h" framework="" version="3.31.0" source="common\services\clock\uc3a0_a1\module_config\conf_clock.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/common/services/delay/delay.h" framework="" version="3.31.0" source="common\services\delay\delay.h" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/avr32/drivers/adc/adc.c" framework="" version="3.31.0" source="avr32\drivers\adc\adc.c" changed="False" content-id="Atmel.ASF" />
+          <file path="src/ASF/avr32/drivers/adc/adc.h" framework="" version="3.31.0" source="avr32\drivers\adc\adc.h" changed="False" content-id="Atmel.ASF" />
+        </files>
+        <documentation help="" />
+        <offline-documentation help="" />
+        <dependencies>
+          <content-extension eid="atmel.asf" uuidref="Atmel.ASF" version="3.34.1" />
+        </dependencies>
+        <project id="common.services.freertos.uc3_example.evk1100" value="Add" config="" content-id="Atmel.ASF" />
+        <board id="board.evk1100" value="Add" config="" content-id="Atmel.ASF" />
+      </framework-data>
     </AsfFrameworkConfig>
     <avrtool>com.atmel.avrdbg.tool.avrdragon</avrtool>
     <avrtoolinterface>JTAG</avrtoolinterface>
@@ -218,6 +218,8 @@
       <ToolNumber>00A200014185</ToolNumber>
       <ToolName>AVR Dragon</ToolName>
     </com_atmel_avrdbg_tool_avrdragon>
+    <ResetRule>0</ResetRule>
+    <EraseKey />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <ToolchainSettings>
