@@ -4,7 +4,7 @@
 #include "BUTTONS.h"
 #include "usart.h"
 #include "gpio.h"#include "pm.h"#include "semphr.h"#include "queue.h"#include "display_init.h"#include <string.h>#include <stdio.h>
-#include "adc.h"#include "board.h"#define BUFFER_SIZE 1volatile xSemaphoreHandle xFillCountTemperature;		// Semaphore handle - Queue Tempvolatile xSemaphoreHandle xEmptyCountTemperature;volatile xSemaphoreHandle xFillCountPotentiometer;	// Semaphore handle - Queue Potentiometervolatile xSemaphoreHandle xEmptyCountPotentiometer;volatile xSemaphoreHandle xFillCountLight;			// Semaphore handle - Queue Lightvolatile xSemaphoreHandle xEmptyCountLight;xSemaphoreHandle xLCDSemaphore;		// Semaphore handle - DisplayxQueueHandle xQHandleTemperature;	// Queue handle - Temperature, ConsumerxQueueHandle xQHandlePotentiometer;	// Queue handle - Potentiometer, ConsumerxQueueHandle xQHandleLight;			// Queue handle - Light, Consumer
+#include "adc.h"#include "board.h"#define BUFFER_SIZE 1volatile xSemaphoreHandle xFillCountTemperature;		// Semaphore handle - Queue Tempvolatile xSemaphoreHandle xEmptyCountTemperature;volatile xSemaphoreHandle xFillCountPotentiometer;	// Semaphore handle - Queue Potentiometervolatile xSemaphoreHandle xEmptyCountPotentiometer;volatile xSemaphoreHandle xFillCountLight;			// Semaphore handle - Queue Lightvolatile xSemaphoreHandle xEmptyCountLight;xQueueHandle xQHandleTemperature;	// Queue handle - Temperature, ConsumerxQueueHandle xQHandlePotentiometer;	// Queue handle - Potentiometer, ConsumerxQueueHandle xQHandleLight;			// Queue handle - Light, Consumer
 xTaskHandle xHandleConsumer;		// Task handle - ConsumerxTaskHandle xHandleTemperature;		// Task handle - TemperaturexTaskHandle xHandlePotentiometer;	// Task handle - PotentiometerxTaskHandle xHandleLight;			// Task handle - Light
 
 void init_usart ( void )
@@ -36,9 +36,6 @@ void init_usart ( void )
 
 void vTemperature(void *pvParameters)
 {
-	volatile portTickType xLastWakeTime; // Holds tick count
-	xLastWakeTime = xTaskGetTickCount(); // Sets current tick count
-	//volatile const portTickType xFreq = 544; // Holds the period	
 	volatile uint32_t value_to_send;		// Character to send to Consumer
 	
 	while(1)
@@ -55,24 +52,11 @@ void vTemperature(void *pvParameters)
 				// Semaphore given
 			}
 		}
-		//We have CLK_ADC/2 - 10-bit requires 10 clock cycles - Sample & Hold Time = (SHTIM+1) / ADCClock where SHTIM = 15 - Startup Time = (STARTUP+1) * 8 / ADCClock where STARTUP = 31  
-		// ADCClock = CLK_ADC / ( (PRESCAL+1) * 2 ) where PRESCAL = 0 => ADCClock = CLK_ADC / 2
-		// IF CLK_ADC = 12 MHz => ADDClock = 6 MHz => Sample hold time = 16/6MHz = 0.00000267, Startup time = 32 * 8 / 6MHz = 0,00004267
-		// Sample hold time + Startup time = 0,00004534
-		// (Sample hold time + Startup time) * 12MHz = 544
-		// IF CLK_ADC = 115200Hz => (Sample hold time + Startup time) * 115200 = (0,0002778 + 0,00444) * 115200 = 543.49
-
-		//vTaskDelay(100);
-		//vTaskDelayUntil(xLastWakeTime,xFreq);
 	}
 }
 
 void vPotentiometer(void *pvParameters)
 {
-	volatile portTickType xLastWakeTime; // Holds tick count
-	xLastWakeTime = xTaskGetTickCount(); // Sets current tick count
-	//volatile const portTickType xFreq = TASK_DELAY_MS(1000); // Holds the period		
-	volatile const portTickType xFreq = 544; // Holds the period	
 	volatile uint32_t value_to_send;		// Character to send to Consumer
 	
 	while(1)
@@ -89,20 +73,11 @@ void vPotentiometer(void *pvParameters)
 				// Semaphore given
 			}
 		}
-		/*if (xTaskGetTickCount() > (xLastWakeTime + xFreq))
-		{
-			usart_write_line(serialPORT_USART, "Deadline miss - Potentiometer");
-		}*/
-		//vTaskDelayUntil(xLastWakeTime,xFreq);
-		//vTaskDelay(100);
 	}
 }
 
 void vLight(void *pvParameters)
 {
-	volatile portTickType xLastWakeTime; // Holds tick count
-	xLastWakeTime = xTaskGetTickCount(); // Sets current tick count
-	//volatile const portTickType xFreq = 544; // Holds the period	
 	volatile uint32_t value_to_send;		// Character to send to Consumer
 	
 	while(1)
@@ -119,9 +94,6 @@ void vLight(void *pvParameters)
 				// Semaphore given
 			}
 		}
-		//vTaskDelay(TASK_DELAY_MS(100));
-		//vTaskDelayUntil(xLastWakeTime,xFreq);
-		//vTaskDelay(100);
 	}
 }
 
@@ -140,6 +112,10 @@ void vConsumer( void *pvParameters )
 	volatile char potentiometer_usart[10];
 	volatile char light_usart[10];
 	
+	volatile portTickType xLastWakeTime; // Holds tick count
+	xLastWakeTime = xTaskGetTickCount(); // Sets current tick count
+	volatile const portTickType xFreq = TASK_DELAY_MS(100); // Holds the period	
+	
 	dip204_clear_display();
 	dip204_set_cursor_position(1, 1);
 	dip204_write_string(string_temp);
@@ -147,8 +123,6 @@ void vConsumer( void *pvParameters )
 	dip204_write_string(string_potentiometer);
 	dip204_set_cursor_position(1, 3);
 	dip204_write_string(string_light);
-	
-	onLED(LED3_BIT_VALUE);	// On when Consumer is active
 	
 	while(1)
 	{
@@ -192,7 +166,7 @@ void vConsumer( void *pvParameters )
 		usart_write_line(serialPORT_USART, temperature_usart);
 		sprintf(potentiometer_usart, "Potentiometer %d\n", pot_usart_write);
 		usart_write_line(serialPORT_USART, potentiometer_usart);
-		sprintf(light_usart, "Light %d\n", light_usart_write);
+		sprintf(light_usart, "Light %d\n", light_received);
 		usart_write_line(serialPORT_USART, light_usart);
 		dip204_set_cursor_position(15, 1);
 		dip204_printf_string("%04d", temperature_received); //print value
@@ -201,7 +175,7 @@ void vConsumer( void *pvParameters )
 		dip204_set_cursor_position(15, 3);
 		dip204_printf_string("%04d", light_received); //print value
 		
-		vTaskDelay(TASK_DELAY_MS(100));
+		vTaskDelayUntil(&xLastWakeTime,xFreq);
 	}
 }
 
@@ -217,8 +191,6 @@ int main(void)
 	adc_enable(&AVR32_ADC, ADC_POTENTIOMETER_CHANNEL);
 	adc_enable(&AVR32_ADC, ADC_TEMPERATURE_CHANNEL);
 	adc_enable(&AVR32_ADC, ADC_LIGHT_CHANNEL);
-	
-	vSemaphoreCreateBinary(xLCDSemaphore);	// Semaphore - Display
 	
 	xFillCountPotentiometer = xSemaphoreCreateCounting(BUFFER_SIZE, 0);
 	xEmptyCountPotentiometer = xSemaphoreCreateCounting(BUFFER_SIZE, BUFFER_SIZE);
