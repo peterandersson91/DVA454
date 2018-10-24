@@ -5,7 +5,7 @@
 #include "usart.h"
 #include "gpio.h"#include "pm.h"#include "semphr.h"#include "queue.h"#include "display_init.h"#include <string.h>#include "board.h"
 #include "adc.h"
-#include "display_init.h"#include <stdio.h>#define BUFFER_SIZE 10xSemaphoreHandle xFillCount;		// Semaphore handle - QueuexSemaphoreHandle xEmptyCount;xSemaphoreHandle xLCDSemaphore;		// Semaphore handle - DisplayxSemaphoreHandle xMutex;			// Mutex semaphorexQueueHandle xQHandle;				// Queue handle - Producer, ConsumerxTaskHandle xHandlePotentiometer;		// Task handle - Potentiometer
+#include "display_init.h"#include <stdio.h>#define BUFFER_SIZE 10xSemaphoreHandle xFillCount;		// Semaphore handlexSemaphoreHandle xEmptyCount;		// Semaphore handlexSemaphoreHandle xMutex;			// Mutex semaphorexQueueHandle xQHandle;				// Queue handle - Producer, ConsumerxTaskHandle xHandlePotentiometer;		// Task handle - Potentiometer
 xTaskHandle xHandleTemperature;			// Task handle - TemperaturexTaskHandle xHandleLight;				// Task handle - LightxTaskHandle xHandleLCDWrite;			// Task handle - Write on LCDstruct sensor_struct{
 		volatile int sensor_value;
 		volatile int ID;
@@ -41,21 +41,20 @@ void init_usart ( void )
 // Potentiometer task which acts as a producer
 void vPotentiometer( void *pvParameters )
 {
-	volatile struct sensor_struct pot_struct;
+	volatile struct sensor_struct pot_struct; // Struct for storing value from sensor and ID.
 	while(1)
-	{
-		// Start a ADC sampling of all active channels
-		adc_start(&AVR32_ADC);		
-		
+	{		
 		// Polling for semaphore EmptyCount before getting access to queue (removes value from semaphore) 
 		if(xSemaphoreTake(xEmptyCount, (portTickType)portMAX_DELAY) == pdTRUE)
 		{
 			// Semaphore taken
 		}
-		if(xSemaphoreTake(xLCDSemaphore,(portTickType)portMAX_DELAY) == pdTRUE)
+		if(xSemaphoreTake(xMutex,(portTickType)portMAX_DELAY) == pdTRUE)
 		{
-			usart_write_line(serialPORT_USART, "Pot tar mutex");
+			//Take mutex
 		}
+		// Start an ADC sampling of all active channels
+		adc_start(&AVR32_ADC);
 		// Get the potentiometer value
 		pot_struct.sensor_value = adc_get_value(&AVR32_ADC, ADC_POTENTIOMETER_CHANNEL);
 		// Convert the potentiometer value to a value btwn 0-255
@@ -67,9 +66,9 @@ void vPotentiometer( void *pvParameters )
 		// Put the value on the queue
 		xQueueSendToBack(xQHandle, &pot_struct, (portTickType)10);
 		
-		if(xSemaphoreGive(xLCDSemaphore) == pdTRUE)
+		if(xSemaphoreGive(xMutex) == pdTRUE)
 		{
-			usart_write_line(serialPORT_USART, "pot lämnar mutex");
+			//Give mutex
 		}
 		// Give the semaphore FillCount (adds value to semaphore) 
 		if(xSemaphoreGive(xFillCount) == pdTRUE)
@@ -84,22 +83,20 @@ void vPotentiometer( void *pvParameters )
 // Temperature task which acts as a producer
 void vTemperature( void *pvParameters )
 {
-	volatile struct sensor_struct temp_struct;
+	volatile struct sensor_struct temp_struct; // Struct for storing value from sensor and ID.
 	while (1)
-	{
-		// Start a ADC sampling of all active channels
-		adc_start(&AVR32_ADC);
-		
+	{	
 		// Polling for semaphore EmptyCount before getting access to queue (removes value from semaphore)
 		if(xSemaphoreTake(xEmptyCount, (portTickType)portMAX_DELAY) == pdTRUE)
 		{
 			// Semaphore taken
 		}
-		if(xSemaphoreTake(xLCDSemaphore,(portTickType)portMAX_DELAY) == pdTRUE)
+		if(xSemaphoreTake(xMutex,(portTickType)portMAX_DELAY) == pdTRUE)
 		{
-			usart_write_line(serialPORT_USART, "temp tar mutex");
+			//Take mutex
 		}
-
+		// Start an ADC sampling of all active channels
+		adc_start(&AVR32_ADC);
 		//Get the temperature value
 		temp_struct.sensor_value = adc_get_value(&AVR32_ADC, ADC_TEMPERATURE_CHANNEL);
 		temp_struct.ID = 1;
@@ -107,9 +104,9 @@ void vTemperature( void *pvParameters )
 		// Put the value on the queue
 		xQueueSendToBack(xQHandle, &temp_struct, (portTickType)10);
 		
-		if(xSemaphoreGive(xLCDSemaphore) == pdTRUE)
+		if(xSemaphoreGive(xMutex) == pdTRUE)
 		{
-			usart_write_line(serialPORT_USART, "temp lämnar mutex");
+			//Give mutex
 		}
 		// Give the semaphore FillCount (adds value to semaphore)
 		if(xSemaphoreGive(xFillCount) == pdTRUE)
@@ -125,22 +122,20 @@ void vTemperature( void *pvParameters )
 // Light sensor task which acts as a producer
 void vLight( void *pvParameters )
 {
-	volatile struct sensor_struct light_struct;
+	volatile struct sensor_struct light_struct; // Struct for storing value from sensor and ID. 
 	while (1)
-	{
-		// Start a ADC sampling of all active channels
-		adc_start(&AVR32_ADC);
-		
+	{		
 		// Polling for semaphore EmptyCount before getting access to queue (removes value from semaphore)
 		if(xSemaphoreTake(xEmptyCount, (portTickType)portMAX_DELAY) == pdTRUE)
 		{
 			// Semaphore taken
 		}
-		if(xSemaphoreTake(xLCDSemaphore,(portTickType)portMAX_DELAY) == pdTRUE)
+		if(xSemaphoreTake(xMutex,(portTickType)portMAX_DELAY) == pdTRUE)
 		{
-			usart_write_line(serialPORT_USART, "Light tar mutex");
+			//Take mutex
 		}
-		
+		// Start an ADC sampling of all active channels
+		adc_start(&AVR32_ADC);	
 		//Get the light sensor value
 		light_struct.sensor_value = adc_get_value(&AVR32_ADC, ADC_LIGHT_CHANNEL);
 		light_struct.ID = 2;
@@ -148,9 +143,9 @@ void vLight( void *pvParameters )
 		// Put the value on the queue
 		xQueueSendToBack(xQHandle, &light_struct, (portTickType)10);
 		
-		if(xSemaphoreGive(xLCDSemaphore) == pdTRUE)
+		if(xSemaphoreGive(xMutex) == pdTRUE)
 		{
-			usart_write_line(serialPORT_USART, "Light lämnar mutex");
+			//Give mutex
 		}
 		// Give the semaphore FillCount (adds value to semaphore)
 		if(xSemaphoreGive(xFillCount) == pdTRUE)
@@ -177,9 +172,9 @@ void vLCDWrite( void *pvParameters )
 			// Semaphore taken
 		}
 		
-		if(xSemaphoreTake(xLCDSemaphore, (portTickType)portMAX_DELAY) == pdTRUE)
+		if(xSemaphoreTake(xMutex, (portTickType)portMAX_DELAY) == pdTRUE)
 		{
-			usart_write_line(serialPORT_USART, "LCD tar mutex");
+			//usart_write_line(serialPORT_USART, "LCD tar mutex");
 		}
 		// Read value from queue
 		xQueueReceive(xQHandle, &sensor_struct1, (portTickType)10);
@@ -208,16 +203,16 @@ void vLCDWrite( void *pvParameters )
 		usart_write_line(serialPORT_USART, str_temp);
 		usart_write_line(serialPORT_USART, str_light);
 		
-		if(xSemaphoreGive(xLCDSemaphore) == pdTRUE)
+		if(xSemaphoreGive(xMutex) == pdTRUE)
 		{
-			usart_write_line(serialPORT_USART, "LCD lämnar mutex");
+			// Give mutex
 		}
 		// Give the semaphore EmptyCount (adds value to semaphore)
 		if(xSemaphoreGive(xEmptyCount) == pdTRUE)
 		{
 			// Semaphore given
 		}
-		vTaskDelay(TASK_DELAY_MS(20));
+		vTaskDelay(TASK_DELAY_MS(10));
 	}
 }
 int main(void)
@@ -233,7 +228,6 @@ int main(void)
 	adc_enable(&AVR32_ADC, ADC_TEMPERATURE_CHANNEL);
 	adc_enable(&AVR32_ADC, ADC_LIGHT_CHANNEL);
 	
-	vSemaphoreCreateBinary(xLCDSemaphore);	// Semaphore - Display
 	xFillCount = xSemaphoreCreateCounting(BUFFER_SIZE, 0);
 	xEmptyCount = xSemaphoreCreateCounting(BUFFER_SIZE, BUFFER_SIZE);
 	xMutex = xSemaphoreCreateMutex();
@@ -245,7 +239,7 @@ int main(void)
 	}
 	
 	
-	// Create the task , store the handle .
+	// Create the tasks, store the handles.
 	xTaskCreate(	vPotentiometer,
 					"vPotentiometer",
 					configMINIMAL_STACK_SIZE,
